@@ -36,6 +36,7 @@ import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
 import { StudentTravelModal } from './components/StudentTravelModal';
 import { OnboardTechModal } from './components/OnboardTechModal';
 import { LostAndFoundModal } from './components/LostAndFoundModal';
+import { HighwayTollModal } from './components/HighwayTollModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -154,6 +155,9 @@ export function App() {
 
   // Lost & Found Luggage & Belongings Tracking Modal State
   const [isLostFoundModalOpen, setIsLostFoundModalOpen] = useState(false);
+
+  // Highway Tolls, Bridges & HGS Estimator Modal State
+  const [isHighwayModalOpen, setIsHighwayModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -699,6 +703,7 @@ export function App() {
         onOpenStudentModal={() => setIsStudentModalOpen(true)}
         onOpenTechModal={() => setIsTechModalOpen(true)}
         onOpenLostFoundModal={() => setIsLostFoundModalOpen(true)}
+        onOpenHighwayModal={() => setIsHighwayModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -853,6 +858,12 @@ export function App() {
         isOpen={isLostFoundModalOpen}
         onClose={() => setIsLostFoundModalOpen(false)}
         onShowToast={showToast}
+      />
+
+      {/* Global Highway & Bridge Tolls Estimator Modal */}
+      <HighwayTollModal
+        isOpen={isHighwayModalOpen}
+        onClose={() => setIsHighwayModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
