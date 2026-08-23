@@ -60,6 +60,7 @@ const SeasonalDealsCalendarModal = lazy(() => import('./components/SeasonalDeals
 const LiveFlightRadarModal = lazy(() => import('./components/LiveFlightRadarModal').then(m => ({ default: m.LiveFlightRadarModal })));
 const AirportMetroTransitModal = lazy(() => import('./components/AirportMetroTransitModal').then(m => ({ default: m.AirportMetroTransitModal })));
 const InteractiveRouteNetworkModal = lazy(() => import('./components/InteractiveRouteNetworkModal').then(m => ({ default: m.InteractiveRouteNetworkModal })));
+const LiveOccupancyRadarModal = lazy(() => import('./components/LiveOccupancyRadarModal').then(m => ({ default: m.LiveOccupancyRadarModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -224,6 +225,9 @@ export function App() {
 
   // Main Intercity Transport Corridors & Visual Route Network Modal State
   const [isRouteNetworkOpen, setIsRouteNetworkOpen] = useState(false);
+
+  // Live Real-Time Seat Occupancy & Scarcity Radar Modal State
+  const [isOccupancyOpen, setIsOccupancyOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -790,6 +794,7 @@ export function App() {
         onOpenFlightRadarModal={() => setIsFlightRadarOpen(true)}
         onOpenAirportMetroModal={() => setIsAirportMetroOpen(true)}
         onOpenRouteNetworkModal={() => setIsRouteNetworkOpen(true)}
+        onOpenOccupancyModal={() => setIsOccupancyOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1078,6 +1083,17 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Live Real-Time Seat Occupancy & Scarcity Radar Modal */}
+        <LiveOccupancyRadarModal
+          isOpen={isOccupancyOpen}
+          onClose={() => setIsOccupancyOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}
