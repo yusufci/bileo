@@ -50,6 +50,7 @@ const RouteStopsModal = lazy(() => import('./components/RouteStopsModal').then(m
 const PassengerRightsModal = lazy(() => import('./components/PassengerRightsModal').then(m => ({ default: m.PassengerRightsModal })));
 const TravelGuidesModal = lazy(() => import('./components/TravelGuidesModal').then(m => ({ default: m.TravelGuidesModal })));
 const FrequentTravelerRewardsModal = lazy(() => import('./components/FrequentTravelerRewardsModal').then(m => ({ default: m.FrequentTravelerRewardsModal })));
+const LiveRoadWeatherRadarModal = lazy(() => import('./components/LiveRoadWeatherRadarModal').then(m => ({ default: m.LiveRoadWeatherRadarModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -184,6 +185,9 @@ export function App() {
 
   // Loyalty Program, Bileo Miles & Frequent Traveler Modal State
   const [isRewardsModalOpen, setIsRewardsModalOpen] = useState(false);
+
+  // Live Road, Maritime & Weather Radar Modal State
+  const [isRadarModalOpen, setIsRadarModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -740,6 +744,7 @@ export function App() {
         onOpenRightsModal={() => setIsRightsModalOpen(true)}
         onOpenGuidesModal={() => setIsGuidesModalOpen(true)}
         onOpenRewardsModal={() => setIsRewardsModalOpen(true)}
+        onOpenRadarModal={() => setIsRadarModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -944,6 +949,12 @@ export function App() {
           isOpen={isRewardsModalOpen}
           onClose={() => setIsRewardsModalOpen(false)}
           onShowToast={showToast}
+        />
+
+        {/* Global Live Road, Maritime & Weather Radar Modal */}
+        <LiveRoadWeatherRadarModal
+          isOpen={isRadarModalOpen}
+          onClose={() => setIsRadarModalOpen(false)}
         />
 
         {/* Global Price Drop Alert Modal */}

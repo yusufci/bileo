@@ -28,6 +28,7 @@ interface FooterProps {
   onOpenRightsModal?: () => void;
   onOpenGuidesModal?: () => void;
   onOpenRewardsModal?: () => void;
+  onOpenRadarModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -56,6 +57,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRightsModal,
   onOpenGuidesModal,
   onOpenRewardsModal,
+  onOpenRadarModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -288,6 +290,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-400 transition-colors"
                 >
                   <span>⭐ Sadakat & Miller</span>
+                </button>
+              )}
+              {onOpenRadarModal && (
+                <button
+                  type="button"
+                  onClick={onOpenRadarModal}
+                  className="text-xs font-extrabold text-cyan-900 hover:text-cyan-950 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
+                >
+                  <span>🛰️ Yol & Radar Durumu</span>
                 </button>
               )}
             </div>
