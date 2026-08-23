@@ -5,9 +5,14 @@ import { SeferLogo } from './SeferLogo';
 interface FooterProps {
   onOpenEcoModal?: () => void;
   onOpenTerminalGuide?: () => void;
+  onOpenCurrencyModal?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenEcoModal, onOpenTerminalGuide }) => {
+export const Footer: React.FC<FooterProps> = ({
+  onOpenEcoModal,
+  onOpenTerminalGuide,
+  onOpenCurrencyModal,
+}) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,15 +29,26 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEcoModal, onOpenTerminalGu
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>TÜRSAB Onaylı & 256-Bit SSL Güvenli Altyapı</span>
             </div>
-            {onOpenEcoModal && (
-              <button
-                type="button"
-                onClick={onOpenEcoModal}
-                className="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
-              >
-                <span>🌱 Karbon Ayak İzi & Eko-Hesaplayıcı ➔</span>
-              </button>
-            )}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              {onOpenEcoModal && (
+                <button
+                  type="button"
+                  onClick={onOpenEcoModal}
+                  className="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                >
+                  <span>🌱 Eko-Hesaplayıcı</span>
+                </button>
+              )}
+              {onOpenCurrencyModal && (
+                <button
+                  type="button"
+                  onClick={onOpenCurrencyModal}
+                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                >
+                  <span>💱 Çoklu Döviz Çevirici</span>
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Col 2: Ulaşım Türleri */}

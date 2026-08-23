@@ -20,6 +20,7 @@ import { FleetExperienceModal } from './components/FleetExperienceModal';
 import { FareMatrixModal } from './components/FareMatrixModal';
 import { EcoCarbonModal } from './components/EcoCarbonModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
+import { CurrencyConverterModal } from './components/CurrencyConverterModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -90,6 +91,9 @@ export function App() {
 
   // Keyboard Shortcuts Modal State
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+
+  // Multi-Currency Converter Modal State
+  const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -612,6 +616,7 @@ export function App() {
       <Footer
         onOpenEcoModal={() => setIsEcoModalOpen(true)}
         onOpenTerminalGuide={() => setIsTerminalGuideOpen(true)}
+        onOpenCurrencyModal={() => setIsCurrencyModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -666,6 +671,12 @@ export function App() {
       <KeyboardShortcutsModal
         isOpen={isShortcutsOpen}
         onClose={() => setIsShortcutsOpen(false)}
+      />
+
+      {/* Global Multi-Currency Converter Modal */}
+      <CurrencyConverterModal
+        isOpen={isCurrencyModalOpen}
+        onClose={() => setIsCurrencyModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
