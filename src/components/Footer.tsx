@@ -40,6 +40,7 @@ interface FooterProps {
   onOpenRouteNetworkModal?: () => void;
   onOpenOccupancyModal?: () => void;
   onOpenProvincesModal?: () => void;
+  onOpenTransfersModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -80,6 +81,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRouteNetworkModal,
   onOpenOccupancyModal,
   onOpenProvincesModal,
+  onOpenTransfersModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -420,6 +422,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-red-950 hover:text-red-900 flex items-center gap-1.5 cursor-pointer bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl border border-red-300 transition-colors"
                 >
                   <span>🇹🇷 81 İl Rehberi</span>
+                </button>
+              )}
+              {onOpenTransfersModal && (
+                <button
+                  type="button"
+                  onClick={onOpenTransfersModal}
+                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>🔄 Akıllı Aktarma</span>
                 </button>
               )}
             </div>

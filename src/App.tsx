@@ -62,6 +62,7 @@ const AirportMetroTransitModal = lazy(() => import('./components/AirportMetroTra
 const InteractiveRouteNetworkModal = lazy(() => import('./components/InteractiveRouteNetworkModal').then(m => ({ default: m.InteractiveRouteNetworkModal })));
 const LiveOccupancyRadarModal = lazy(() => import('./components/LiveOccupancyRadarModal').then(m => ({ default: m.LiveOccupancyRadarModal })));
 const AllProvincesTransitModal = lazy(() => import('./components/AllProvincesTransitModal').then(m => ({ default: m.AllProvincesTransitModal })));
+const SmartTransferPlannerModal = lazy(() => import('./components/SmartTransferPlannerModal').then(m => ({ default: m.SmartTransferPlannerModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -232,6 +233,9 @@ export function App() {
 
   // Turkey 81 Provinces & Transit Directory Modal State
   const [isProvincesModalOpen, setIsProvincesModalOpen] = useState(false);
+
+  // Smart Multi-Leg Layover & Transfer Planner Modal State
+  const [isTransfersModalOpen, setIsTransfersModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -800,6 +804,7 @@ export function App() {
         onOpenRouteNetworkModal={() => setIsRouteNetworkOpen(true)}
         onOpenOccupancyModal={() => setIsOccupancyOpen(true)}
         onOpenProvincesModal={() => setIsProvincesModalOpen(true)}
+        onOpenTransfersModal={() => setIsTransfersModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1109,6 +1114,17 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Smart Multi-Leg Layover & Transfer Planner Modal */}
+        <SmartTransferPlannerModal
+          isOpen={isTransfersModalOpen}
+          onClose={() => setIsTransfersModalOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}
