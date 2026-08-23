@@ -49,6 +49,7 @@ const MedicalTravelModal = lazy(() => import('./components/MedicalTravelModal').
 const RouteStopsModal = lazy(() => import('./components/RouteStopsModal').then(m => ({ default: m.RouteStopsModal })));
 const PassengerRightsModal = lazy(() => import('./components/PassengerRightsModal').then(m => ({ default: m.PassengerRightsModal })));
 const TravelGuidesModal = lazy(() => import('./components/TravelGuidesModal').then(m => ({ default: m.TravelGuidesModal })));
+const FrequentTravelerRewardsModal = lazy(() => import('./components/FrequentTravelerRewardsModal').then(m => ({ default: m.FrequentTravelerRewardsModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -180,6 +181,9 @@ export function App() {
 
   // Popular Holiday & City Travel Guides Modal State
   const [isGuidesModalOpen, setIsGuidesModalOpen] = useState(false);
+
+  // Loyalty Program, Bileo Miles & Frequent Traveler Modal State
+  const [isRewardsModalOpen, setIsRewardsModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -735,6 +739,7 @@ export function App() {
         onOpenRouteStopsModal={() => setIsRouteStopsModalOpen(true)}
         onOpenRightsModal={() => setIsRightsModalOpen(true)}
         onOpenGuidesModal={() => setIsGuidesModalOpen(true)}
+        onOpenRewardsModal={() => setIsRewardsModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -932,6 +937,13 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Loyalty Rewards & Bileo Miles Modal */}
+        <FrequentTravelerRewardsModal
+          isOpen={isRewardsModalOpen}
+          onClose={() => setIsRewardsModalOpen(false)}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}
