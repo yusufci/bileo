@@ -48,6 +48,7 @@ const GroupBookingModal = lazy(() => import('./components/GroupBookingModal').th
 const MedicalTravelModal = lazy(() => import('./components/MedicalTravelModal').then(m => ({ default: m.MedicalTravelModal })));
 const RouteStopsModal = lazy(() => import('./components/RouteStopsModal').then(m => ({ default: m.RouteStopsModal })));
 const PassengerRightsModal = lazy(() => import('./components/PassengerRightsModal').then(m => ({ default: m.PassengerRightsModal })));
+const TravelGuidesModal = lazy(() => import('./components/TravelGuidesModal').then(m => ({ default: m.TravelGuidesModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -176,6 +177,9 @@ export function App() {
 
   // Passenger Legal Rights, Delays & Compensation Modal State
   const [isRightsModalOpen, setIsRightsModalOpen] = useState(false);
+
+  // Popular Holiday & City Travel Guides Modal State
+  const [isGuidesModalOpen, setIsGuidesModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -730,6 +734,7 @@ export function App() {
         onOpenMedicalModal={() => setIsMedicalModalOpen(true)}
         onOpenRouteStopsModal={() => setIsRouteStopsModalOpen(true)}
         onOpenRightsModal={() => setIsRightsModalOpen(true)}
+        onOpenGuidesModal={() => setIsGuidesModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -917,6 +922,16 @@ export function App() {
         <PassengerRightsModal
           isOpen={isRightsModalOpen}
           onClose={() => setIsRightsModalOpen(false)}
+        />
+
+        {/* Global Holiday & City Travel Guides Modal */}
+        <TravelGuidesModal
+          isOpen={isGuidesModalOpen}
+          onClose={() => setIsGuidesModalOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         />
 
         {/* Global Price Drop Alert Modal */}
