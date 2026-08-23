@@ -66,6 +66,7 @@ const SmartTransferPlannerModal = lazy(() => import('./components/SmartTransferP
 const SeatComfortGuideModal = lazy(() => import('./components/SeatComfortGuideModal').then(m => ({ default: m.SeatComfortGuideModal })));
 const TicketRescheduleModal = lazy(() => import('./components/TicketRescheduleModal').then(m => ({ default: m.TicketRescheduleModal })));
 const OnboardEntertainmentModal = lazy(() => import('./components/OnboardEntertainmentModal').then(m => ({ default: m.OnboardEntertainmentModal })));
+const ExpressParcelTransitModal = lazy(() => import('./components/ExpressParcelTransitModal').then(m => ({ default: m.ExpressParcelTransitModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -248,6 +249,9 @@ export function App() {
 
   // Onboard Media & Wi-Fi Entertainment Guide Modal State
   const [isEntertainmentModalOpen, setIsEntertainmentModalOpen] = useState(false);
+
+  // Express Bus & Flight Parcel Cargo Tracking Modal State
+  const [isParcelModalOpen, setIsParcelModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -820,6 +824,7 @@ export function App() {
         onOpenSeatComfortModal={() => setIsSeatComfortModalOpen(true)}
         onOpenRescheduleModal={() => setIsRescheduleModalOpen(true)}
         onOpenEntertainmentModal={() => setIsEntertainmentModalOpen(true)}
+        onOpenParcelModal={() => setIsParcelModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1160,6 +1165,13 @@ export function App() {
         <OnboardEntertainmentModal
           isOpen={isEntertainmentModalOpen}
           onClose={() => setIsEntertainmentModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Express Bus & Flight Parcel Cargo Tracking Modal */}
+        <ExpressParcelTransitModal
+          isOpen={isParcelModalOpen}
+          onClose={() => setIsParcelModalOpen(false)}
           onShowToast={showToast}
         />
 
