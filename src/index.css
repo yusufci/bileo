@@ -1,0 +1,163 @@
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500,400&f[]=general-sans@700,600,500,400&f[]=satoshi@900,700,500,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.012em;
+  }
+
+  html {
+    font-family: 'Satoshi', 'General Sans', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    background-color: #FBF9F5;
+    color: #1E1B18;
+    font-family: 'Satoshi', 'General Sans', 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+/* Hyper-Realistic Physical Ticket Styling */
+.ticket-paper {
+  background: #FFFFFF;
+  border-radius: 1.75rem;
+  box-shadow: 0 16px 40px -10px rgba(30, 27, 24, 0.08), 0 6px 16px -4px rgba(30, 27, 24, 0.04);
+  position: relative;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.ticket-notch-left {
+  position: absolute;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  background-color: #FBF9F5;
+  border-radius: 50%;
+  z-index: 20;
+  box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.ticket-notch-right {
+  position: absolute;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  background-color: #FBF9F5;
+  border-radius: 50%;
+  z-index: 20;
+  box-shadow: inset 2px 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.ticket-perforation-line {
+  border-top: 2px dashed #E2DCD2;
+  width: 100%;
+}
+
+/* Barcode pattern */
+.barcode-pattern {
+  background: repeating-linear-gradient(
+    90deg,
+    #1E1B18 0px,
+    #1E1B18 2px,
+    transparent 2px,
+    transparent 4px,
+    #1E1B18 4px,
+    #1E1B18 7px,
+    transparent 7px,
+    transparent 9px,
+    #1E1B18 9px,
+    #1E1B18 10px,
+    transparent 10px,
+    transparent 13px,
+    #1E1B18 13px,
+    #1E1B18 16px,
+    transparent 16px,
+    transparent 18px,
+    #1E1B18 18px,
+    #1E1B18 20px,
+    transparent 20px,
+    transparent 22px,
+    #1E1B18 22px,
+    #1E1B18 25px
+  );
+}
+
+/* Global Invisible Scrollbars */
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Infinite Seamless Marquee Ribbon Keyframes */
+@keyframes marqueeLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 65s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marqueeRight 75s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+/* 60FPS Live Transit Ticker Ribbon */
+@keyframes tickerMove {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker-marquee {
+  display: inline-flex;
+  width: max-content;
+  will-change: transform;
+  animation: tickerMove 28s linear infinite;
+}
+
+.animate-ticker-marquee:hover {
+  animation-play-state: paused;
+}
+
