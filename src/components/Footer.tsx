@@ -29,6 +29,7 @@ interface FooterProps {
   onOpenGuidesModal?: () => void;
   onOpenRewardsModal?: () => void;
   onOpenRadarModal?: () => void;
+  onOpenCampusModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -58,6 +59,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenGuidesModal,
   onOpenRewardsModal,
   onOpenRadarModal,
+  onOpenCampusModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -299,6 +301,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-cyan-900 hover:text-cyan-950 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
                   <span>🛰️ Yol & Radar Durumu</span>
+                </button>
+              )}
+              {onOpenCampusModal && (
+                <button
+                  type="button"
+                  onClick={onOpenCampusModal}
+                  className="text-xs font-extrabold text-indigo-900 hover:text-indigo-950 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                >
+                  <span>🎓 Kampüs & Yurt Ağı</span>
                 </button>
               )}
             </div>

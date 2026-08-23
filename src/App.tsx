@@ -51,6 +51,7 @@ const PassengerRightsModal = lazy(() => import('./components/PassengerRightsModa
 const TravelGuidesModal = lazy(() => import('./components/TravelGuidesModal').then(m => ({ default: m.TravelGuidesModal })));
 const FrequentTravelerRewardsModal = lazy(() => import('./components/FrequentTravelerRewardsModal').then(m => ({ default: m.FrequentTravelerRewardsModal })));
 const LiveRoadWeatherRadarModal = lazy(() => import('./components/LiveRoadWeatherRadarModal').then(m => ({ default: m.LiveRoadWeatherRadarModal })));
+const CampusTransitModal = lazy(() => import('./components/CampusTransitModal').then(m => ({ default: m.CampusTransitModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -188,6 +189,9 @@ export function App() {
 
   // Live Road, Maritime & Weather Radar Modal State
   const [isRadarModalOpen, setIsRadarModalOpen] = useState(false);
+
+  // University Campus & Student Dorm Transit Network Modal State
+  const [isCampusModalOpen, setIsCampusModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -745,6 +749,7 @@ export function App() {
         onOpenGuidesModal={() => setIsGuidesModalOpen(true)}
         onOpenRewardsModal={() => setIsRewardsModalOpen(true)}
         onOpenRadarModal={() => setIsRadarModalOpen(true)}
+        onOpenCampusModal={() => setIsCampusModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -955,6 +960,13 @@ export function App() {
         <LiveRoadWeatherRadarModal
           isOpen={isRadarModalOpen}
           onClose={() => setIsRadarModalOpen(false)}
+        />
+
+        {/* Global University Campus & Student Dorm Transit Modal */}
+        <CampusTransitModal
+          isOpen={isCampusModalOpen}
+          onClose={() => setIsCampusModalOpen(false)}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}
