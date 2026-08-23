@@ -48,3 +48,5 @@ Thumbs.db
 
 # System generated / agent artifacts
 .agents/
+
+.vercel
