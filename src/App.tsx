@@ -72,6 +72,7 @@ const SeaTransitFerryGuideModal = lazy(() => import('./components/SeaTransitFerr
 const BicycleTransitGuideModal = lazy(() => import('./components/BicycleTransitGuideModal').then(m => ({ default: m.BicycleTransitGuideModal })));
 const CarRentalTransitGuideModal = lazy(() => import('./components/CarRentalTransitGuideModal').then(m => ({ default: m.CarRentalTransitGuideModal })));
 const LiveTransitScraperModal = lazy(() => import('./components/LiveTransitScraperModal').then(m => ({ default: m.LiveTransitScraperModal })));
+const SmartTravelBudgetCalculatorModal = lazy(() => import('./components/SmartTravelBudgetCalculatorModal').then(m => ({ default: m.SmartTravelBudgetCalculatorModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -272,6 +273,9 @@ export function App() {
 
   // Live Transit Scraper & Ingestion Status Modal State
   const [isScraperModalOpen, setIsScraperModalOpen] = useState(false);
+
+  // Smart Travel Budget Calculator Modal State
+  const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -850,6 +854,7 @@ export function App() {
         onOpenBicycleModal={() => setIsBicycleModalOpen(true)}
         onOpenCarRentalModal={() => setIsCarRentalModalOpen(true)}
         onOpenScraperModal={() => setIsScraperModalOpen(true)}
+        onOpenBudgetModal={() => setIsBudgetModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1240,6 +1245,13 @@ export function App() {
         <LiveTransitScraperModal
           isOpen={isScraperModalOpen}
           onClose={() => setIsScraperModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Smart Travel Budget Calculator Modal */}
+        <SmartTravelBudgetCalculatorModal
+          isOpen={isBudgetModalOpen}
+          onClose={() => setIsBudgetModalOpen(false)}
           onShowToast={showToast}
         />
 

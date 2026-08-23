@@ -50,6 +50,7 @@ interface FooterProps {
   onOpenBicycleModal?: () => void;
   onOpenCarRentalModal?: () => void;
   onOpenScraperModal?: () => void;
+  onOpenBudgetModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -100,6 +101,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenBicycleModal,
   onOpenCarRentalModal,
   onOpenScraperModal,
+  onOpenBudgetModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -122,414 +124,423 @@ export const Footer: React.FC<FooterProps> = ({
                 <button
                   type="button"
                   onClick={onOpenEcoModal}
-                  className="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                  className="text-xs font-bold text-emerald-800 hover:text-emerald-950 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
-                  <span>🌱 Eko-Hesaplayıcı</span>
+                  <span>Eko-Hesaplayıcı</span>
                 </button>
               )}
               {onOpenCurrencyModal && (
                 <button
                   type="button"
                   onClick={onOpenCurrencyModal}
-                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>💱 Döviz</span>
+                  <span>Döviz Çevirici</span>
                 </button>
               )}
               {onOpenLuggageModal && (
                 <button
                   type="button"
                   onClick={onOpenLuggageModal}
-                  className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
+                  className="text-xs font-bold text-blue-900 hover:text-blue-950 flex items-center cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
                 >
-                  <span>🧳 Bagaj</span>
+                  <span>Bagaj Hakları</span>
                 </button>
               )}
               {onOpenWeatherModal && (
                 <button
                   type="button"
                   onClick={onOpenWeatherModal}
-                  className="text-xs font-extrabold text-amber-700 hover:text-amber-800 flex items-center gap-1.5 cursor-pointer bg-amber-50/80 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50/80 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>☀️ Hava</span>
+                  <span>Hava Durumu</span>
                 </button>
               )}
               {onOpenShuttleModal && (
                 <button
                   type="button"
                   onClick={onOpenShuttleModal}
-                  className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
+                  className="text-xs font-bold text-bordeaux-800 hover:text-bordeaux-950 flex items-center cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
                 >
-                  <span>🚐 Servis</span>
+                  <span>Servis Saatleri</span>
                 </button>
               )}
               {onOpenPetModal && (
                 <button
                   type="button"
                   onClick={onOpenPetModal}
-                  className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
+                  className="text-xs font-bold text-rose-900 hover:text-rose-950 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
                 >
-                  <span>🐾 Pati</span>
+                  <span>Evcil Hayvan</span>
                 </button>
               )}
               {onOpenInsuranceModal && (
                 <button
                   type="button"
                   onClick={onOpenInsuranceModal}
-                  className="text-xs font-extrabold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                  className="text-xs font-bold text-emerald-900 hover:text-emerald-950 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
-                  <span>🛡️ Sigorta</span>
+                  <span>Seyahat Sigortası</span>
                 </button>
               )}
               {onOpenTaxiModal && (
                 <button
                   type="button"
                   onClick={onOpenTaxiModal}
-                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>🚕 Taksi</span>
+                  <span>Taksi Tarifesi</span>
                 </button>
               )}
               {onOpenRestStopModal && (
                 <button
                   type="button"
                   onClick={onOpenRestStopModal}
-                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>🍽️ Mola</span>
+                  <span>Mola Tesisleri</span>
                 </button>
               )}
               {onOpenDiscountsModal && (
                 <button
                   type="button"
                   onClick={onOpenDiscountsModal}
-                  className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
+                  className="text-xs font-bold text-bordeaux-800 hover:text-bordeaux-950 flex items-center cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
                 >
-                  <span>🎟️ İndirimler</span>
+                  <span>İndirim Kuponları</span>
                 </button>
               )}
               {onOpenStorageModal && (
                 <button
                   type="button"
                   onClick={onOpenStorageModal}
-                  className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
+                  className="text-xs font-bold text-blue-900 hover:text-blue-950 flex items-center cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
                 >
-                  <span>🛅 Emanet</span>
+                  <span>Emanet Dolapları</span>
                 </button>
               )}
               {onOpenTrackerModal && (
                 <button
                   type="button"
                   onClick={onOpenTrackerModal}
-                  className="text-xs font-extrabold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                  className="text-xs font-bold text-emerald-900 hover:text-emerald-950 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
-                  <span>🛰️ Canlı Takip</span>
+                  <span>Canlı Araç Takibi</span>
                 </button>
               )}
               {onOpenCateringModal && (
                 <button
                   type="button"
                   onClick={onOpenCateringModal}
-                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>☕ İkram</span>
+                  <span>İkram Menüsü</span>
                 </button>
               )}
               {onOpenAccessibilityModal && (
                 <button
                   type="button"
                   onClick={onOpenAccessibilityModal}
-                  className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
+                  className="text-xs font-bold text-blue-900 hover:text-blue-950 flex items-center cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
                 >
-                  <span>♿ Engelsiz</span>
+                  <span>Engelsiz Seyahat</span>
                 </button>
               )}
               {onOpenStudentModal && (
                 <button
                   type="button"
                   onClick={onOpenStudentModal}
-                  className="text-xs font-extrabold text-purple-800 hover:text-purple-900 flex items-center gap-1.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-xl border border-purple-200 transition-colors"
+                  className="text-xs font-bold text-purple-900 hover:text-purple-950 flex items-center cursor-pointer bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-xl border border-purple-200 transition-colors"
                 >
-                  <span>🎓 Genç</span>
+                  <span>Genç & Öğrenci</span>
                 </button>
               )}
               {onOpenTechModal && (
                 <button
                   type="button"
                   onClick={onOpenTechModal}
-                  className="text-xs font-extrabold text-cyan-800 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-200 transition-colors"
+                  className="text-xs font-bold text-cyan-900 hover:text-cyan-950 flex items-center cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-200 transition-colors"
                 >
-                  <span>🔌 Priz & Wi-Fi</span>
+                  <span>Priz & Wi-Fi Ağı</span>
                 </button>
               )}
               {onOpenLostFoundModal && (
                 <button
                   type="button"
                   onClick={onOpenLostFoundModal}
-                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>📦 Kayıp Eşya</span>
+                  <span>Kayıp Eşya Portalı</span>
                 </button>
               )}
               {onOpenHighwayModal && (
                 <button
                   type="button"
                   onClick={onOpenHighwayModal}
-                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>🛣️ Otoyol & Köprü</span>
+                  <span>Otoyol & Köprü Geçişleri</span>
                 </button>
               )}
               {onOpenGroupModal && (
                 <button
                   type="button"
                   onClick={onOpenGroupModal}
-                  className="text-xs font-extrabold text-indigo-800 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-200 transition-colors"
+                  className="text-xs font-bold text-indigo-900 hover:text-indigo-950 flex items-center cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-200 transition-colors"
                 >
-                  <span>👥 Grup & Kurumsal</span>
+                  <span>Grup & Kurumsal</span>
                 </button>
               )}
               {onOpenMedicalModal && (
                 <button
                   type="button"
                   onClick={onOpenMedicalModal}
-                  className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
+                  className="text-xs font-bold text-rose-900 hover:text-rose-950 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
                 >
-                  <span>🩺 Seyahat Sağlığı</span>
+                  <span>Seyahat Sağlığı</span>
                 </button>
               )}
               {onOpenRouteStopsModal && (
                 <button
                   type="button"
                   onClick={onOpenRouteStopsModal}
-                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>🗺️ Güzergah & Duraklar</span>
+                  <span>Güzergah & Duraklar</span>
                 </button>
               )}
               {onOpenRightsModal && (
                 <button
                   type="button"
                   onClick={onOpenRightsModal}
-                  className="text-xs font-extrabold text-emerald-900 hover:text-emerald-950 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>⚖️ Yolcu Hakları</span>
+                  <span>Yolcu Hakları</span>
                 </button>
               )}
               {onOpenGuidesModal && (
                 <button
                   type="button"
                   onClick={onOpenGuidesModal}
-                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                  className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>🏖️ Tatil & Gezi Rehberi</span>
+                  <span>Tatil & Gezi Rehberi</span>
                 </button>
               )}
               {onOpenRewardsModal && (
                 <button
                   type="button"
                   onClick={onOpenRewardsModal}
-                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-400 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-400 transition-colors"
                 >
-                  <span>⭐ Sadakat & Miller</span>
+                  <span>Sadakat & Miller</span>
                 </button>
               )}
               {onOpenRadarModal && (
                 <button
                   type="button"
                   onClick={onOpenRadarModal}
-                  className="text-xs font-extrabold text-cyan-900 hover:text-cyan-950 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
+                  className="text-xs font-bold text-cyan-950 hover:text-cyan-900 flex items-center cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
-                  <span>🛰️ Yol & Radar Durumu</span>
+                  <span>Yol & Radar Durumu</span>
                 </button>
               )}
               {onOpenCampusModal && (
                 <button
                   type="button"
                   onClick={onOpenCampusModal}
-                  className="text-xs font-extrabold text-indigo-900 hover:text-indigo-950 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                  className="text-xs font-bold text-indigo-950 hover:text-indigo-900 flex items-center cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
                 >
-                  <span>🎓 Kampüs & Yurt Ağı</span>
+                  <span>Kampüs & Yurt Ağı</span>
                 </button>
               )}
               {onOpenCompareModal && (
                 <button
                   type="button"
                   onClick={onOpenCompareModal}
-                  className="text-xs font-extrabold text-bordeaux-900 hover:text-bordeaux-950 flex items-center gap-1.5 cursor-pointer bg-bordeaux-50 hover:bg-bordeaux-100 px-3 py-1.5 rounded-xl border border-bordeaux-300 transition-colors"
+                  className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-bordeaux-50 hover:bg-bordeaux-100 px-3 py-1.5 rounded-xl border border-bordeaux-300 transition-colors"
                 >
-                  <span>⚖️ Mod Karşılaştır</span>
+                  <span>Mod Karşılaştırma</span>
                 </button>
               )}
               {onOpenCityCardModal && (
                 <button
                   type="button"
                   onClick={onOpenCityCardModal}
-                  className="text-xs font-extrabold text-emerald-900 hover:text-emerald-950 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>💳 Şehir Kartları</span>
+                  <span>Şehir Kartları</span>
                 </button>
               )}
               {onOpenOvernightModal && (
                 <button
                   type="button"
                   onClick={onOpenOvernightModal}
-                  className="text-xs font-extrabold text-indigo-950 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                  className="text-xs font-bold text-indigo-950 hover:text-indigo-900 flex items-center cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
                 >
-                  <span>🌙 Gece Seferleri</span>
+                  <span>Gece Seferleri</span>
                 </button>
               )}
               {onOpenSkiModal && (
                 <button
                   type="button"
                   onClick={onOpenSkiModal}
-                  className="text-xs font-extrabold text-cyan-950 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
+                  className="text-xs font-bold text-cyan-950 hover:text-cyan-900 flex items-center cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
-                  <span>⛷️ Kayak & Kış</span>
+                  <span>Kayak & Kış Merkezleri</span>
                 </button>
               )}
               {onOpenSeasonsModal && (
                 <button
                   type="button"
                   onClick={onOpenSeasonsModal}
-                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>📅 Sezon & Bayram</span>
+                  <span>Sezon & Bayram Takvimi</span>
                 </button>
               )}
               {onOpenFlightRadarModal && (
                 <button
                   type="button"
                   onClick={onOpenFlightRadarModal}
-                  className="text-xs font-extrabold text-sky-950 hover:text-sky-900 flex items-center gap-1.5 cursor-pointer bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-xl border border-sky-300 transition-colors"
+                  className="text-xs font-bold text-sky-950 hover:text-sky-900 flex items-center cursor-pointer bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-xl border border-sky-300 transition-colors"
                 >
-                  <span>✈️ Uçuş Radarı</span>
+                  <span>Uçuş Radarı</span>
                 </button>
               )}
               {onOpenAirportMetroModal && (
                 <button
                   type="button"
                   onClick={onOpenAirportMetroModal}
-                  className="text-xs font-extrabold text-teal-950 hover:text-teal-900 flex items-center gap-1.5 cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
+                  className="text-xs font-bold text-teal-950 hover:text-teal-900 flex items-center cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
                 >
-                  <span>🚇 Havalimanı Metrosu</span>
+                  <span>Havalimanı Metrosu</span>
                 </button>
               )}
               {onOpenRouteNetworkModal && (
                 <button
                   type="button"
                   onClick={onOpenRouteNetworkModal}
-                  className="text-xs font-extrabold text-bordeaux-950 hover:text-bordeaux-900 flex items-center gap-1.5 cursor-pointer bg-rose-50/80 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
+                  className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50/80 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
-                  <span>🗺️ Rota Ağı</span>
+                  <span>Rota Ağı Haritası</span>
                 </button>
               )}
               {onOpenOccupancyModal && (
                 <button
                   type="button"
                   onClick={onOpenOccupancyModal}
-                  className="text-xs font-extrabold text-rose-950 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
+                  className="text-xs font-bold text-rose-950 hover:text-rose-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
-                  <span>🔥 Doluluk Radarı</span>
+                  <span>Doluluk Radarı</span>
                 </button>
               )}
               {onOpenProvincesModal && (
                 <button
                   type="button"
                   onClick={onOpenProvincesModal}
-                  className="text-xs font-extrabold text-red-950 hover:text-red-900 flex items-center gap-1.5 cursor-pointer bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl border border-red-300 transition-colors"
+                  className="text-xs font-bold text-red-950 hover:text-red-900 flex items-center cursor-pointer bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl border border-red-300 transition-colors"
                 >
-                  <span>🇹🇷 81 İl Rehberi</span>
+                  <span>81 İl Rehberi</span>
                 </button>
               )}
               {onOpenTransfersModal && (
                 <button
                   type="button"
                   onClick={onOpenTransfersModal}
-                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>🔄 Akıllı Aktarma</span>
+                  <span>Akıllı Aktarma</span>
                 </button>
               )}
               {onOpenSeatComfortModal && (
                 <button
                   type="button"
                   onClick={onOpenSeatComfortModal}
-                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>💺 Koltuk & Gölge</span>
+                  <span>Koltuk & Gölge Rehberi</span>
                 </button>
               )}
               {onOpenRescheduleModal && (
                 <button
                   type="button"
                   onClick={onOpenRescheduleModal}
-                  className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>📅 Bilet Erteleme</span>
+                  <span>Bilet Erteleme</span>
                 </button>
               )}
               {onOpenEntertainmentModal && (
                 <button
                   type="button"
                   onClick={onOpenEntertainmentModal}
-                  className="text-xs font-extrabold text-indigo-950 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                  className="text-xs font-bold text-indigo-950 hover:text-indigo-900 flex items-center cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
                 >
-                  <span>🎬 Eğlence & TV</span>
+                  <span>Eğlence Portalı</span>
                 </button>
               )}
               {onOpenParcelModal && (
                 <button
                   type="button"
                   onClick={onOpenParcelModal}
-                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>📦 Hızlı Kargo</span>
+                  <span>Hızlı Kargo</span>
                 </button>
               )}
               {onOpenSleeperTrainModal && (
                 <button
                   type="button"
                   onClick={onOpenSleeperTrainModal}
-                  className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>🚂 Yataklı Trenler</span>
+                  <span>Yataklı Trenler</span>
                 </button>
               )}
               {onOpenFerryGuideModal && (
                 <button
                   type="button"
                   onClick={onOpenFerryGuideModal}
-                  className="text-xs font-extrabold text-cyan-950 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
+                  className="text-xs font-bold text-cyan-950 hover:text-cyan-900 flex items-center cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
-                  <span>⛴️ Feribot & Ada</span>
+                  <span>Feribot & Adalar</span>
                 </button>
               )}
               {onOpenBicycleModal && (
                 <button
                   type="button"
                   onClick={onOpenBicycleModal}
-                  className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>🚲 Bisiklet & Scooter</span>
+                  <span>Bisiklet & Scooter</span>
                 </button>
               )}
               {onOpenCarRentalModal && (
                 <button
                   type="button"
                   onClick={onOpenCarRentalModal}
-                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>🚗 Araç Kiralama</span>
+                  <span>Araç Kiralama</span>
                 </button>
               )}
               {onOpenScraperModal && (
                 <button
                   type="button"
                   onClick={onOpenScraperModal}
-                  className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
-                  <span>📡 Canlı Veri & Kazıma</span>
+                  <span>Canlı Veri & Telemetri</span>
+                </button>
+              )}
+              {onOpenBudgetModal && (
+                <button
+                  type="button"
+                  onClick={onOpenBudgetModal}
+                  className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
+                >
+                  <span>Seyahat Bütçe Planlayıcı</span>
                 </button>
               )}
             </div>
