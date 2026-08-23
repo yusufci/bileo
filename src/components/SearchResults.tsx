@@ -18,12 +18,14 @@ interface SearchResultsProps {
   searchState: SearchFilterState;
   onUpdateSearchState: (updates: Partial<SearchFilterState>) => void;
   onSelectRoute: (route: RouteItem) => void;
+  onOpenPriceAlert?: (minPrice: number) => void;
 }
 
 export const SearchResults: React.FC<SearchResultsProps> = ({
   routes,
   searchState,
   onSelectRoute,
+  onOpenPriceAlert,
 }) => {
   const getTransportIcon = (type: string) => {
     switch (type) {
@@ -95,16 +97,33 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
         {/* Clean & Borderless Results Header & Filter Bar */}
         <div className="pb-4 mb-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-black text-bordeaux-700 uppercase tracking-wider">
-                <span>{searchState.fromCity || 'İstanbul'}</span>
-                <BileoArrowRight className="w-3.5 h-3.5" />
-                <span>{searchState.toCity || 'Ankara'}</span>
-                <span className="text-charcoal-muted">• {searchState.departureDate || '24 Mayıs Cuma'}</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-1">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-black text-bordeaux-700 uppercase tracking-wider">
+                  <span>{searchState.fromCity || 'İstanbul'}</span>
+                  <BileoArrowRight className="w-3.5 h-3.5" />
+                  <span>{searchState.toCity || 'Ankara'}</span>
+                  <span className="text-charcoal-muted">• {searchState.departureDate || '24 Mayıs Cuma'}</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B18] font-display mt-0.5">
+                  Bulunan Seferler ({filteredRoutes.length} Sefer)
+                </h2>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B18] font-display mt-0.5">
-                Bulunan Seferler ({filteredRoutes.length} Sefer)
-              </h2>
+
+              {onOpenPriceAlert && filteredRoutes.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const min = Math.min(...filteredRoutes.map((r) => r.price));
+                    onOpenPriceAlert(min);
+                  }}
+                  className="self-start sm:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-extrabold transition-colors cursor-pointer"
+                  title="Fiyatlar düştüğünde e-posta ile bildirim al"
+                >
+                  <BileoSparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Fiyat Alarmı Kur</span>
+                </button>
+              )}
             </div>
 
             {/* Filter & Sort Controls */}

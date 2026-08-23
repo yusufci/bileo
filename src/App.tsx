@@ -14,6 +14,7 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { TicketWalletModal } from './components/TicketWalletModal';
 import { RefundModal } from './components/RefundModal';
 import { PnrQueryModal } from './components/PnrQueryModal';
+import { PriceAlertModal } from './components/PriceAlertModal';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -67,6 +68,12 @@ export function App() {
 
   // PNR Query Modal State
   const [isPnrQueryOpen, setIsPnrQueryOpen] = useState(false);
+
+  // Price Alert Modal State
+  const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
+    isOpen: false,
+    minPrice: 400,
+  });
 
   // Toast Notifications State
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -484,6 +491,7 @@ export function App() {
           searchState={searchState}
           onUpdateSearchState={handleUpdateSearchState}
           onSelectRoute={handleSelectRouteFromResults}
+          onOpenPriceAlert={(minPrice) => setPriceAlertData({ isOpen: true, minPrice })}
         />
 
         <WhyBileoSection
@@ -554,6 +562,16 @@ export function App() {
         onClose={() => setIsPnrQueryOpen(false)}
         tickets={tickets}
         onOpenRefund={handleOpenRefund}
+        onShowToast={showToast}
+      />
+
+      {/* Global Price Drop Alert Modal */}
+      <PriceAlertModal
+        isOpen={priceAlertData.isOpen}
+        onClose={() => setPriceAlertData((prev) => ({ ...prev, isOpen: false }))}
+        fromCity={searchState.fromCity || 'İstanbul'}
+        toCity={searchState.toCity || 'Ankara'}
+        currentMinPrice={priceAlertData.minPrice}
         onShowToast={showToast}
       />
 
