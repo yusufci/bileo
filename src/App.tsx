@@ -37,6 +37,7 @@ import { StudentTravelModal } from './components/StudentTravelModal';
 import { OnboardTechModal } from './components/OnboardTechModal';
 import { LostAndFoundModal } from './components/LostAndFoundModal';
 import { HighwayTollModal } from './components/HighwayTollModal';
+import { GroupBookingModal } from './components/GroupBookingModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -158,6 +159,9 @@ export function App() {
 
   // Highway Tolls, Bridges & HGS Estimator Modal State
   const [isHighwayModalOpen, setIsHighwayModalOpen] = useState(false);
+
+  // Group & Corporate Charter Booking Modal State
+  const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -704,6 +708,7 @@ export function App() {
         onOpenTechModal={() => setIsTechModalOpen(true)}
         onOpenLostFoundModal={() => setIsLostFoundModalOpen(true)}
         onOpenHighwayModal={() => setIsHighwayModalOpen(true)}
+        onOpenGroupModal={() => setIsGroupModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -864,6 +869,13 @@ export function App() {
       <HighwayTollModal
         isOpen={isHighwayModalOpen}
         onClose={() => setIsHighwayModalOpen(false)}
+      />
+
+      {/* Global Group & Corporate Charter Booking Modal */}
+      <GroupBookingModal
+        isOpen={isGroupModalOpen}
+        onClose={() => setIsGroupModalOpen(false)}
+        onShowToast={showToast}
       />
 
       {/* Global Price Drop Alert Modal */}

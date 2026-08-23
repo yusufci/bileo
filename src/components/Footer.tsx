@@ -22,6 +22,7 @@ interface FooterProps {
   onOpenTechModal?: () => void;
   onOpenLostFoundModal?: () => void;
   onOpenHighwayModal?: () => void;
+  onOpenGroupModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -44,6 +45,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenTechModal,
   onOpenLostFoundModal,
   onOpenHighwayModal,
+  onOpenGroupModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -222,6 +224,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
                   <span>🛣️ Otoyol & Köprü</span>
+                </button>
+              )}
+              {onOpenGroupModal && (
+                <button
+                  type="button"
+                  onClick={onOpenGroupModal}
+                  className="text-xs font-extrabold text-indigo-800 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-200 transition-colors"
+                >
+                  <span>👥 Grup & Kurumsal</span>
                 </button>
               )}
             </div>
