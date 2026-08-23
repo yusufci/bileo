@@ -170,8 +170,8 @@ export const SeaTransitFerryGuideModal: React.FC<SeaTransitFerryGuideModalProps>
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-900 flex items-center justify-center border border-cyan-200 text-lg font-black">
-              ⛴️
+            <div className="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-900 flex items-center justify-center border border-cyan-200">
+              <BileoFerry className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Feribot, Deniz Otobüsü & Ada İskeleleri Portalı</h3>
@@ -200,7 +200,7 @@ export const SeaTransitFerryGuideModal: React.FC<SeaTransitFerryGuideModalProps>
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🌊 Popüler Deniz Hatları
+              Popüler Deniz Hatları
             </button>
             <button
               type="button"
@@ -211,7 +211,7 @@ export const SeaTransitFerryGuideModal: React.FC<SeaTransitFerryGuideModalProps>
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🚗 Araç & Yolcu Kuralları
+              Araç & Yolcu Kuralları
             </button>
             <button
               type="button"
@@ -222,7 +222,7 @@ export const SeaTransitFerryGuideModal: React.FC<SeaTransitFerryGuideModalProps>
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              💨 Lodos & Sefer İpuçları
+              Lodos & İskele Tavsiyeleri
             </button>
           </div>
 

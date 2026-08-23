@@ -73,6 +73,7 @@ const BicycleTransitGuideModal = lazy(() => import('./components/BicycleTransitG
 const CarRentalTransitGuideModal = lazy(() => import('./components/CarRentalTransitGuideModal').then(m => ({ default: m.CarRentalTransitGuideModal })));
 const LiveTransitScraperModal = lazy(() => import('./components/LiveTransitScraperModal').then(m => ({ default: m.LiveTransitScraperModal })));
 const SmartTravelBudgetCalculatorModal = lazy(() => import('./components/SmartTravelBudgetCalculatorModal').then(m => ({ default: m.SmartTravelBudgetCalculatorModal })));
+const HighwayPassesLiveRadarModal = lazy(() => import('./components/HighwayPassesLiveRadarModal').then(m => ({ default: m.HighwayPassesLiveRadarModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -276,6 +277,9 @@ export function App() {
 
   // Smart Travel Budget Calculator Modal State
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
+
+  // Critical Mountain Passes & Highway Tunnels Radar Modal State
+  const [isHighwayPassesModalOpen, setIsHighwayPassesModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -855,6 +859,7 @@ export function App() {
         onOpenCarRentalModal={() => setIsCarRentalModalOpen(true)}
         onOpenScraperModal={() => setIsScraperModalOpen(true)}
         onOpenBudgetModal={() => setIsBudgetModalOpen(true)}
+        onOpenHighwayPassesModal={() => setIsHighwayPassesModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1252,6 +1257,13 @@ export function App() {
         <SmartTravelBudgetCalculatorModal
           isOpen={isBudgetModalOpen}
           onClose={() => setIsBudgetModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Critical Mountain Passes & Highway Tunnels Radar Modal */}
+        <HighwayPassesLiveRadarModal
+          isOpen={isHighwayPassesModalOpen}
+          onClose={() => setIsHighwayPassesModalOpen(false)}
           onShowToast={showToast}
         />
 

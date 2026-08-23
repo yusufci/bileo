@@ -157,8 +157,8 @@ export const SleeperTrainGuideModal: React.FC<SleeperTrainGuideModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center border border-emerald-200 text-lg font-black">
-              🚂
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-900 flex items-center justify-center border border-emerald-200">
+              <BileoTrain className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">TCDD Yataklı & Turistik Trenler Portalı</h3>
@@ -187,7 +187,7 @@ export const SleeperTrainGuideModal: React.FC<SleeperTrainGuideModalProps> = ({
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🗺️ Efsanevi Tren Hatları
+              Efsanevi Tren Hatları
             </button>
             <button
               type="button"
@@ -198,7 +198,7 @@ export const SleeperTrainGuideModal: React.FC<SleeperTrainGuideModalProps> = ({
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🛌 Yataklı & Kuşetli Vagonlar
+              Yataklı & Kuşetli Vagonlar
             </button>
             <button
               type="button"
@@ -209,7 +209,7 @@ export const SleeperTrainGuideModal: React.FC<SleeperTrainGuideModalProps> = ({
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              💡 Bilet Bulma & Hazırlık Taktikleri
+              Bilet Bulma & İpuçları
             </button>
           </div>
 

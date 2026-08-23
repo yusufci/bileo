@@ -51,6 +51,7 @@ interface FooterProps {
   onOpenCarRentalModal?: () => void;
   onOpenScraperModal?: () => void;
   onOpenBudgetModal?: () => void;
+  onOpenHighwayPassesModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -102,6 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCarRentalModal,
   onOpenScraperModal,
   onOpenBudgetModal,
+  onOpenHighwayPassesModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -541,6 +543,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
                   <span>Seyahat Bütçe Planlayıcı</span>
+                </button>
+              )}
+              {onOpenHighwayPassesModal && (
+                <button
+                  type="button"
+                  onClick={onOpenHighwayPassesModal}
+                  className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>Kritik Geçit & Tünel Radarı</span>
                 </button>
               )}
             </div>
