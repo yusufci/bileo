@@ -15,6 +15,7 @@ import {
   BileoMessageSquare,
   BileoStar,
   BileoCheck,
+  BileoCopy,
 } from './icons';
 import { RouteItem, TransportType, ReviewItem, ReviewReply, User } from '../types';
 import { CompanyLogo } from './CompanyLogo';
@@ -151,6 +152,19 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
   const [newComfort, setNewComfort] = useState<number>(5);
   const [newService, setNewService] = useState<number>(5);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [copiedRoute, setCopiedRoute] = useState(false);
+
+  const handleShareWhatsApp = () => {
+    const text = encodeURIComponent(`Bileo üzerinden sefer buldum: ${route.company} ile ${route.from} ➔ ${route.to} (${route.date} - ${route.departureTime}). Fiyat: ${route.price} TL. İncele: https://bileo.vercel.app`);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  };
+
+  const handleCopyRoute = () => {
+    const text = `${route.company} • ${route.from} ➔ ${route.to} • ${route.date} ${route.departureTime} • ${route.price} TL • https://bileo.vercel.app`;
+    navigator.clipboard.writeText(text);
+    setCopiedRoute(true);
+    setTimeout(() => setCopiedRoute(false), 2500);
+  };
 
   // Open Add Review Modal with Authentication Check
   const handleOpenAddReview = () => {
@@ -713,6 +727,26 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                 <span>KOLTUK SEÇİMİNE İLERLE ({passengerCount} KOLTUK)</span>
                 <BileoArrowRight className="w-4 h-4" />
               </button>
+
+              {/* Social Sharing & Copy Route Row */}
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleShareWhatsApp}
+                  className="flex-1 py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-extrabold transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-emerald-200"
+                >
+                  <span>WhatsApp’ta Paylaş</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyRoute}
+                  className="py-2 px-3 rounded-xl bg-[#FAF7F2] hover:bg-cream-100 text-charcoal text-xs font-extrabold transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#E8E1D5]"
+                  title="Sefer detaylarını kopyala"
+                >
+                  {copiedRoute ? <BileoCheck className="w-3.5 h-3.5 text-emerald-600" /> : <BileoCopy className="w-3.5 h-3.5 text-charcoal-muted" />}
+                  <span>{copiedRoute ? 'Kopyalandı!' : 'Kopyala'}</span>
+                </button>
+              </div>
 
             </div>
 
