@@ -58,6 +58,7 @@ const OvernightTravelModal = lazy(() => import('./components/OvernightTravelModa
 const WinterSkiTransitModal = lazy(() => import('./components/WinterSkiTransitModal').then(m => ({ default: m.WinterSkiTransitModal })));
 const SeasonalDealsCalendarModal = lazy(() => import('./components/SeasonalDealsCalendarModal').then(m => ({ default: m.SeasonalDealsCalendarModal })));
 const LiveFlightRadarModal = lazy(() => import('./components/LiveFlightRadarModal').then(m => ({ default: m.LiveFlightRadarModal })));
+const AirportMetroTransitModal = lazy(() => import('./components/AirportMetroTransitModal').then(m => ({ default: m.AirportMetroTransitModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -216,6 +217,9 @@ export function App() {
 
   // Live Aircraft Radar Telemetry & Highway Corridors Modal State
   const [isFlightRadarOpen, setIsFlightRadarOpen] = useState(false);
+
+  // Airport Metro Lines, Shuttles & Last-Mile Transfers Modal State
+  const [isAirportMetroOpen, setIsAirportMetroOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -780,6 +784,7 @@ export function App() {
         onOpenSkiModal={() => setIsSkiModalOpen(true)}
         onOpenSeasonsModal={() => setIsSeasonsModalOpen(true)}
         onOpenFlightRadarModal={() => setIsFlightRadarOpen(true)}
+        onOpenAirportMetroModal={() => setIsAirportMetroOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1052,6 +1057,12 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Airport Metro Lines, Shuttles & Last-Mile Transfers Modal */}
+        <AirportMetroTransitModal
+          isOpen={isAirportMetroOpen}
+          onClose={() => setIsAirportMetroOpen(false)}
         />
 
         {/* Global Price Drop Alert Modal */}
