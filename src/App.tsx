@@ -17,6 +17,7 @@ import { PnrQueryModal } from './components/PnrQueryModal';
 import { PriceAlertModal } from './components/PriceAlertModal';
 import { TerminalGuideModal } from './components/TerminalGuideModal';
 import { FleetExperienceModal } from './components/FleetExperienceModal';
+import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -601,6 +602,9 @@ export function App() {
 
       {/* Global Toast Notification Engine */}
       <ToastNotification toasts={toasts} onDismiss={dismissToast} />
+
+      {/* Offline Status & Cached Wallet Banner */}
+      <OfflineBanner onOpenWallet={handleOpenWalletWithAuth} />
     </div>
   );
 }

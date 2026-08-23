@@ -433,8 +433,20 @@ export const TicketWalletModal: React.FC<TicketWalletModalProps> = ({
                       </p>
                     </div>
 
-                    {/* Actions: Print & Refund */}
-                    <div className="flex items-center gap-4">
+                    {/* Actions: WhatsApp Share, Print & Refund */}
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                      <button
+                        onClick={() => {
+                          const passengerNames = selectedTicket.passengers.map((p) => `${p.firstName} ${p.lastName}`).join(', ');
+                          const msg = encodeURIComponent(`Bileo E-Bilet Bilgisi:\nPNR: ${selectedTicket.pnr}\nFirma: ${selectedTicket.route.company}\nGüzergah: ${selectedTicket.route.from} ➔ ${selectedTicket.route.to}\nTarih: ${selectedTicket.route.date} ${selectedTicket.route.departureTime}\nYolcu: ${passengerNames}\nKoltuk: ${selectedTicket.seats.join(', ')}\nBiletinizi https://bileo.vercel.app adresinden sorgulayabilirsiniz.`);
+                          window.open(`https://wa.me/?text=${msg}`, '_blank');
+                        }}
+                        className="text-emerald-700 hover:text-emerald-800 text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer"
+                        title="Bileti WhatsApp ile Paylaş"
+                      >
+                        <span>WhatsApp’ta Paylaş</span>
+                      </button>
+
                       <button
                         onClick={handlePrint}
                         className="text-charcoal hover:text-bordeaux-700 text-xs font-extrabold flex items-center gap-1.5 transition-colors cursor-pointer"
