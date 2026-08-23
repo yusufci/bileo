@@ -53,6 +53,7 @@ const FrequentTravelerRewardsModal = lazy(() => import('./components/FrequentTra
 const LiveRoadWeatherRadarModal = lazy(() => import('./components/LiveRoadWeatherRadarModal').then(m => ({ default: m.LiveRoadWeatherRadarModal })));
 const CampusTransitModal = lazy(() => import('./components/CampusTransitModal').then(m => ({ default: m.CampusTransitModal })));
 const MultiModalComparisonModal = lazy(() => import('./components/MultiModalComparisonModal').then(m => ({ default: m.MultiModalComparisonModal })));
+const CityTransitCardsModal = lazy(() => import('./components/CityTransitCardsModal').then(m => ({ default: m.CityTransitCardsModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -196,6 +197,9 @@ export function App() {
 
   // Multi-Modal Corridor Comparison & Optimization Modal State
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+
+  // Urban Transit Cards, Fares & NFC Top-up Modal State
+  const [isCityCardModalOpen, setIsCityCardModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -755,6 +759,7 @@ export function App() {
         onOpenRadarModal={() => setIsRadarModalOpen(true)}
         onOpenCampusModal={() => setIsCampusModalOpen(true)}
         onOpenCompareModal={() => setIsCompareModalOpen(true)}
+        onOpenCityCardModal={() => setIsCityCardModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -982,6 +987,13 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Urban Transit Cards, Fares & NFC Top-up Modal */}
+        <CityTransitCardsModal
+          isOpen={isCityCardModalOpen}
+          onClose={() => setIsCityCardModalOpen(false)}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}

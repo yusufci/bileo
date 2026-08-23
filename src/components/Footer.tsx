@@ -31,6 +31,7 @@ interface FooterProps {
   onOpenRadarModal?: () => void;
   onOpenCampusModal?: () => void;
   onOpenCompareModal?: () => void;
+  onOpenCityCardModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -62,6 +63,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRadarModal,
   onOpenCampusModal,
   onOpenCompareModal,
+  onOpenCityCardModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -321,6 +323,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-bordeaux-900 hover:text-bordeaux-950 flex items-center gap-1.5 cursor-pointer bg-bordeaux-50 hover:bg-bordeaux-100 px-3 py-1.5 rounded-xl border border-bordeaux-300 transition-colors"
                 >
                   <span>⚖️ Mod Karşılaştır</span>
+                </button>
+              )}
+              {onOpenCityCardModal && (
+                <button
+                  type="button"
+                  onClick={onOpenCityCardModal}
+                  className="text-xs font-extrabold text-emerald-900 hover:text-emerald-950 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                >
+                  <span>💳 Şehir Kartları</span>
                 </button>
               )}
             </div>
