@@ -32,6 +32,7 @@ import { DiscountsGuideModal } from './components/DiscountsGuideModal';
 import { LuggageStorageModal } from './components/LuggageStorageModal';
 import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
 import { CateringMenuModal } from './components/CateringMenuModal';
+import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -138,6 +139,9 @@ export function App() {
 
   // Special Dietary & In-Transit Catering Menu Modal State
   const [isCateringModalOpen, setIsCateringModalOpen] = useState(false);
+
+  // Reduced Mobility & Accessibility Guide Modal State
+  const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -679,6 +683,7 @@ export function App() {
         onOpenStorageModal={() => setIsStorageModalOpen(true)}
         onOpenTrackerModal={() => setIsTrackerModalOpen(true)}
         onOpenCateringModal={() => setIsCateringModalOpen(true)}
+        onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -807,6 +812,12 @@ export function App() {
       <CateringMenuModal
         isOpen={isCateringModalOpen}
         onClose={() => setIsCateringModalOpen(false)}
+      />
+
+      {/* Global Accessibility & Reduced Mobility Guide Modal */}
+      <AccessibilityGuideModal
+        isOpen={isAccessibilityModalOpen}
+        onClose={() => setIsAccessibilityModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
