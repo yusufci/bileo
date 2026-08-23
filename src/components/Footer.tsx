@@ -8,6 +8,7 @@ interface FooterProps {
   onOpenCurrencyModal?: () => void;
   onOpenLuggageModal?: () => void;
   onOpenWeatherModal?: () => void;
+  onOpenShuttleModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -16,6 +17,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCurrencyModal,
   onOpenLuggageModal,
   onOpenWeatherModal,
+  onOpenShuttleModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -67,7 +69,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenWeatherModal}
                   className="text-xs font-extrabold text-amber-700 hover:text-amber-800 flex items-center gap-1.5 cursor-pointer bg-amber-50/80 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>☀️ Hava Durumu</span>
+                  <span>☀️ Hava</span>
+                </button>
+              )}
+              {onOpenShuttleModal && (
+                <button
+                  type="button"
+                  onClick={onOpenShuttleModal}
+                  className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
+                >
+                  <span>🚐 Servis Saatleri</span>
                 </button>
               )}
             </div>

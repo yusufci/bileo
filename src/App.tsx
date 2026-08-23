@@ -23,6 +23,7 @@ import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { CurrencyConverterModal } from './components/CurrencyConverterModal';
 import { LuggageAllowanceModal } from './components/LuggageAllowanceModal';
 import { DestinationWeatherModal } from './components/DestinationWeatherModal';
+import { ShuttleTimetableModal } from './components/ShuttleTimetableModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -102,6 +103,9 @@ export function App() {
 
   // Destination Weather Modal State
   const [isWeatherModalOpen, setIsWeatherModalOpen] = useState(false);
+
+  // Shuttle Timetable Modal State
+  const [isShuttleModalOpen, setIsShuttleModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -627,6 +631,7 @@ export function App() {
         onOpenCurrencyModal={() => setIsCurrencyModalOpen(true)}
         onOpenLuggageModal={() => setIsLuggageModalOpen(true)}
         onOpenWeatherModal={() => setIsWeatherModalOpen(true)}
+        onOpenShuttleModal={() => setIsShuttleModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -700,6 +705,12 @@ export function App() {
         isOpen={isWeatherModalOpen}
         onClose={() => setIsWeatherModalOpen(false)}
         initialCity={searchState.toCity || 'İstanbul'}
+      />
+
+      {/* Global Shuttle & Airport Transfer Timetable Modal */}
+      <ShuttleTimetableModal
+        isOpen={isShuttleModalOpen}
+        onClose={() => setIsShuttleModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
