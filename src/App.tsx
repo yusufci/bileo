@@ -64,6 +64,7 @@ const LiveOccupancyRadarModal = lazy(() => import('./components/LiveOccupancyRad
 const AllProvincesTransitModal = lazy(() => import('./components/AllProvincesTransitModal').then(m => ({ default: m.AllProvincesTransitModal })));
 const SmartTransferPlannerModal = lazy(() => import('./components/SmartTransferPlannerModal').then(m => ({ default: m.SmartTransferPlannerModal })));
 const SeatComfortGuideModal = lazy(() => import('./components/SeatComfortGuideModal').then(m => ({ default: m.SeatComfortGuideModal })));
+const TicketRescheduleModal = lazy(() => import('./components/TicketRescheduleModal').then(m => ({ default: m.TicketRescheduleModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -240,6 +241,9 @@ export function App() {
 
   // Seat Comfort & Sun Direction Simulator Modal State
   const [isSeatComfortModalOpen, setIsSeatComfortModalOpen] = useState(false);
+
+  // Self-Service Ticket Reschedule & Departure Change Modal State
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -810,6 +814,7 @@ export function App() {
         onOpenProvincesModal={() => setIsProvincesModalOpen(true)}
         onOpenTransfersModal={() => setIsTransfersModalOpen(true)}
         onOpenSeatComfortModal={() => setIsSeatComfortModalOpen(true)}
+        onOpenRescheduleModal={() => setIsRescheduleModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1136,6 +1141,14 @@ export function App() {
         <SeatComfortGuideModal
           isOpen={isSeatComfortModalOpen}
           onClose={() => setIsSeatComfortModalOpen(false)}
+        />
+
+        {/* Global Self-Service Ticket Reschedule & Departure Change Modal */}
+        <TicketRescheduleModal
+          isOpen={isRescheduleModalOpen}
+          onClose={() => setIsRescheduleModalOpen(false)}
+          tickets={tickets}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}
