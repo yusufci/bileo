@@ -23,6 +23,7 @@ interface FooterProps {
   onOpenLostFoundModal?: () => void;
   onOpenHighwayModal?: () => void;
   onOpenGroupModal?: () => void;
+  onOpenMedicalModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -46,6 +47,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenLostFoundModal,
   onOpenHighwayModal,
   onOpenGroupModal,
+  onOpenMedicalModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -233,6 +235,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-indigo-800 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-200 transition-colors"
                 >
                   <span>👥 Grup & Kurumsal</span>
+                </button>
+              )}
+              {onOpenMedicalModal && (
+                <button
+                  type="button"
+                  onClick={onOpenMedicalModal}
+                  className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
+                >
+                  <span>🩺 Seyahat Sağlığı</span>
                 </button>
               )}
             </div>

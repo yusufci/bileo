@@ -38,6 +38,7 @@ import { OnboardTechModal } from './components/OnboardTechModal';
 import { LostAndFoundModal } from './components/LostAndFoundModal';
 import { HighwayTollModal } from './components/HighwayTollModal';
 import { GroupBookingModal } from './components/GroupBookingModal';
+import { MedicalTravelModal } from './components/MedicalTravelModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -162,6 +163,9 @@ export function App() {
 
   // Group & Corporate Charter Booking Modal State
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+
+  // Travel Health, Medication & Medical Clearance Modal State
+  const [isMedicalModalOpen, setIsMedicalModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -709,6 +713,7 @@ export function App() {
         onOpenLostFoundModal={() => setIsLostFoundModalOpen(true)}
         onOpenHighwayModal={() => setIsHighwayModalOpen(true)}
         onOpenGroupModal={() => setIsGroupModalOpen(true)}
+        onOpenMedicalModal={() => setIsMedicalModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -876,6 +881,12 @@ export function App() {
         isOpen={isGroupModalOpen}
         onClose={() => setIsGroupModalOpen(false)}
         onShowToast={showToast}
+      />
+
+      {/* Global Travel Health & Medical Clearance Modal */}
+      <MedicalTravelModal
+        isOpen={isMedicalModalOpen}
+        onClose={() => setIsMedicalModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
