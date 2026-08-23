@@ -260,8 +260,8 @@ export const SmartTransferPlannerModal: React.FC<SmartTransferPlannerModalProps>
         {/* Modal Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200 text-lg font-black">
-              🔄
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200">
+              <BileoTrain className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Akıllı Aktarma & Bağlantılı Sefer Planlayıcı</h3>
@@ -352,8 +352,8 @@ export const SmartTransferPlannerModal: React.FC<SmartTransferPlannerModalProps>
 
             {/* Hub & Safe Buffer Notification */}
             <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 flex items-start gap-3">
-              <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center flex-shrink-0 font-black text-xs">
-                ⏳
+              <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center flex-shrink-0">
+                <BileoClock className="w-4 h-4 text-amber-900" />
               </div>
               <div className="space-y-0.5 text-xs">
                 <div className="flex items-center gap-2">

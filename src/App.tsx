@@ -77,6 +77,7 @@ const HighwayPassesLiveRadarModal = lazy(() => import('./components/HighwayPasse
 const SeatUpgradeComfortPlannerModal = lazy(() => import('./components/SeatUpgradeComfortPlannerModal').then(m => ({ default: m.SeatUpgradeComfortPlannerModal })));
 const EcoTreeOffsetCertificateModal = lazy(() => import('./components/EcoTreeOffsetCertificateModal').then(m => ({ default: m.EcoTreeOffsetCertificateModal })));
 const AirportExpressBusGuideModal = lazy(() => import('./components/AirportExpressBusGuideModal').then(m => ({ default: m.AirportExpressBusGuideModal })));
+const ElectricVehicleChargingGuideModal = lazy(() => import('./components/ElectricVehicleChargingGuideModal').then(m => ({ default: m.ElectricVehicleChargingGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -292,6 +293,9 @@ export function App() {
 
   // Airport Express Shuttle Guide Modal State
   const [isAirportShuttleModalOpen, setIsAirportShuttleModalOpen] = useState(false);
+
+  // Highway EV Fast Charging Corridor Guide Modal State
+  const [isEvChargingModalOpen, setIsEvChargingModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -875,6 +879,7 @@ export function App() {
         onOpenSeatUpgradeModal={() => setIsSeatUpgradeModalOpen(true)}
         onOpenEcoCertificateModal={() => setIsEcoCertificateModalOpen(true)}
         onOpenAirportShuttleModal={() => setIsAirportShuttleModalOpen(true)}
+        onOpenEvChargingModal={() => setIsEvChargingModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1300,6 +1305,13 @@ export function App() {
         <AirportExpressBusGuideModal
           isOpen={isAirportShuttleModalOpen}
           onClose={() => setIsAirportShuttleModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Highway EV Charging Corridor Guide Modal */}
+        <ElectricVehicleChargingGuideModal
+          isOpen={isEvChargingModalOpen}
+          onClose={() => setIsEvChargingModalOpen(false)}
           onShowToast={showToast}
         />
 

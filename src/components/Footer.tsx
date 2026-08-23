@@ -55,6 +55,7 @@ interface FooterProps {
   onOpenSeatUpgradeModal?: () => void;
   onOpenEcoCertificateModal?: () => void;
   onOpenAirportShuttleModal?: () => void;
+  onOpenEvChargingModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -110,6 +111,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenSeatUpgradeModal,
   onOpenEcoCertificateModal,
   onOpenAirportShuttleModal,
+  onOpenEvChargingModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -585,6 +587,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-bold text-teal-950 hover:text-teal-900 flex items-center cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
                 >
                   <span>Havalimanı Servisleri</span>
+                </button>
+              )}
+              {onOpenEvChargingModal && (
+                <button
+                  type="button"
+                  onClick={onOpenEvChargingModal}
+                  className="text-xs font-bold text-teal-950 hover:text-teal-900 flex items-center cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
+                >
+                  <span>Otoyol Şarj İstasyonları</span>
                 </button>
               )}
             </div>
