@@ -5,6 +5,7 @@ import {
   BileoPlane,
   BileoBus,
   BileoCheck,
+  BileoCompass,
 } from './icons';
 import { sound } from '../utils/sound';
 
@@ -38,70 +39,50 @@ const DESTINATION_GUIDES: DestinationGuide[] = [
     recommendedMode: 'tren',
     fromCity: 'İstanbul',
     toCity: 'Eskişehir',
-    duration: '2 sa 40 dk (YHT)',
-    budgetEst: '₺₺ (Ekonomik & Öğrenci Dostu)',
-    highlights: [
-      'Porsuk Çayı üzerinde Venedik tipi gondol ve bot turları',
-      'Tarihi Odunpazarı Evleri, Balmumu Heykel Müzesi ve Lületaşı Çarşısı',
-      'Sazova Bilim Kültür ve Sanat Parkı & Masal Şatosu',
-      'Meşhur Odunpazarı Çiböreği ve Balaban Kebap lezzet durakları',
-    ],
-    transitTip: 'Eskişehir YHT Garı şehir merkezindedir; çıkışta Estram tramvayına binerek 5 dakikada Porsuk Çayı’na ulaşabilirsiniz.',
-    bestSeason: 'İlkbahar ve Sonbahar (Nisan - Ekim)',
+    duration: '2 sa 45 dk (YHT)',
+    budgetEst: '1.200 - 2.500 TL (Hafta Sonu)',
+    highlights: ['Odunpazarı Tarihi Evleri', 'Porsuk Çayı Gondol Turu', 'Sazova Bilim & Kültür Parkı', 'Balmumu Heykel Müzesi'],
+    transitTip: 'İstanbul Söğütlüçeşme veya Ankara Gar\'dan her saat başı kalkan YHT ile doğrudan merkezdeki Eskişehir Garı\'na inip yürüyerek şehri gezebilirsiniz.',
+    bestSeason: 'İlkbahar & Sonbahar',
   },
   {
-    id: 'kapadokya-peri',
-    destination: 'Kapadokya — Masalsı Vadiler & Balonlar',
-    tag: 'Nevşehir & Göreme Gece Seferi',
-    recommendedMode: 'otobus',
-    fromCity: 'İstanbul',
-    toCity: 'Nevşehir',
-    duration: '9 sa (Konforlu Gece Otobüsü)',
-    budgetEst: '₺₺₺ (Kültür & Deneyim)',
-    highlights: [
-      'Gün doğumunda Göreme semalarında sıcak hava balonu turu',
-      'Derinkuyu ve Kaymaklı yeraltı şehirleri keşfi',
-      'Aşk Vadisi ve Paşabağ Rahipler Vadisi peribacaları yürüyüşü',
-      'Uçhisar Kalesi gün batımı manzarası ve çömlek kebabı',
-    ],
-    transitTip: 'Nevşehir Otogarı’ndan her 20 dakikada bir kalkan Göreme/Ürgüp ilçe servisleriyle vadilere kolayca geçebilirsiniz.',
-    bestSeason: 'Tüm Yıl (Özellikle Eylül - Kasım ve Nisan - Haziran)',
-  },
-  {
-    id: 'kas-fethiye-likya',
-    destination: 'Kaş & Fethiye — Turkuaz Akdeniz & Likya',
-    tag: 'Ölüdeniz & Kaputaş Plajı Rotası',
+    id: 'kapadokya-bus-plane',
+    destination: 'Kapadokya — Masalsı Peri Bacaları',
+    tag: 'Nevşehir/Kayseri Aktarmalı Gezi',
     recommendedMode: 'ucak',
     fromCity: 'İstanbul',
-    toCity: 'Muğla (Dalaman)',
-    duration: '1 sa 15 dk Uçuş + HAVAŞ',
-    budgetEst: '₺₺₺ (Tatil & Doğa)',
-    highlights: [
-      'Dünyaca ünlü Kaputaş Plajı ve Patara kum tepeleri',
-      'Babadağ’dan Ölüdeniz lagününe yamaç paraşütü',
-      'Kekova batık şehir tekne turu ve Simena kalesi',
-      'Tarihi Likya Yolu günübirlik doğa yürüyüş parkurları',
-    ],
-    transitTip: 'Dalaman Havalimanı’ndan Fethiye ve Kaş’a kesintisiz HAVAŞ ve MUTTAŞ transfer otobüsleri çalışmaktadır.',
+    toCity: 'Nevşehir',
+    duration: '1 sa 15 dk Uçuş + 30 dk Servis',
+    budgetEst: '4.500 - 9.000 TL (3 Günlük)',
+    highlights: ['Göreme Açık Hava Müzesi', 'Sıcak Hava Balon Turu', 'Derinkuyu Yeraltı Şehri', 'Uçhisar Kalesi'],
+    transitTip: 'Nevşehir Kapadokya (NAV) veya Kayseri (ASR) havalimanlarından Göreme/Ürgüp bölgesine Havaş ve otel servisleri mevcuttur.',
+    bestSeason: 'Eylül - Kasım / Nisan - Haziran',
+  },
+  {
+    id: 'kas-kalkan',
+    destination: 'Kaş & Kalkan — Turkuaz Akdeniz',
+    tag: 'Fethiye veya Antalya Otogar Üzerinden',
+    recommendedMode: 'otobus',
+    fromCity: 'İzmir',
+    toCity: 'Antalya',
+    duration: '6 sa 30 dk Otobüs',
+    budgetEst: '5.000 - 12.000 TL (Yaz Sezonu)',
+    highlights: ['Kaputaş Plajı & Patara Kum Tepeleri', 'Kekova Batık Şehir Tekne Turu', 'Meis Adası Günübirlik Geçiş', 'Antik Tiyatro Günbatımı'],
+    transitTip: 'Antalya veya Fethiye otogarından her 45 dakikada bir kalkan sahil minibüsleriyle Kaş Otogarı\'na ulaşabilirsiniz.',
     bestSeason: 'Mayıs - Ekim Arası',
   },
   {
-    id: 'karadeniz-yayla',
-    destination: 'Trabzon & Rize — Karadeniz Yeşili',
-    tag: 'Ayder, Uzungöl & Sümela Manastırı',
+    id: 'karadeniz-ayder',
+    destination: 'Rize Ayder & Fırtına Vadisi',
+    tag: 'Rize-Artvin Havalimanı (RZV) İle Kolay Ulaşım',
     recommendedMode: 'ucak',
     fromCity: 'İstanbul',
-    toCity: 'Trabzon',
-    duration: '1 sa 40 dk Uçuş',
-    budgetEst: '₺₺₺ (Yayla & Doğa)',
-    highlights: [
-      'Kayalıklara asılı tarihi Sümela Manastırı ziyareti',
-      'Rize Ayder ve Pokut yaylalarında bulut denizi manzarası',
-      'Fırtına Deresi boyunca zipline ve rafting heyecanı',
-      'Karadeniz Pidesi, Muhlama ve Akçaabat Köftesi ziyafeti',
-    ],
-    transitTip: 'Trabzon Havalimanı şehir merkezine 10 dakika mesafededir; Rize-Artvin Havalimanı ise yaylalara doğrudan erişim sunar.',
-    bestSeason: 'Haziran - Eylül Arası',
+    toCity: 'Rize',
+    duration: '1 sa 50 dk Uçak + 50 dk Havaş',
+    budgetEst: '4.000 - 8.000 TL (Doğa Turu)',
+    highlights: ['Ayder Yaylası & Kaplıcalar', 'Zilkale & Palovit Şelalesi', 'Fırtına Deresi Rafting', 'Pokut & Sal Yaylası Bulut Denizi'],
+    transitTip: 'Deniz dolgusu üzerine inşa edilen Rize-Artvin Havalimanı (RZV) çıkışında Havaş servisleri Çamlıhemşin ve Ayder güzergahına düzenli sefer yapar.',
+    bestSeason: 'Haziran - Eylül',
   },
 ];
 
@@ -136,8 +117,8 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200 text-lg font-black">
-              🏖️
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200">
+              <BileoCompass className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Popüler Rotalar & Tatil Gezi Rehberi</h3>
@@ -182,13 +163,13 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
               <h4 className="text-xl sm:text-2xl font-black font-display">{current.destination}</h4>
               <div className="flex flex-wrap items-center gap-2 pt-1">
                 <span className="px-2.5 py-1 rounded-lg bg-white/20 backdrop-blur-xs text-[11px] font-bold">
-                  ⏱️ {current.duration}
+                  {current.duration}
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-white/20 backdrop-blur-xs text-[11px] font-bold">
-                  💰 {current.budgetEst}
+                  {current.budgetEst}
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-white/20 backdrop-blur-xs text-[11px] font-bold">
-                  ☀️ {current.bestSeason}
+                  {current.bestSeason}
                 </span>
               </div>
             </div>
@@ -197,7 +178,7 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
           {/* Highlights Checklist */}
           <div className="space-y-3">
             <span className="text-[11px] font-black text-charcoal uppercase tracking-wider block">
-              ⭐ Mutlaka Görülmesi & Deneyimlenmesi Gerekenler
+              Mutlaka Görülmesi & Deneyimlenmesi Gerekenler
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {current.highlights.map((item, idx) => (
@@ -215,7 +196,7 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
           {/* Transit Advice Box */}
           <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 space-y-1">
             <span className="text-[10px] font-black text-emerald-900 uppercase tracking-wider block mb-0.5">
-              💡 Yerel Ulaşım & Aktarma İpucu
+              Yerel Ulaşım & Aktarma İpucu
             </span>
             <p className="text-xs text-emerald-950 font-medium leading-relaxed">
               {current.transitTip}

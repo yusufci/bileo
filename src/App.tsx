@@ -76,6 +76,7 @@ const SmartTravelBudgetCalculatorModal = lazy(() => import('./components/SmartTr
 const HighwayPassesLiveRadarModal = lazy(() => import('./components/HighwayPassesLiveRadarModal').then(m => ({ default: m.HighwayPassesLiveRadarModal })));
 const SeatUpgradeComfortPlannerModal = lazy(() => import('./components/SeatUpgradeComfortPlannerModal').then(m => ({ default: m.SeatUpgradeComfortPlannerModal })));
 const EcoTreeOffsetCertificateModal = lazy(() => import('./components/EcoTreeOffsetCertificateModal').then(m => ({ default: m.EcoTreeOffsetCertificateModal })));
+const AirportExpressBusGuideModal = lazy(() => import('./components/AirportExpressBusGuideModal').then(m => ({ default: m.AirportExpressBusGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -288,6 +289,9 @@ export function App() {
 
   // Carbon Offset & Digital Green Tree Certificate Modal State
   const [isEcoCertificateModalOpen, setIsEcoCertificateModalOpen] = useState(false);
+
+  // Airport Express Shuttle Guide Modal State
+  const [isAirportShuttleModalOpen, setIsAirportShuttleModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -870,6 +874,7 @@ export function App() {
         onOpenHighwayPassesModal={() => setIsHighwayPassesModalOpen(true)}
         onOpenSeatUpgradeModal={() => setIsSeatUpgradeModalOpen(true)}
         onOpenEcoCertificateModal={() => setIsEcoCertificateModalOpen(true)}
+        onOpenAirportShuttleModal={() => setIsAirportShuttleModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1288,6 +1293,13 @@ export function App() {
         <EcoTreeOffsetCertificateModal
           isOpen={isEcoCertificateModalOpen}
           onClose={() => setIsEcoCertificateModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Airport Express Shuttle Guide Modal */}
+        <AirportExpressBusGuideModal
+          isOpen={isAirportShuttleModalOpen}
+          onClose={() => setIsAirportShuttleModalOpen(false)}
           onShowToast={showToast}
         />
 
