@@ -14,6 +14,7 @@ interface FooterProps {
   onOpenTaxiModal?: () => void;
   onOpenRestStopModal?: () => void;
   onOpenDiscountsModal?: () => void;
+  onOpenStorageModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -28,6 +29,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenTaxiModal,
   onOpenRestStopModal,
   onOpenDiscountsModal,
+  onOpenStorageModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -134,6 +136,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
                 >
                   <span>🎟️ İndirimler</span>
+                </button>
+              )}
+              {onOpenStorageModal && (
+                <button
+                  type="button"
+                  onClick={onOpenStorageModal}
+                  className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
+                >
+                  <span>🛅 Emanet</span>
                 </button>
               )}
             </div>

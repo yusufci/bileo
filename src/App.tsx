@@ -29,6 +29,7 @@ import { TravelInsuranceModal } from './components/TravelInsuranceModal';
 import { TaxiEstimatorModal } from './components/TaxiEstimatorModal';
 import { RestStopGuideModal } from './components/RestStopGuideModal';
 import { DiscountsGuideModal } from './components/DiscountsGuideModal';
+import { LuggageStorageModal } from './components/LuggageStorageModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -126,6 +127,9 @@ export function App() {
 
   // Student, Senior, Military & Special Discounts Modal State
   const [isDiscountsModalOpen, setIsDiscountsModalOpen] = useState(false);
+
+  // Left Luggage & Storage Locker Modal State
+  const [isStorageModalOpen, setIsStorageModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -657,6 +661,7 @@ export function App() {
         onOpenTaxiModal={() => setIsTaxiModalOpen(true)}
         onOpenRestStopModal={() => setIsRestStopModalOpen(true)}
         onOpenDiscountsModal={() => setIsDiscountsModalOpen(true)}
+        onOpenStorageModal={() => setIsStorageModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -766,6 +771,12 @@ export function App() {
       <DiscountsGuideModal
         isOpen={isDiscountsModalOpen}
         onClose={() => setIsDiscountsModalOpen(false)}
+      />
+
+      {/* Global Left Luggage & Storage Lockers Modal */}
+      <LuggageStorageModal
+        isOpen={isStorageModalOpen}
+        onClose={() => setIsStorageModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
