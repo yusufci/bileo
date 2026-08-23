@@ -16,6 +16,7 @@ interface TerminalInfo {
   type: 'otobus' | 'ucak' | 'tren' | 'feribot';
   address: string;
   metroConnection: string;
+  transitLines?: string[];
   amenities: string[];
   tips: string;
   gateInfo: string;
@@ -29,6 +30,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'otobus',
     address: 'Altıntepsi Mah., Bayrampaşa / İstanbul',
     metroConnection: 'M1A / M1B Otogar İstasyonu (Doğrudan Terminal İçi Çıkış)',
+    transitLines: ['M1A Yenikapı - Atatürk Havalimanı', 'M1B Yenikapı - Kirazlı', 'İETT 83O / 76O'],
     amenities: ['24 Saat Emanet Ofisi', 'Mescit & Şadırvan', 'Ücretsiz Yolcu Servisleri', 'ATM & Banka Noktaları', 'Yeme-İçme Alanları'],
     tips: 'Kalkış saatinizden en az 45 dakika önce peronunuzda hazır bulunmanız ve servis kalkış saatlerini peron görevlisine teyit etmeniz önerilir.',
     gateInfo: 'Peronlar 1 - 168 (Alt & Üst Kat)',
@@ -40,6 +42,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'otobus',
     address: 'Beştepeler Mah., Mevlana Blv. Yenimahalle / Ankara',
     metroConnection: 'Ankaray AŞTİ İstasyonu (Tünel Bağlantılı Doğrudan Giriş)',
+    transitLines: ['Ankaray A1 Dikimevi - AŞTİ', 'EGO 442 Havalimanı Otobüsü', 'Konya Yolu Minibüsleri'],
     amenities: ['Emanet Bagaj Hizmeti', 'Bebek Bakım Odası', 'Özel Yolcu Dinlenme Salonları', 'Taksi Durağı', 'Eczane'],
     tips: 'Kızılay ve Tunalı yönüne gidecek yolcular Ankaray hattını kullanarak 10 dakikada şehir merkezine ulaşabilir.',
     gateInfo: 'Peronlar 1 - 92',
@@ -51,6 +54,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'ucak',
     address: 'Tayakadın Mah., Arnavutköy / İstanbul',
     metroConnection: 'M11 Gayrettepe - İstanbul Havalimanı Metrosu',
+    transitLines: ['M11 Gayrettepe - Kağıthane - Havalimanı', 'Havaist HVİST-14 / HVİST-9', 'İETT H-2 Mecidiyeköy'],
     amenities: ['Havaist Ekspres Otobüsleri', 'Hızlı Geçiş (Fast Track)', 'Duty Free & Dining', 'Ücretsiz Wi-Fi', 'VIP Lounge'],
     tips: 'İç hat uçuşları için uçuştan en az 2 saat, dış hat uçuşları için en az 3 saat önce havalimanında olunmalıdır.',
     gateInfo: 'Kapılar A, B, C, D, E, F, G',
@@ -62,6 +66,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'ucak',
     address: 'Sanayi Mah., Pendik / İstanbul',
     metroConnection: 'M4 Kadıköy - Sabiha Gökçen Havalimanı Metrosu',
+    transitLines: ['M4 Kadıköy - Tavşantepe - Sabiha Gökçen', 'Havabüs Taksim & Kadıköy', 'İETT E-3 4. Levent'],
     amenities: ['Havabüs Otobüsleri', 'Plaza Lounge', 'Otopark & Vale', 'Kayıp Eşya Ofisi', 'Döviz Büroları'],
     tips: 'M4 metro hattı ile Kadıköy rıhtımdan 50 dakikada doğrudan havalimanı içine ulaşabilirsiniz.',
     gateInfo: 'İç & Dış Hatlar Kapıları 201 - 315',
@@ -73,6 +78,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'tren',
     address: 'Celal Bayar Blv., Altındağ / Ankara',
     metroConnection: 'M4 Keçiören - AKM Metrosu & Ankaray Maltepe İstasyonu',
+    transitLines: ['Başkentray Sincan - Kayaş', 'M4 Kızılay - Gar - Keçiören', 'Ankaray Maltepe Tüneli'],
     amenities: ['VIP Lounge', 'Alışveriş & Kafe Alanları', 'Kapalı Otopark', 'TCDD Danışma & Bilet Gişeleri'],
     tips: 'Yüksek Hızlı Tren kapıları kalkıştan 5 dakika önce otomatik kapanmaktadır; peronda vaktinde bulunulmalıdır.',
     gateInfo: 'YHT Peronları 1 - 6',
@@ -84,6 +90,7 @@ const TERMINALS_DATA: TerminalInfo[] = [
     type: 'feribot',
     address: 'Kennedy Cad., Fatih / İstanbul',
     metroConnection: 'M1A, M1B, M2 Metroları ve Marmaray Yenikapı İstasyonu (5 dk yürüme)',
+    transitLines: ['Marmaray Halkalı - Gebze', 'M2 Hacıosman - Yenikapı', 'M1A/M1B Havalimanı & Kirazlı'],
     amenities: ['Araçlı Biniş Gişeleri', 'Kafeterya', 'Açık Otopark', 'Bilet Satış & Danışma'],
     tips: 'Araçlı yolcuların kalkış saatinden 30 dakika önce biniş şeritlerinde hazır bulunması gerekmektedir.',
     gateInfo: 'İskele 1, 2, 3 ve Araç Rampa Hatları',
@@ -225,7 +232,7 @@ export const TerminalGuideModal: React.FC<TerminalGuideModalProps> = ({ isOpen, 
             </div>
 
             {/* Metro & Transit Connection Card */}
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-1.5">
+            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-2">
               <span className="text-[10px] font-extrabold text-charcoal uppercase tracking-wider block">
                 Raylı Sistem & Toplu Taşıma Bağlantısı
               </span>
@@ -233,6 +240,15 @@ export const TerminalGuideModal: React.FC<TerminalGuideModalProps> = ({ isOpen, 
                 <BileoCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
                 <span>{selectedTerminal.metroConnection}</span>
               </p>
+              {selectedTerminal.transitLines && selectedTerminal.transitLines.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {selectedTerminal.transitLines.map((line, lIdx) => (
+                    <span key={lIdx} className="px-2 py-0.5 rounded-md bg-white border border-[#E8E1D5] text-[10px] font-extrabold text-charcoal shadow-2xs">
+                      🚆 {line}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Amenities Grid */}
