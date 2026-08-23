@@ -10,6 +10,7 @@ interface FooterProps {
   onOpenWeatherModal?: () => void;
   onOpenShuttleModal?: () => void;
   onOpenPetModal?: () => void;
+  onOpenInsuranceModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -20,6 +21,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenWeatherModal,
   onOpenShuttleModal,
   onOpenPetModal,
+  onOpenInsuranceModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -89,7 +91,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenPetModal}
                   className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
                 >
-                  <span>🐾 Evcil Hayvan</span>
+                  <span>🐾 Pati</span>
+                </button>
+              )}
+              {onOpenInsuranceModal && (
+                <button
+                  type="button"
+                  onClick={onOpenInsuranceModal}
+                  className="text-xs font-extrabold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                >
+                  <span>🛡️ Sigorta</span>
                 </button>
               )}
             </div>

@@ -25,6 +25,7 @@ import { LuggageAllowanceModal } from './components/LuggageAllowanceModal';
 import { DestinationWeatherModal } from './components/DestinationWeatherModal';
 import { ShuttleTimetableModal } from './components/ShuttleTimetableModal';
 import { PetTravelModal } from './components/PetTravelModal';
+import { TravelInsuranceModal } from './components/TravelInsuranceModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -110,6 +111,9 @@ export function App() {
 
   // Pet Travel Regulations Modal State
   const [isPetModalOpen, setIsPetModalOpen] = useState(false);
+
+  // Travel Insurance & Trip Protection Modal State
+  const [isInsuranceModalOpen, setIsInsuranceModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -637,6 +641,7 @@ export function App() {
         onOpenWeatherModal={() => setIsWeatherModalOpen(true)}
         onOpenShuttleModal={() => setIsShuttleModalOpen(true)}
         onOpenPetModal={() => setIsPetModalOpen(true)}
+        onOpenInsuranceModal={() => setIsInsuranceModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -722,6 +727,12 @@ export function App() {
       <PetTravelModal
         isOpen={isPetModalOpen}
         onClose={() => setIsPetModalOpen(false)}
+      />
+
+      {/* Global Travel Insurance & Trip Protection Modal */}
+      <TravelInsuranceModal
+        isOpen={isInsuranceModalOpen}
+        onClose={() => setIsInsuranceModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
