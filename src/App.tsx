@@ -69,6 +69,7 @@ const OnboardEntertainmentModal = lazy(() => import('./components/OnboardEnterta
 const ExpressParcelTransitModal = lazy(() => import('./components/ExpressParcelTransitModal').then(m => ({ default: m.ExpressParcelTransitModal })));
 const SleeperTrainGuideModal = lazy(() => import('./components/SleeperTrainGuideModal').then(m => ({ default: m.SleeperTrainGuideModal })));
 const SeaTransitFerryGuideModal = lazy(() => import('./components/SeaTransitFerryGuideModal').then(m => ({ default: m.SeaTransitFerryGuideModal })));
+const BicycleTransitGuideModal = lazy(() => import('./components/BicycleTransitGuideModal').then(m => ({ default: m.BicycleTransitGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -260,6 +261,9 @@ export function App() {
 
   // Sea Transit & Ferry Guide Modal State
   const [isFerryGuideModalOpen, setIsFerryGuideModalOpen] = useState(false);
+
+  // Bicycle & E-Scooter Transit Guide Modal State
+  const [isBicycleModalOpen, setIsBicycleModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -835,6 +839,7 @@ export function App() {
         onOpenParcelModal={() => setIsParcelModalOpen(true)}
         onOpenSleeperTrainModal={() => setIsSleeperTrainModalOpen(true)}
         onOpenFerryGuideModal={() => setIsFerryGuideModalOpen(true)}
+        onOpenBicycleModal={() => setIsBicycleModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1204,6 +1209,13 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: 'feribot' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+          onShowToast={showToast}
+        />
+
+        {/* Global Bicycle & E-Scooter Transit Guide Modal */}
+        <BicycleTransitGuideModal
+          isOpen={isBicycleModalOpen}
+          onClose={() => setIsBicycleModalOpen(false)}
           onShowToast={showToast}
         />
 
