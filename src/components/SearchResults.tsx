@@ -242,6 +242,19 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                           ({route.reviewCount} Değerlendirme)
                         </span>
                       </div>
+                      {route.availableSeats !== undefined && (
+                        <div className="pt-0.5">
+                          {route.availableSeats <= 6 ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-amber-50 text-amber-900 border border-amber-200">
+                              Son {route.availableSeats} Koltuk • Yoğun Talep
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold text-emerald-800 bg-emerald-50">
+                              {route.availableSeats} Boş Koltuk
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <div className="lg:col-span-5">
