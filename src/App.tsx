@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { Header } from './components/Header';
 import { LiveTransitTicker } from './components/LiveTransitTicker';
 import { HeroSection } from './components/HeroSection';
@@ -9,43 +9,45 @@ import { SearchResults } from './components/SearchResults';
 import { WhyBileoSection } from './components/WhyBileoSection';
 import { TicketExperienceScreen } from './components/TicketExperienceScreen';
 import { CarrierDetailScreen } from './components/CarrierDetailScreen';
-import { SeatSelectionModal } from './components/SeatSelectionModal';
-import { CheckoutModal } from './components/CheckoutModal';
-import { TicketWalletModal } from './components/TicketWalletModal';
-import { RefundModal } from './components/RefundModal';
-import { PnrQueryModal } from './components/PnrQueryModal';
-import { PriceAlertModal } from './components/PriceAlertModal';
-import { TerminalGuideModal } from './components/TerminalGuideModal';
-import { FleetExperienceModal } from './components/FleetExperienceModal';
-import { FareMatrixModal } from './components/FareMatrixModal';
-import { EcoCarbonModal } from './components/EcoCarbonModal';
-import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
-import { CurrencyConverterModal } from './components/CurrencyConverterModal';
-import { LuggageAllowanceModal } from './components/LuggageAllowanceModal';
-import { DestinationWeatherModal } from './components/DestinationWeatherModal';
-import { ShuttleTimetableModal } from './components/ShuttleTimetableModal';
-import { PetTravelModal } from './components/PetTravelModal';
-import { TravelInsuranceModal } from './components/TravelInsuranceModal';
-import { TaxiEstimatorModal } from './components/TaxiEstimatorModal';
-import { RestStopGuideModal } from './components/RestStopGuideModal';
-import { DiscountsGuideModal } from './components/DiscountsGuideModal';
-import { LuggageStorageModal } from './components/LuggageStorageModal';
-import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
-import { CateringMenuModal } from './components/CateringMenuModal';
-import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
-import { StudentTravelModal } from './components/StudentTravelModal';
-import { OnboardTechModal } from './components/OnboardTechModal';
-import { LostAndFoundModal } from './components/LostAndFoundModal';
-import { HighwayTollModal } from './components/HighwayTollModal';
-import { GroupBookingModal } from './components/GroupBookingModal';
-import { MedicalTravelModal } from './components/MedicalTravelModal';
-import { RouteStopsModal } from './components/RouteStopsModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
-import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
 import { sound } from './utils/sound';
+
+// Lazy Loaded Modals for Ultra-Fast Initial Page Load & Minimal Bundle Size
+const SeatSelectionModal = lazy(() => import('./components/SeatSelectionModal').then(m => ({ default: m.SeatSelectionModal })));
+const CheckoutModal = lazy(() => import('./components/CheckoutModal').then(m => ({ default: m.CheckoutModal })));
+const TicketWalletModal = lazy(() => import('./components/TicketWalletModal').then(m => ({ default: m.TicketWalletModal })));
+const RefundModal = lazy(() => import('./components/RefundModal').then(m => ({ default: m.RefundModal })));
+const PnrQueryModal = lazy(() => import('./components/PnrQueryModal').then(m => ({ default: m.PnrQueryModal })));
+const PriceAlertModal = lazy(() => import('./components/PriceAlertModal').then(m => ({ default: m.PriceAlertModal })));
+const TerminalGuideModal = lazy(() => import('./components/TerminalGuideModal').then(m => ({ default: m.TerminalGuideModal })));
+const FleetExperienceModal = lazy(() => import('./components/FleetExperienceModal').then(m => ({ default: m.FleetExperienceModal })));
+const FareMatrixModal = lazy(() => import('./components/FareMatrixModal').then(m => ({ default: m.FareMatrixModal })));
+const EcoCarbonModal = lazy(() => import('./components/EcoCarbonModal').then(m => ({ default: m.EcoCarbonModal })));
+const KeyboardShortcutsModal = lazy(() => import('./components/KeyboardShortcutsModal').then(m => ({ default: m.KeyboardShortcutsModal })));
+const CurrencyConverterModal = lazy(() => import('./components/CurrencyConverterModal').then(m => ({ default: m.CurrencyConverterModal })));
+const LuggageAllowanceModal = lazy(() => import('./components/LuggageAllowanceModal').then(m => ({ default: m.LuggageAllowanceModal })));
+const DestinationWeatherModal = lazy(() => import('./components/DestinationWeatherModal').then(m => ({ default: m.DestinationWeatherModal })));
+const ShuttleTimetableModal = lazy(() => import('./components/ShuttleTimetableModal').then(m => ({ default: m.ShuttleTimetableModal })));
+const PetTravelModal = lazy(() => import('./components/PetTravelModal').then(m => ({ default: m.PetTravelModal })));
+const TravelInsuranceModal = lazy(() => import('./components/TravelInsuranceModal').then(m => ({ default: m.TravelInsuranceModal })));
+const TaxiEstimatorModal = lazy(() => import('./components/TaxiEstimatorModal').then(m => ({ default: m.TaxiEstimatorModal })));
+const RestStopGuideModal = lazy(() => import('./components/RestStopGuideModal').then(m => ({ default: m.RestStopGuideModal })));
+const DiscountsGuideModal = lazy(() => import('./components/DiscountsGuideModal').then(m => ({ default: m.DiscountsGuideModal })));
+const LuggageStorageModal = lazy(() => import('./components/LuggageStorageModal').then(m => ({ default: m.LuggageStorageModal })));
+const LiveJourneyTrackerModal = lazy(() => import('./components/LiveJourneyTrackerModal').then(m => ({ default: m.LiveJourneyTrackerModal })));
+const CateringMenuModal = lazy(() => import('./components/CateringMenuModal').then(m => ({ default: m.CateringMenuModal })));
+const AccessibilityGuideModal = lazy(() => import('./components/AccessibilityGuideModal').then(m => ({ default: m.AccessibilityGuideModal })));
+const StudentTravelModal = lazy(() => import('./components/StudentTravelModal').then(m => ({ default: m.StudentTravelModal })));
+const OnboardTechModal = lazy(() => import('./components/OnboardTechModal').then(m => ({ default: m.OnboardTechModal })));
+const LostAndFoundModal = lazy(() => import('./components/LostAndFoundModal').then(m => ({ default: m.LostAndFoundModal })));
+const HighwayTollModal = lazy(() => import('./components/HighwayTollModal').then(m => ({ default: m.HighwayTollModal })));
+const GroupBookingModal = lazy(() => import('./components/GroupBookingModal').then(m => ({ default: m.GroupBookingModal })));
+const MedicalTravelModal = lazy(() => import('./components/MedicalTravelModal').then(m => ({ default: m.MedicalTravelModal })));
+const RouteStopsModal = lazy(() => import('./components/RouteStopsModal').then(m => ({ default: m.RouteStopsModal })));
+const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
   SearchFilterState,
@@ -546,36 +548,40 @@ export function App() {
 
   if (selectedRouteForSeat) {
     return (
-      <SeatSelectionModal
-        route={selectedRouteForSeat.route}
-        targetSeatsCount={selectedRouteForSeat.passengerCount}
-        onClose={() => {
-          setSelectedRouteForExperience(selectedRouteForSeat.route);
-          setSelectedRouteForSeat(null);
-        }}
-        onConfirmSeats={handleConfirmSeats}
-      />
+      <Suspense fallback={null}>
+        <SeatSelectionModal
+          route={selectedRouteForSeat.route}
+          targetSeatsCount={selectedRouteForSeat.passengerCount}
+          onClose={() => {
+            setSelectedRouteForExperience(selectedRouteForSeat.route);
+            setSelectedRouteForSeat(null);
+          }}
+          onConfirmSeats={handleConfirmSeats}
+        />
+      </Suspense>
     );
   }
 
   if (checkoutData) {
     return (
-      <CheckoutModal
-        route={checkoutData.route}
-        selectedSeats={checkoutData.selectedSeats}
-        seatGenders={checkoutData.seatGenders}
-        selectedSeatObjects={checkoutData.selectedSeatObjects}
-        selectedGender={checkoutData.gender}
-        onClose={() => setCheckoutData(null)}
-        onPaymentSuccess={handleTicketPurchased}
-        onBookingCompleted={handleTicketPurchased}
-      />
+      <Suspense fallback={null}>
+        <CheckoutModal
+          route={checkoutData.route}
+          selectedSeats={checkoutData.selectedSeats}
+          seatGenders={checkoutData.seatGenders}
+          selectedSeatObjects={checkoutData.selectedSeatObjects}
+          selectedGender={checkoutData.gender}
+          onClose={() => setCheckoutData(null)}
+          onPaymentSuccess={handleTicketPurchased}
+          onBookingCompleted={handleTicketPurchased}
+        />
+      </Suspense>
     );
   }
 
   if (isWalletOpen) {
     return (
-      <>
+      <Suspense fallback={null}>
         <TicketWalletModal
           tickets={tickets}
           onClose={() => setIsWalletOpen(false)}
@@ -588,7 +594,7 @@ export function App() {
             onConfirmRefund={handleConfirmRefund}
           />
         )}
-      </>
+      </Suspense>
     );
   }
 
@@ -721,194 +727,197 @@ export function App() {
         onOpenRouteStopsModal={() => setIsRouteStopsModalOpen(true)}
       />
 
-      {/* Global Authentication Modal */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => {
-          setIsAuthModalOpen(false);
-          setPendingAction(null);
-        }}
-        onLoginSuccess={handleLoginSuccess}
-        promptReason={authPromptReason}
-      />
+      {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
+      <Suspense fallback={null}>
+        {/* Global Authentication Modal */}
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => {
+            setIsAuthModalOpen(false);
+            setPendingAction(null);
+          }}
+          onLoginSuccess={handleLoginSuccess}
+          promptReason={authPromptReason}
+        />
 
-      {/* Global PNR Query & Self-Service Management Modal */}
-      <PnrQueryModal
-        isOpen={isPnrQueryOpen}
-        onClose={() => setIsPnrQueryOpen(false)}
-        tickets={tickets}
-        onOpenRefund={handleOpenRefund}
-        onShowToast={showToast}
-      />
+        {/* Global PNR Query & Self-Service Management Modal */}
+        <PnrQueryModal
+          isOpen={isPnrQueryOpen}
+          onClose={() => setIsPnrQueryOpen(false)}
+          tickets={tickets}
+          onOpenRefund={handleOpenRefund}
+          onShowToast={showToast}
+        />
 
-      {/* Global Terminal & Station Guide Modal */}
-      <TerminalGuideModal
-        isOpen={isTerminalGuideOpen}
-        onClose={() => setIsTerminalGuideOpen(false)}
-      />
+        {/* Global Terminal & Station Guide Modal */}
+        <TerminalGuideModal
+          isOpen={isTerminalGuideOpen}
+          onClose={() => setIsTerminalGuideOpen(false)}
+        />
 
-      {/* Global Fleet & Vehicle Standards Modal */}
-      <FleetExperienceModal
-        isOpen={isFleetModalOpen}
-        onClose={() => setIsFleetModalOpen(false)}
-      />
+        {/* Global Fleet & Vehicle Standards Modal */}
+        <FleetExperienceModal
+          isOpen={isFleetModalOpen}
+          onClose={() => setIsFleetModalOpen(false)}
+        />
 
-      {/* Global Multimodal Fare Matrix Modal */}
-      <FareMatrixModal
-        isOpen={isFareMatrixOpen}
-        onClose={() => setIsFareMatrixOpen(false)}
-        onSelectRouteMode={(from, to, mode) => {
-          handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      />
+        {/* Global Multimodal Fare Matrix Modal */}
+        <FareMatrixModal
+          isOpen={isFareMatrixOpen}
+          onClose={() => setIsFareMatrixOpen(false)}
+          onSelectRouteMode={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
 
-      {/* Global Eco Carbon Footprint Modal */}
-      <EcoCarbonModal
-        isOpen={isEcoModalOpen}
-        onClose={() => setIsEcoModalOpen(false)}
-      />
+        {/* Global Eco Carbon Footprint Modal */}
+        <EcoCarbonModal
+          isOpen={isEcoModalOpen}
+          onClose={() => setIsEcoModalOpen(false)}
+        />
 
-      {/* Global Keyboard Shortcuts Modal */}
-      <KeyboardShortcutsModal
-        isOpen={isShortcutsOpen}
-        onClose={() => setIsShortcutsOpen(false)}
-      />
+        {/* Global Keyboard Shortcuts Modal */}
+        <KeyboardShortcutsModal
+          isOpen={isShortcutsOpen}
+          onClose={() => setIsShortcutsOpen(false)}
+        />
 
-      {/* Global Multi-Currency Converter Modal */}
-      <CurrencyConverterModal
-        isOpen={isCurrencyModalOpen}
-        onClose={() => setIsCurrencyModalOpen(false)}
-      />
+        {/* Global Multi-Currency Converter Modal */}
+        <CurrencyConverterModal
+          isOpen={isCurrencyModalOpen}
+          onClose={() => setIsCurrencyModalOpen(false)}
+        />
 
-      {/* Global Luggage Allowance & Rules Modal */}
-      <LuggageAllowanceModal
-        isOpen={isLuggageModalOpen}
-        onClose={() => setIsLuggageModalOpen(false)}
-      />
+        {/* Global Luggage Allowance & Rules Modal */}
+        <LuggageAllowanceModal
+          isOpen={isLuggageModalOpen}
+          onClose={() => setIsLuggageModalOpen(false)}
+        />
 
-      {/* Global Destination Weather Forecast Modal */}
-      <DestinationWeatherModal
-        isOpen={isWeatherModalOpen}
-        onClose={() => setIsWeatherModalOpen(false)}
-        initialCity={searchState.toCity || 'İstanbul'}
-      />
+        {/* Global Destination Weather Forecast Modal */}
+        <DestinationWeatherModal
+          isOpen={isWeatherModalOpen}
+          onClose={() => setIsWeatherModalOpen(false)}
+          initialCity={searchState.toCity || 'İstanbul'}
+        />
 
-      {/* Global Shuttle & Airport Transfer Timetable Modal */}
-      <ShuttleTimetableModal
-        isOpen={isShuttleModalOpen}
-        onClose={() => setIsShuttleModalOpen(false)}
-      />
+        {/* Global Shuttle & Airport Transfer Timetable Modal */}
+        <ShuttleTimetableModal
+          isOpen={isShuttleModalOpen}
+          onClose={() => setIsShuttleModalOpen(false)}
+        />
 
-      {/* Global Pet Travel Regulations Modal */}
-      <PetTravelModal
-        isOpen={isPetModalOpen}
-        onClose={() => setIsPetModalOpen(false)}
-      />
+        {/* Global Pet Travel Regulations Modal */}
+        <PetTravelModal
+          isOpen={isPetModalOpen}
+          onClose={() => setIsPetModalOpen(false)}
+        />
 
-      {/* Global Travel Insurance & Trip Protection Modal */}
-      <TravelInsuranceModal
-        isOpen={isInsuranceModalOpen}
-        onClose={() => setIsInsuranceModalOpen(false)}
-      />
+        {/* Global Travel Insurance & Trip Protection Modal */}
+        <TravelInsuranceModal
+          isOpen={isInsuranceModalOpen}
+          onClose={() => setIsInsuranceModalOpen(false)}
+        />
 
-      {/* Global Taxi & Ride Fare Estimator Modal */}
-      <TaxiEstimatorModal
-        isOpen={isTaxiModalOpen}
-        onClose={() => setIsTaxiModalOpen(false)}
-      />
+        {/* Global Taxi & Ride Fare Estimator Modal */}
+        <TaxiEstimatorModal
+          isOpen={isTaxiModalOpen}
+          onClose={() => setIsTaxiModalOpen(false)}
+        />
 
-      {/* Global Highway Rest Stop & Food Guide Modal */}
-      <RestStopGuideModal
-        isOpen={isRestStopModalOpen}
-        onClose={() => setIsRestStopModalOpen(false)}
-      />
+        {/* Global Highway Rest Stop & Food Guide Modal */}
+        <RestStopGuideModal
+          isOpen={isRestStopModalOpen}
+          onClose={() => setIsRestStopModalOpen(false)}
+        />
 
-      {/* Global Special Passenger Discounts Guide Modal */}
-      <DiscountsGuideModal
-        isOpen={isDiscountsModalOpen}
-        onClose={() => setIsDiscountsModalOpen(false)}
-      />
+        {/* Global Special Passenger Discounts Guide Modal */}
+        <DiscountsGuideModal
+          isOpen={isDiscountsModalOpen}
+          onClose={() => setIsDiscountsModalOpen(false)}
+        />
 
-      {/* Global Left Luggage & Storage Lockers Modal */}
-      <LuggageStorageModal
-        isOpen={isStorageModalOpen}
-        onClose={() => setIsStorageModalOpen(false)}
-      />
+        {/* Global Left Luggage & Storage Lockers Modal */}
+        <LuggageStorageModal
+          isOpen={isStorageModalOpen}
+          onClose={() => setIsStorageModalOpen(false)}
+        />
 
-      {/* Global Live GPS Journey Tracker Modal */}
-      <LiveJourneyTrackerModal
-        isOpen={isTrackerModalOpen}
-        onClose={() => setIsTrackerModalOpen(false)}
-        onShowToast={showToast}
-      />
+        {/* Global Live GPS Journey Tracker Modal */}
+        <LiveJourneyTrackerModal
+          isOpen={isTrackerModalOpen}
+          onClose={() => setIsTrackerModalOpen(false)}
+          onShowToast={showToast}
+        />
 
-      {/* Global Special Dietary & Catering Menu Modal */}
-      <CateringMenuModal
-        isOpen={isCateringModalOpen}
-        onClose={() => setIsCateringModalOpen(false)}
-      />
+        {/* Global Special Dietary & Catering Menu Modal */}
+        <CateringMenuModal
+          isOpen={isCateringModalOpen}
+          onClose={() => setIsCateringModalOpen(false)}
+        />
 
-      {/* Global Accessibility & Reduced Mobility Guide Modal */}
-      <AccessibilityGuideModal
-        isOpen={isAccessibilityModalOpen}
-        onClose={() => setIsAccessibilityModalOpen(false)}
-      />
+        {/* Global Accessibility & Reduced Mobility Guide Modal */}
+        <AccessibilityGuideModal
+          isOpen={isAccessibilityModalOpen}
+          onClose={() => setIsAccessibilityModalOpen(false)}
+        />
 
-      {/* Global Student & Youth Travel Club Modal */}
-      <StudentTravelModal
-        isOpen={isStudentModalOpen}
-        onClose={() => setIsStudentModalOpen(false)}
-        onShowToast={showToast}
-      />
+        {/* Global Student & Youth Travel Club Modal */}
+        <StudentTravelModal
+          isOpen={isStudentModalOpen}
+          onClose={() => setIsStudentModalOpen(false)}
+          onShowToast={showToast}
+        />
 
-      {/* Global Onboard Power Outlets, Wi-Fi & Tech Specs Modal */}
-      <OnboardTechModal
-        isOpen={isTechModalOpen}
-        onClose={() => setIsTechModalOpen(false)}
-      />
+        {/* Global Onboard Power Outlets, Wi-Fi & Tech Specs Modal */}
+        <OnboardTechModal
+          isOpen={isTechModalOpen}
+          onClose={() => setIsTechModalOpen(false)}
+        />
 
-      {/* Global Lost & Found Luggage & Items Modal */}
-      <LostAndFoundModal
-        isOpen={isLostFoundModalOpen}
-        onClose={() => setIsLostFoundModalOpen(false)}
-        onShowToast={showToast}
-      />
+        {/* Global Lost & Found Luggage & Items Modal */}
+        <LostAndFoundModal
+          isOpen={isLostFoundModalOpen}
+          onClose={() => setIsLostFoundModalOpen(false)}
+          onShowToast={showToast}
+        />
 
-      {/* Global Highway & Bridge Tolls Estimator Modal */}
-      <HighwayTollModal
-        isOpen={isHighwayModalOpen}
-        onClose={() => setIsHighwayModalOpen(false)}
-      />
+        {/* Global Highway & Bridge Tolls Estimator Modal */}
+        <HighwayTollModal
+          isOpen={isHighwayModalOpen}
+          onClose={() => setIsHighwayModalOpen(false)}
+        />
 
-      {/* Global Group & Corporate Charter Booking Modal */}
-      <GroupBookingModal
-        isOpen={isGroupModalOpen}
-        onClose={() => setIsGroupModalOpen(false)}
-        onShowToast={showToast}
-      />
+        {/* Global Group & Corporate Charter Booking Modal */}
+        <GroupBookingModal
+          isOpen={isGroupModalOpen}
+          onClose={() => setIsGroupModalOpen(false)}
+          onShowToast={showToast}
+        />
 
-      {/* Global Travel Health & Medical Clearance Modal */}
-      <MedicalTravelModal
-        isOpen={isMedicalModalOpen}
-        onClose={() => setIsMedicalModalOpen(false)}
-      />
+        {/* Global Travel Health & Medical Clearance Modal */}
+        <MedicalTravelModal
+          isOpen={isMedicalModalOpen}
+          onClose={() => setIsMedicalModalOpen(false)}
+        />
 
-      {/* Global Intermediate Route Stops & Timeline Modal */}
-      <RouteStopsModal
-        isOpen={isRouteStopsModalOpen}
-        onClose={() => setIsRouteStopsModalOpen(false)}
-      />
+        {/* Global Intermediate Route Stops & Timeline Modal */}
+        <RouteStopsModal
+          isOpen={isRouteStopsModalOpen}
+          onClose={() => setIsRouteStopsModalOpen(false)}
+        />
 
-      {/* Global Price Drop Alert Modal */}
-      <PriceAlertModal
-        isOpen={priceAlertData.isOpen}
-        onClose={() => setPriceAlertData((prev) => ({ ...prev, isOpen: false }))}
-        fromCity={searchState.fromCity || 'İstanbul'}
-        toCity={searchState.toCity || 'Ankara'}
-        currentMinPrice={priceAlertData.minPrice}
-        onShowToast={showToast}
-      />
+        {/* Global Price Drop Alert Modal */}
+        <PriceAlertModal
+          isOpen={priceAlertData.isOpen}
+          onClose={() => setPriceAlertData((prev) => ({ ...prev, isOpen: false }))}
+          fromCity={searchState.fromCity || 'İstanbul'}
+          toCity={searchState.toCity || 'Ankara'}
+          currentMinPrice={priceAlertData.minPrice}
+          onShowToast={showToast}
+        />
+      </Suspense>
 
       {/* Global Toast Notification Engine */}
       <ToastNotification toasts={toasts} onDismiss={dismissToast} />
