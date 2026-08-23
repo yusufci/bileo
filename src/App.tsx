@@ -75,6 +75,7 @@ const LiveTransitScraperModal = lazy(() => import('./components/LiveTransitScrap
 const SmartTravelBudgetCalculatorModal = lazy(() => import('./components/SmartTravelBudgetCalculatorModal').then(m => ({ default: m.SmartTravelBudgetCalculatorModal })));
 const HighwayPassesLiveRadarModal = lazy(() => import('./components/HighwayPassesLiveRadarModal').then(m => ({ default: m.HighwayPassesLiveRadarModal })));
 const SeatUpgradeComfortPlannerModal = lazy(() => import('./components/SeatUpgradeComfortPlannerModal').then(m => ({ default: m.SeatUpgradeComfortPlannerModal })));
+const EcoTreeOffsetCertificateModal = lazy(() => import('./components/EcoTreeOffsetCertificateModal').then(m => ({ default: m.EcoTreeOffsetCertificateModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -284,6 +285,9 @@ export function App() {
 
   // Seat Upgrade & Extra Comfort Assistant Modal State
   const [isSeatUpgradeModalOpen, setIsSeatUpgradeModalOpen] = useState(false);
+
+  // Carbon Offset & Digital Green Tree Certificate Modal State
+  const [isEcoCertificateModalOpen, setIsEcoCertificateModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -865,6 +869,7 @@ export function App() {
         onOpenBudgetModal={() => setIsBudgetModalOpen(true)}
         onOpenHighwayPassesModal={() => setIsHighwayPassesModalOpen(true)}
         onOpenSeatUpgradeModal={() => setIsSeatUpgradeModalOpen(true)}
+        onOpenEcoCertificateModal={() => setIsEcoCertificateModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1276,6 +1281,13 @@ export function App() {
         <SeatUpgradeComfortPlannerModal
           isOpen={isSeatUpgradeModalOpen}
           onClose={() => setIsSeatUpgradeModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Carbon Offset & Green Tree Certificate Modal */}
+        <EcoTreeOffsetCertificateModal
+          isOpen={isEcoCertificateModalOpen}
+          onClose={() => setIsEcoCertificateModalOpen(false)}
           onShowToast={showToast}
         />
 

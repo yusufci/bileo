@@ -5,6 +5,7 @@ import {
   BileoBus,
   BileoFerry,
   BileoPlane,
+  BileoMapPin,
 } from './icons';
 import { sound } from '../utils/sound';
 
@@ -13,7 +14,7 @@ interface RouteStopsModalProps {
   onClose: () => void;
 }
 
-interface IntermediateStop {
+interface StopItem {
   name: string;
   type: 'origin' | 'stop' | 'rest' | 'destination';
   timeOffset: string;
@@ -21,7 +22,7 @@ interface IntermediateStop {
   note?: string;
 }
 
-interface RouteDetail {
+interface RouteStopPlan {
   id: string;
   mode: 'tren' | 'otobus' | 'feribot' | 'ucak';
   title: string;
@@ -29,59 +30,61 @@ interface RouteDetail {
   totalTime: string;
   distance: string;
   frequency: string;
-  stops: IntermediateStop[];
+  stops: StopItem[];
 }
 
-const ROUTE_DATA: RouteDetail[] = [
+const POPULAR_ROUTES: RouteStopPlan[] = [
   {
-    id: 'yht-ist-ank',
+    id: 'yht-ank-ist',
     mode: 'tren',
-    title: 'İstanbul (Söğütlüçeşme) → Ankara Garı',
-    routeCode: 'YHT-91024',
-    totalTime: '4 sa 20 dk',
+    title: 'Ankara (Gar) → İstanbul (Söğütlüçeşme) YHT',
+    routeCode: 'YHT-91003',
+    totalTime: '4 sa 15 dk',
     distance: '533 km',
-    frequency: 'Her saat başı (Günde 16 sefer)',
+    frequency: 'Günde 16 karşılıklı sefer',
     stops: [
-      { name: 'İstanbul (Söğütlüçeşme)', type: 'origin', timeOffset: '00:00', note: 'Marmaray & Metrobüs Bağlantısı' },
-      { name: 'Bostancı', type: 'stop', timeOffset: '+00:10', duration: '2 dk' },
-      { name: 'Pendik', type: 'stop', timeOffset: '+00:25', duration: '3 dk', note: 'Sabiha Gökçen Havalimanı Otobüs Bağlantısı' },
-      { name: 'Gebze', type: 'stop', timeOffset: '+00:45', duration: '2 dk' },
-      { name: 'İzmit (Kocaeli)', type: 'stop', timeOffset: '+01:15', duration: '3 dk' },
-      { name: 'Arifiye (Sakarya)', type: 'stop', timeOffset: '+01:45', duration: '2 dk' },
-      { name: 'Bilecik', type: 'stop', timeOffset: '+02:30', duration: '2 dk' },
-      { name: 'Bozüyük', type: 'stop', timeOffset: '+02:55', duration: '2 dk' },
-      { name: 'Eskişehir Gar', type: 'stop', timeOffset: '+03:20', duration: '5 dk', note: 'Konya & Kütahya Aktarma Noktası' },
-      { name: 'Polatlı YHT', type: 'stop', timeOffset: '+03:55', duration: '2 dk' },
-      { name: 'Ankara YHT Garı', type: 'destination', timeOffset: '+04:20', note: 'Ankaray & Başkentray Metro Entegrasyonu' },
+      { name: 'Ankara YHT Garı', type: 'origin', timeOffset: '00:00', note: 'Başkentray & Ankaray Metro Bağlantısı' },
+      { name: 'Eryaman YHT', type: 'stop', timeOffset: '+00:14', duration: '2 dk' },
+      { name: 'Polatlı YHT', type: 'stop', timeOffset: '+00:38', duration: '2 dk' },
+      { name: 'Eskişehir Garı', type: 'stop', timeOffset: '+01:25', duration: '4 dk' },
+      { name: 'Bozüyük YHT', type: 'stop', timeOffset: '+01:48', duration: '2 dk' },
+      { name: 'Bilecik YHT', type: 'stop', timeOffset: '+02:08', duration: '2 dk' },
+      { name: 'Arifiye (Sakarya)', type: 'stop', timeOffset: '+02:52', duration: '2 dk' },
+      { name: 'İzmit Garı (Kocaeli)', type: 'stop', timeOffset: '+03:22', duration: '3 dk' },
+      { name: 'Gebze Garı', type: 'stop', timeOffset: '+03:48', duration: '2 dk' },
+      { name: 'Pendik Garı (İstanbul)', type: 'stop', timeOffset: '+04:02', duration: '2 dk' },
+      { name: 'Bostancı', type: 'stop', timeOffset: '+04:15', duration: '2 dk' },
+      { name: 'Söğütlüçeşme (Kadıköy)', type: 'destination', timeOffset: '+04:25', note: 'Metrobüs & Marmaray Entegrasyonu' },
+      { name: 'Halkalı Garı (Avrupa Yakası)', type: 'destination', timeOffset: '+05:05', note: 'Marmaray Son İstasyon' },
     ],
   },
   {
-    id: 'bus-ist-izm',
+    id: 'bus-ist-izmir',
     mode: 'otobus',
-    title: 'İstanbul (Esenler) → İzmir Şehirlerarası Otogar',
-    routeCode: 'O-5 EKSPRES',
-    totalTime: '5 sa 15 dk',
-    distance: '480 km',
-    frequency: 'Günde 28 ekspres sefer',
+    title: 'İstanbul (Esenler) → İzmir (Bornova) O-5 Otoyolu',
+    routeCode: 'EXP-IZM35',
+    totalTime: '4 sa 45 dk',
+    distance: '479 km',
+    frequency: '24 Saat her 30 dakikada bir sefer',
     stops: [
-      { name: 'İstanbul (Esenler Büyük Otogar)', type: 'origin', timeOffset: '00:00', note: 'M1A Metro İstasyonu' },
-      { name: 'Alibeyköy Cep Otogarı', type: 'stop', timeOffset: '+00:40', duration: '15 dk', note: 'T5 Tramvay Hattı' },
-      { name: 'Osmangazi Köprüsü Geçişi', type: 'stop', timeOffset: '+01:30', note: 'Körfez Hızlı Geçiş' },
-      { name: 'Bursa Otogar', type: 'stop', timeOffset: '+02:15', duration: '20 dk' },
-      { name: 'Oksijen O-5 Dinlenme Tesisi', type: 'rest', timeOffset: '+03:15', duration: '30 dk Mola', note: 'Sıcak Yemek & Şarj Alanı' },
-      { name: 'Balıkesir Otogar', type: 'stop', timeOffset: '+04:00', duration: '15 dk' },
-      { name: 'Manisa Şehirlerarası Otogar', type: 'stop', timeOffset: '+04:45', duration: '10 dk' },
-      { name: 'İzmir Şehirlerarası Otobüs Terminali', type: 'destination', timeOffset: '+05:15', note: 'İzmirim Kart & Şehir İçi Ücretsiz Servisler' },
+      { name: 'İstanbul (Büyük İstanbul Otogarı - Esenler)', type: 'origin', timeOffset: '00:00', note: 'M1A/M1B Otogar Metro' },
+      { name: 'Alibeyköy Cep Otogarı', type: 'stop', timeOffset: '+00:35', duration: '10 dk' },
+      { name: 'Dudullu Terminali (Anadolu Yakası)', type: 'stop', timeOffset: '+01:15', duration: '15 dk' },
+      { name: 'Osmangazi Köprüsü Geçişi', type: 'stop', timeOffset: '+01:45', note: 'O-5 Otoyolu Kesintisiz Geçiş' },
+      { name: 'Bursa Oksijen Dinlenme Tesisi', type: 'rest', timeOffset: '+02:30', duration: '30 dk Çay & Yemek Molası' },
+      { name: 'Balıkesir Batı Geçişi', type: 'stop', timeOffset: '+03:35', note: 'Otoyol Gişeleri' },
+      { name: 'Manisa Kuzey Çıkışı', type: 'stop', timeOffset: '+04:15', note: 'Sabuncubeli Tüneli' },
+      { name: 'İzmir Şehirlerarası Otobüs Terminali (Bornova)', type: 'destination', timeOffset: '+04:45', note: 'Eshot & Metro Ücretsiz Şehir Servisleri' },
     ],
   },
   {
     id: 'bus-ist-ant',
     mode: 'otobus',
-    title: 'İstanbul (Harem) → Antalya Otogarı',
-    routeCode: 'AKDENİZ GECE',
+    title: 'İstanbul (Harem) → Antalya (Şehirlerarası Otogar)',
+    routeCode: 'EXP-ANT07',
     totalTime: '9 sa 45 dk',
-    distance: '710 km',
-    frequency: 'Akşam 20:00 - 23:30 arası yoğun',
+    distance: '695 km',
+    frequency: 'Günde 24 karşılıklı ekspres sefer',
     stops: [
       { name: 'İstanbul (Harem Otogarı)', type: 'origin', timeOffset: '00:00', note: 'Üsküdar & Marmaray Bağlantısı' },
       { name: 'Kocaeli (İzmit Otogarı)', type: 'stop', timeOffset: '+01:20', duration: '15 dk' },
@@ -112,11 +115,11 @@ export const RouteStopsModal: React.FC<RouteStopsModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [selectedRouteId, setSelectedRouteId] = useState<string>('yht-ist-ank');
+  const [selectedRouteId, setSelectedRouteId] = useState<string>('yht-ank-ist');
 
   if (!isOpen) return null;
 
-  const current = ROUTE_DATA.find((r) => r.id === selectedRouteId) || ROUTE_DATA[0];
+  const current = POPULAR_ROUTES.find((r) => r.id === selectedRouteId) || POPULAR_ROUTES[0];
 
   const handleSelectRoute = (id: string) => {
     sound.playTick();
@@ -140,8 +143,8 @@ export const RouteStopsModal: React.FC<RouteStopsModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200 text-lg font-black">
-              🗺️
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-900 flex items-center justify-center border border-amber-200">
+              <BileoMapPin className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Güzergah & Durak Çizelgesi Portalı</h3>
@@ -158,7 +161,7 @@ export const RouteStopsModal: React.FC<RouteStopsModalProps> = ({
 
         {/* Route Selector Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
-          {ROUTE_DATA.map((r) => (
+          {POPULAR_ROUTES.map((r) => (
             <button
               key={r.id}
               type="button"

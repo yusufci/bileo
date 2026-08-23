@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   BileoClose,
   BileoCheck,
+  BileoShieldCheck,
 } from './icons';
 import { sound } from '../utils/sound';
 
@@ -25,16 +26,18 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     if (!eduMailOrTc.trim()) return;
-    sound.playTick();
+
     setIsVerifying(true);
+    sound.playTick();
+
     setTimeout(() => {
       setIsVerifying(false);
       setIsVerified(true);
       sound.playSuccess();
       if (onShowToast) {
         onShowToast(
-          'Genç Bileo Statüsü Onaylandı 🎉',
-          'YÖKSİS / E-Devlet doğrulamanız başarıyla tamamlandı. Tüm seyahatlerinizde %20 ek öğrenci indirimi tanımlandı.',
+          'Öğrenci Doğrulaması Başarılı!',
+          'Tüm otobüs, YHT ve uçak biletlerinizde %15-20 genç indirimi aktif edildi.',
           'promo'
         );
       }
@@ -48,8 +51,8 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200 text-lg font-black">
-              🎓
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200">
+              <BileoShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -111,12 +114,12 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
             </div>
           </div>
 
-          {/* 4 Modal Student Privileges */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          {/* Perks Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             
             <div className="p-4 rounded-2xl bg-white border border-[#E8E1D5] space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-bordeaux-700">🚄 TCDD YHT Tren İndirimi</span>
+                <span className="text-xs font-black text-rose-700">TCDD Genç Tren İndirimi</span>
                 <span className="px-2 py-0.5 rounded-md bg-rose-50 text-rose-800 text-[10px] font-black">%15 İndirim</span>
               </div>
               <p className="text-xs text-charcoal-muted leading-relaxed">
@@ -126,7 +129,7 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
 
             <div className="p-4 rounded-2xl bg-white border border-[#E8E1D5] space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-blue-700">✈️ Havayolu Genç Bagajı</span>
+                <span className="text-xs font-black text-blue-700">Havayolu Genç Bagajı</span>
                 <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 text-[10px] font-black">+20 KG Bagaj</span>
               </div>
               <p className="text-xs text-charcoal-muted leading-relaxed">
@@ -136,7 +139,7 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
 
             <div className="p-4 rounded-2xl bg-white border border-[#E8E1D5] space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-700">🚌 Otobüs Puan Biriktirme</span>
+                <span className="text-xs font-black text-emerald-700">Otobüs Puan Biriktirme</span>
                 <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 text-[10px] font-black">5. Bilette %50</span>
               </div>
               <p className="text-xs text-charcoal-muted leading-relaxed">
@@ -146,7 +149,7 @@ export const StudentTravelModal: React.FC<StudentTravelModalProps> = ({
 
             <div className="p-4 rounded-2xl bg-white border border-[#E8E1D5] space-y-1.5 shadow-2xs">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-amber-800">🏛️ Müzekart & Kültür Rehberi</span>
+                <span className="text-xs font-black text-amber-800">Müzekart & Kültür Rehberi</span>
                 <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 text-[10px] font-black">60 TL / Yıl</span>
               </div>
               <p className="text-xs text-charcoal-muted leading-relaxed">

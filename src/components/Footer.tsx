@@ -53,6 +53,7 @@ interface FooterProps {
   onOpenBudgetModal?: () => void;
   onOpenHighwayPassesModal?: () => void;
   onOpenSeatUpgradeModal?: () => void;
+  onOpenEcoCertificateModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -106,6 +107,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenBudgetModal,
   onOpenHighwayPassesModal,
   onOpenSeatUpgradeModal,
+  onOpenEcoCertificateModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -563,6 +565,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
                   <span>Koltuk Yükseltme & Yan Koltuk</span>
+                </button>
+              )}
+              {onOpenEcoCertificateModal && (
+                <button
+                  type="button"
+                  onClick={onOpenEcoCertificateModal}
+                  className="text-xs font-bold text-emerald-950 hover:text-emerald-900 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
+                >
+                  <span>Yeşil Fidan Sertifikası</span>
                 </button>
               )}
             </div>

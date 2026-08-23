@@ -107,20 +107,20 @@ export const PassengerRightsModal: React.FC<PassengerRightsModalProps> = ({
 
   const calculateRightsResult = () => {
     if (calculatorMode === 'ucak') {
-      if (delayHours >= 8) return '🏨 Ücretsiz 4-5 Yıldızlı Otel Konaklaması + VIP Havalimanı Transferi + Sıcak Yemek + 100€/250€ Tazminat';
-      if (delayHours >= 5) return '🍽️ Sıcak Yemek İkramı + İsterseniz Biletin Tam Ücret İadesi veya Alternatif Uçuş';
-      if (delayHours >= 2) return '☕ Ücretsiz Sıcak/Soğuk İçecek, Sandviç ve 2 Adet İletişim (Telefon/E-posta) Hakkı';
-      return '🕒 Standart terminal beklemesi, henüz yasal ikram zorunluluğu başlamamıştır.';
+      if (delayHours >= 8) return 'Ücretsiz 4-5 Yıldızlı Otel Konaklaması + VIP Havalimanı Transferi + Sıcak Yemek + 100€/250€ Tazminat';
+      if (delayHours >= 5) return 'Sıcak Yemek İkramı + İsterseniz Biletin Tam Ücret İadesi veya Alternatif Uçuş';
+      if (delayHours >= 2) return 'Ücretsiz Sıcak/Soğuk İçecek, Sandviç ve 2 Adet İletişim (Telefon/E-posta) Hakkı';
+      return 'Standart terminal beklemesi, henüz yasal ikram zorunluluğu başlamamıştır.';
     }
     if (calculatorMode === 'otobus') {
-      if (delayHours >= 2) return '🚌 Firma Tarafından Anında Yedek Araç Tahsisi VEYA Bilet Ücretinin %100 Nakit İadesi';
-      if (delayHours >= 1) return '📢 Terminal İçi Bekleme Alanı & Sefer Durumu Yazılı/Sözlü Bilgilendirmesi';
-      return '🕒 1 saatin altındaki gecikmelerde sefer hazırlıkları takip edilir.';
+      if (delayHours >= 2) return 'Firma Tarafından Anında Yedek Araç Tahsisi VEYA Bilet Ücretinin %100 Nakit İadesi';
+      if (delayHours >= 1) return 'Terminal İçi Bekleme Alanı & Sefer Durumu Yazılı/Sözlü Bilgilendirmesi';
+      return '1 saatin altındaki gecikmelerde sefer hazırlıkları takip edilir.';
     }
     if (calculatorMode === 'tren') {
-      if (delayHours >= 2) return '💰 %100 Tam Bilet Ücreti İadesi veya 1 Yıl Geçerli TCDD Seyahat Kuponu';
-      if (delayHours >= 1) return '💰 %50 Bilet Ücreti İadesi veya İndirim Kuponu';
-      return '🕒 1 saatin altındaki YHT gecikmelerinde ray hattı önceliği takip edilir.';
+      if (delayHours >= 2) return '%100 Tam Bilet Ücreti İadesi veya 1 Yıl Geçerli TCDD Seyahat Kuponu';
+      if (delayHours >= 1) return '%50 Bilet Ücreti İadesi veya İndirim Kuponu';
+      return '1 saatin altındaki YHT gecikmelerinde ray hattı önceliği takip edilir.';
     }
     return '';
   };
@@ -132,8 +132,8 @@ export const PassengerRightsModal: React.FC<PassengerRightsModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200 text-lg font-black">
-              ⚖️
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200">
+              <BileoShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Yolcu Hakları, İptal & Rötar Tazminat Rehberi</h3>
