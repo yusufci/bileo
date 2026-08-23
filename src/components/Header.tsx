@@ -8,6 +8,7 @@ interface HeaderProps {
   onSelectTransport?: (type: TransportType) => void;
   onOpenWallet: () => void;
   onOpenAuth: () => void;
+  onOpenPnrQuery?: () => void;
   onLogout: () => void;
   user: User | null;
   activeTicketCount: number;
@@ -16,6 +17,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   onOpenWallet,
   onOpenAuth,
+  onOpenPnrQuery,
   onLogout,
   user,
   activeTicketCount,
@@ -60,8 +62,20 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
 
-        {/* Right Actions: Authentication & Profile */}
-        <div className="flex items-center gap-3">
+        {/* Right Actions: PNR Query & Authentication & Profile */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {onOpenPnrQuery && (
+            <button
+              onClick={onOpenPnrQuery}
+              type="button"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] text-xs font-extrabold transition-all cursor-pointer"
+              title="PNR Numarası ile Bilet Sorgula & İptal Et"
+            >
+              <BileoTicket className="w-3.5 h-3.5 text-bordeaux-700" />
+              <span className="hidden sm:inline">PNR Sorgula</span>
+            </button>
+          )}
+
           {user ? (
             /* Logged-in Profile Menu */
             <div className="relative" ref={dropdownRef}>
@@ -114,6 +128,24 @@ export const Header: React.FC<HeaderProps> = ({
                         <BileoChevronRight className="w-3.5 h-3.5 text-charcoal-muted" />
                       )}
                     </button>
+
+                    {/* PNR Sorgula */}
+                    {onOpenPnrQuery && (
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          onOpenPnrQuery();
+                        }}
+                        type="button"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <BileoSearch className="w-4 h-4 text-bordeaux-700" />
+                          <span>PNR ile Bilet Sorgula</span>
+                        </div>
+                        <BileoChevronRight className="w-3.5 h-3.5 text-charcoal-muted" />
+                      </button>
+                    )}
 
                     {/* Yeni Sefer Ara */}
                     <button

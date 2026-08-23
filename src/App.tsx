@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { LiveTransitTicker } from './components/LiveTransitTicker';
 import { HeroSection } from './components/HeroSection';
@@ -13,6 +13,8 @@ import { SeatSelectionModal } from './components/SeatSelectionModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { TicketWalletModal } from './components/TicketWalletModal';
 import { RefundModal } from './components/RefundModal';
+import { PnrQueryModal } from './components/PnrQueryModal';
+import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
@@ -62,6 +64,24 @@ export function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authPromptReason, setAuthPromptReason] = useState<string | undefined>(undefined);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  // PNR Query Modal State
+  const [isPnrQueryOpen, setIsPnrQueryOpen] = useState(false);
+
+  // Toast Notifications State
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  const showToast = useCallback(
+    (title: string, description?: string, type: 'success' | 'error' | 'info' | 'promo' = 'info', duration = 4000) => {
+      const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setToasts((prev) => [...prev, { id, title, description, type, duration }]);
+    },
+    []
+  );
+
+  const dismissToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
 
   const [tickets, setTickets] = useState<BookingTicket[]>(() => {
     try {
@@ -138,6 +158,8 @@ export function App() {
       // ignore
     }
 
+    showToast('Giriş Başarılı', `Hoş geldiniz, ${user.name}!`, 'success');
+
     if (pendingAction) {
       const action = pendingAction;
       setPendingAction(null);
@@ -159,6 +181,7 @@ export function App() {
     setSelectedRouteForSeat(null);
     setCheckoutData(null);
     setSelectedCarrierForDetail(null);
+    showToast('Çıkış Yapıldı', 'Oturumunuz güvenli bir şekilde kapatıldı.', 'info');
   };
 
   const handleSelectCarrierDirect = (carrierName: string) => {
@@ -280,6 +303,7 @@ export function App() {
     setSelectedRouteForSeat(null);
     setSelectedRouteForExperience(null);
     setIsWalletOpen(true);
+    showToast('Tebrikler!', `Biletiniz başarıyla oluşturuldu. PNR: ${newTicket.pnr}`, 'success', 5000);
   };
 
   const handleOpenRefund = (ticket: BookingTicket) => {
@@ -298,6 +322,7 @@ export function App() {
           : t
       )
     );
+    showToast('İade Talebiniz Alındı', `${pnr} numaralı bilet için ${refundDetails.refundedAmount} TL iade onaylandı.`, 'info', 5000);
   };
 
   const handleSelectCarrierShowcase = (carrierName: string, _transportType?: TransportType) => {
@@ -429,6 +454,7 @@ export function App() {
           setAuthPromptReason(undefined);
           setIsAuthModalOpen(true);
         }}
+        onOpenPnrQuery={() => setIsPnrQueryOpen(true)}
         onLogout={handleLogout}
         user={currentUser}
         activeTicketCount={tickets.filter((t) => t.status === 'active' || t.status === 'confirmed').length}
@@ -441,6 +467,7 @@ export function App() {
             onUpdateSearchState={handleUpdateSearchState}
             onPerformSearch={handlePerformSearch}
             onSelectCarrier={handleSelectCarrierDirect}
+            onOpenPnrQuery={() => setIsPnrQueryOpen(true)}
           />
         </div>
 
@@ -520,9 +547,20 @@ export function App() {
         onLoginSuccess={handleLoginSuccess}
         promptReason={authPromptReason}
       />
+
+      {/* Global PNR Query & Self-Service Management Modal */}
+      <PnrQueryModal
+        isOpen={isPnrQueryOpen}
+        onClose={() => setIsPnrQueryOpen(false)}
+        tickets={tickets}
+        onOpenRefund={handleOpenRefund}
+        onShowToast={showToast}
+      />
+
+      {/* Global Toast Notification Engine */}
+      <ToastNotification toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }
 
 export default App;
-

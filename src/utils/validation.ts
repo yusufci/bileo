@@ -249,17 +249,27 @@ export function validateCoupon(code: string): {
 
   switch (normalized) {
     case 'BILEO50':
+    case 'ILKBILET50':
+    case 'YAZ50':
       return {
         valid: true,
         discountPercent: 0,
         discountAmount: 50,
         description: '50 TL Bileo Hoş Geldin İndirimi uygulandı.',
       };
+    case 'BILEO10':
     case 'YOLCULUK10':
       return {
         valid: true,
         discountPercent: 10,
         description: '%10 Bahar Seyahati İndirimi uygulandı.',
+      };
+    case 'SEFER2026':
+      return {
+        valid: true,
+        discountPercent: 0,
+        discountAmount: 75,
+        description: '75 TL Özel Sefer 2026 Promosyonu uygulandı.',
       };
     case 'PREMIUM20':
       return {
