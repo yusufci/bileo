@@ -15,6 +15,7 @@ interface FooterProps {
   onOpenRestStopModal?: () => void;
   onOpenDiscountsModal?: () => void;
   onOpenStorageModal?: () => void;
+  onOpenTrackerModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -30,6 +31,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenRestStopModal,
   onOpenDiscountsModal,
   onOpenStorageModal,
+  onOpenTrackerModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -145,6 +147,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
                 >
                   <span>🛅 Emanet</span>
+                </button>
+              )}
+              {onOpenTrackerModal && (
+                <button
+                  type="button"
+                  onClick={onOpenTrackerModal}
+                  className="text-xs font-extrabold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                >
+                  <span>🛰️ Canlı Takip</span>
                 </button>
               )}
             </div>

@@ -30,6 +30,7 @@ import { TaxiEstimatorModal } from './components/TaxiEstimatorModal';
 import { RestStopGuideModal } from './components/RestStopGuideModal';
 import { DiscountsGuideModal } from './components/DiscountsGuideModal';
 import { LuggageStorageModal } from './components/LuggageStorageModal';
+import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -130,6 +131,9 @@ export function App() {
 
   // Left Luggage & Storage Locker Modal State
   const [isStorageModalOpen, setIsStorageModalOpen] = useState(false);
+
+  // Live GPS Journey Tracker Modal State
+  const [isTrackerModalOpen, setIsTrackerModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -669,6 +673,7 @@ export function App() {
         onOpenRestStopModal={() => setIsRestStopModalOpen(true)}
         onOpenDiscountsModal={() => setIsDiscountsModalOpen(true)}
         onOpenStorageModal={() => setIsStorageModalOpen(true)}
+        onOpenTrackerModal={() => setIsTrackerModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -784,6 +789,13 @@ export function App() {
       <LuggageStorageModal
         isOpen={isStorageModalOpen}
         onClose={() => setIsStorageModalOpen(false)}
+      />
+
+      {/* Global Live GPS Journey Tracker Modal */}
+      <LiveJourneyTrackerModal
+        isOpen={isTrackerModalOpen}
+        onClose={() => setIsTrackerModalOpen(false)}
+        onShowToast={showToast}
       />
 
       {/* Global Price Drop Alert Modal */}
