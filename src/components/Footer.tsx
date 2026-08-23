@@ -9,6 +9,7 @@ interface FooterProps {
   onOpenLuggageModal?: () => void;
   onOpenWeatherModal?: () => void;
   onOpenShuttleModal?: () => void;
+  onOpenPetModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -18,6 +19,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenLuggageModal,
   onOpenWeatherModal,
   onOpenShuttleModal,
+  onOpenPetModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -78,7 +80,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenShuttleModal}
                   className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
                 >
-                  <span>🚐 Servis Saatleri</span>
+                  <span>🚐 Servis</span>
+                </button>
+              )}
+              {onOpenPetModal && (
+                <button
+                  type="button"
+                  onClick={onOpenPetModal}
+                  className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
+                >
+                  <span>🐾 Evcil Hayvan</span>
                 </button>
               )}
             </div>
