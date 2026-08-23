@@ -12,6 +12,7 @@ interface FooterProps {
   onOpenPetModal?: () => void;
   onOpenInsuranceModal?: () => void;
   onOpenTaxiModal?: () => void;
+  onOpenRestStopModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -24,6 +25,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenPetModal,
   onOpenInsuranceModal,
   onOpenTaxiModal,
+  onOpenRestStopModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -112,6 +114,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
                   <span>🚕 Taksi</span>
+                </button>
+              )}
+              {onOpenRestStopModal && (
+                <button
+                  type="button"
+                  onClick={onOpenRestStopModal}
+                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>🍽️ Mola Tesisleri</span>
                 </button>
               )}
             </div>
