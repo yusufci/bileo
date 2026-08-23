@@ -48,6 +48,7 @@ interface FooterProps {
   onOpenSleeperTrainModal?: () => void;
   onOpenFerryGuideModal?: () => void;
   onOpenBicycleModal?: () => void;
+  onOpenCarRentalModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -96,6 +97,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenSleeperTrainModal,
   onOpenFerryGuideModal,
   onOpenBicycleModal,
+  onOpenCarRentalModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -508,6 +510,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
                   <span>🚲 Bisiklet & Scooter</span>
+                </button>
+              )}
+              {onOpenCarRentalModal && (
+                <button
+                  type="button"
+                  onClick={onOpenCarRentalModal}
+                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>🚗 Araç Kiralama</span>
                 </button>
               )}
             </div>

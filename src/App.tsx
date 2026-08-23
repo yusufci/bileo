@@ -70,6 +70,7 @@ const ExpressParcelTransitModal = lazy(() => import('./components/ExpressParcelT
 const SleeperTrainGuideModal = lazy(() => import('./components/SleeperTrainGuideModal').then(m => ({ default: m.SleeperTrainGuideModal })));
 const SeaTransitFerryGuideModal = lazy(() => import('./components/SeaTransitFerryGuideModal').then(m => ({ default: m.SeaTransitFerryGuideModal })));
 const BicycleTransitGuideModal = lazy(() => import('./components/BicycleTransitGuideModal').then(m => ({ default: m.BicycleTransitGuideModal })));
+const CarRentalTransitGuideModal = lazy(() => import('./components/CarRentalTransitGuideModal').then(m => ({ default: m.CarRentalTransitGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -264,6 +265,9 @@ export function App() {
 
   // Bicycle & E-Scooter Transit Guide Modal State
   const [isBicycleModalOpen, setIsBicycleModalOpen] = useState(false);
+
+  // Car Rental & Hub Transfer Guide Modal State
+  const [isCarRentalModalOpen, setIsCarRentalModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -840,6 +844,7 @@ export function App() {
         onOpenSleeperTrainModal={() => setIsSleeperTrainModalOpen(true)}
         onOpenFerryGuideModal={() => setIsFerryGuideModalOpen(true)}
         onOpenBicycleModal={() => setIsBicycleModalOpen(true)}
+        onOpenCarRentalModal={() => setIsCarRentalModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1216,6 +1221,13 @@ export function App() {
         <BicycleTransitGuideModal
           isOpen={isBicycleModalOpen}
           onClose={() => setIsBicycleModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Car Rental & Hub Transfer Guide Modal */}
+        <CarRentalTransitGuideModal
+          isOpen={isCarRentalModalOpen}
+          onClose={() => setIsCarRentalModalOpen(false)}
           onShowToast={showToast}
         />
 
