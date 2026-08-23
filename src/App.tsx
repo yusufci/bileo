@@ -17,6 +17,7 @@ import { PnrQueryModal } from './components/PnrQueryModal';
 import { PriceAlertModal } from './components/PriceAlertModal';
 import { TerminalGuideModal } from './components/TerminalGuideModal';
 import { FleetExperienceModal } from './components/FleetExperienceModal';
+import { FareMatrixModal } from './components/FareMatrixModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -77,6 +78,9 @@ export function App() {
 
   // Fleet Experience Modal State
   const [isFleetModalOpen, setIsFleetModalOpen] = useState(false);
+
+  // Multimodal Fare Matrix Modal State
+  const [isFareMatrixOpen, setIsFareMatrixOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -525,6 +529,7 @@ export function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }
           }}
+          onOpenFareMatrix={() => setIsFareMatrixOpen(true)}
         />
 
         {/* Featured Premier Carrier Showcase & Fleet Experience */}
@@ -588,6 +593,16 @@ export function App() {
       <FleetExperienceModal
         isOpen={isFleetModalOpen}
         onClose={() => setIsFleetModalOpen(false)}
+      />
+
+      {/* Global Multimodal Fare Matrix Modal */}
+      <FareMatrixModal
+        isOpen={isFareMatrixOpen}
+        onClose={() => setIsFareMatrixOpen(false)}
+        onSelectRouteMode={(from, to, mode) => {
+          handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
 
       {/* Global Price Drop Alert Modal */}

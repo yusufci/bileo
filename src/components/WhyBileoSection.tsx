@@ -4,9 +4,10 @@ import { TransportType } from '../types';
 
 interface WhyBileoSectionProps {
   onSelectCarrier?: (carrier: string, type: TransportType) => void;
+  onOpenFareMatrix?: () => void;
 }
 
-export const WhyBileoSection: React.FC<WhyBileoSectionProps> = ({ onSelectCarrier }) => {
+export const WhyBileoSection: React.FC<WhyBileoSectionProps> = ({ onSelectCarrier, onOpenFareMatrix }) => {
   const modes = [
     {
       id: 'otobus',
@@ -42,8 +43,8 @@ export const WhyBileoSection: React.FC<WhyBileoSectionProps> = ({ onSelectCarrie
     <section className="py-10 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header - Dot-Free, Calm Editorial */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 mb-8">
+        {/* Section Header - Dot-Free, Calm Editorial with Fare Matrix Trigger */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1E1B18] font-display tracking-tight">
               Türkiye'nin Öncü Sefer Ağları
@@ -53,9 +54,14 @@ export const WhyBileoSection: React.FC<WhyBileoSectionProps> = ({ onSelectCarrie
             </p>
           </div>
 
-          <div className="text-xs text-charcoal-muted font-medium">
-            Resmi Biletleme ve Doğrudan Entegrasyon
-          </div>
+          {onOpenFareMatrix && (
+            <button
+              onClick={onOpenFareMatrix}
+              className="self-start md:self-auto text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-900 bg-white hover:bg-cream-100 border border-[#E8E1D5] px-3.5 py-2 rounded-xl transition-all shadow-2xs cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Çok Modlu Karşılaştırma & Süre Tablosu ➔</span>
+            </button>
+          )}
         </div>
 
         {/* 4 Balanced Grid Columns (Zero Dots, Zero Clutter, Zero Hover Jumping) */}
