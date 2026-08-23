@@ -13,6 +13,7 @@ interface FooterProps {
   onOpenInsuranceModal?: () => void;
   onOpenTaxiModal?: () => void;
   onOpenRestStopModal?: () => void;
+  onOpenDiscountsModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -26,6 +27,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenInsuranceModal,
   onOpenTaxiModal,
   onOpenRestStopModal,
+  onOpenDiscountsModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -122,7 +124,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenRestStopModal}
                   className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50/90 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>🍽️ Mola Tesisleri</span>
+                  <span>🍽️ Mola</span>
+                </button>
+              )}
+              {onOpenDiscountsModal && (
+                <button
+                  type="button"
+                  onClick={onOpenDiscountsModal}
+                  className="text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-800 flex items-center gap-1.5 cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
+                >
+                  <span>🎟️ İndirimler</span>
                 </button>
               )}
             </div>

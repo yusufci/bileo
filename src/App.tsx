@@ -28,6 +28,7 @@ import { PetTravelModal } from './components/PetTravelModal';
 import { TravelInsuranceModal } from './components/TravelInsuranceModal';
 import { TaxiEstimatorModal } from './components/TaxiEstimatorModal';
 import { RestStopGuideModal } from './components/RestStopGuideModal';
+import { DiscountsGuideModal } from './components/DiscountsGuideModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -122,6 +123,9 @@ export function App() {
 
   // Highway Rest Stop & Food Guide Modal State
   const [isRestStopModalOpen, setIsRestStopModalOpen] = useState(false);
+
+  // Student, Senior, Military & Special Discounts Modal State
+  const [isDiscountsModalOpen, setIsDiscountsModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -652,6 +656,7 @@ export function App() {
         onOpenInsuranceModal={() => setIsInsuranceModalOpen(true)}
         onOpenTaxiModal={() => setIsTaxiModalOpen(true)}
         onOpenRestStopModal={() => setIsRestStopModalOpen(true)}
+        onOpenDiscountsModal={() => setIsDiscountsModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -755,6 +760,12 @@ export function App() {
       <RestStopGuideModal
         isOpen={isRestStopModalOpen}
         onClose={() => setIsRestStopModalOpen(false)}
+      />
+
+      {/* Global Special Passenger Discounts Guide Modal */}
+      <DiscountsGuideModal
+        isOpen={isDiscountsModalOpen}
+        onClose={() => setIsDiscountsModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
