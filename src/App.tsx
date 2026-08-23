@@ -34,6 +34,7 @@ import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
 import { CateringMenuModal } from './components/CateringMenuModal';
 import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
 import { StudentTravelModal } from './components/StudentTravelModal';
+import { OnboardTechModal } from './components/OnboardTechModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -146,6 +147,9 @@ export function App() {
 
   // Student & Youth Travel Club Modal State
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+
+  // Onboard Power Outlets, Wi-Fi & Tech Specs Modal State
+  const [isTechModalOpen, setIsTechModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -689,6 +693,7 @@ export function App() {
         onOpenCateringModal={() => setIsCateringModalOpen(true)}
         onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
         onOpenStudentModal={() => setIsStudentModalOpen(true)}
+        onOpenTechModal={() => setIsTechModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -830,6 +835,12 @@ export function App() {
         isOpen={isStudentModalOpen}
         onClose={() => setIsStudentModalOpen(false)}
         onShowToast={showToast}
+      />
+
+      {/* Global Onboard Power Outlets, Wi-Fi & Tech Specs Modal */}
+      <OnboardTechModal
+        isOpen={isTechModalOpen}
+        onClose={() => setIsTechModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}

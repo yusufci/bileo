@@ -19,6 +19,7 @@ interface FooterProps {
   onOpenCateringModal?: () => void;
   onOpenAccessibilityModal?: () => void;
   onOpenStudentModal?: () => void;
+  onOpenTechModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -38,6 +39,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCateringModal,
   onOpenAccessibilityModal,
   onOpenStudentModal,
+  onOpenTechModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -188,7 +190,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenStudentModal}
                   className="text-xs font-extrabold text-purple-800 hover:text-purple-900 flex items-center gap-1.5 cursor-pointer bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-xl border border-purple-200 transition-colors"
                 >
-                  <span>🎓 Genç Bileo</span>
+                  <span>🎓 Genç</span>
+                </button>
+              )}
+              {onOpenTechModal && (
+                <button
+                  type="button"
+                  onClick={onOpenTechModal}
+                  className="text-xs font-extrabold text-cyan-800 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-200 transition-colors"
+                >
+                  <span>🔌 Priz & Wi-Fi</span>
                 </button>
               )}
             </div>
