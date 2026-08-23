@@ -16,6 +16,7 @@ import { RefundModal } from './components/RefundModal';
 import { PnrQueryModal } from './components/PnrQueryModal';
 import { PriceAlertModal } from './components/PriceAlertModal';
 import { TerminalGuideModal } from './components/TerminalGuideModal';
+import { FleetExperienceModal } from './components/FleetExperienceModal';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -72,6 +73,9 @@ export function App() {
 
   // Terminal Guide Modal State
   const [isTerminalGuideOpen, setIsTerminalGuideOpen] = useState(false);
+
+  // Fleet Experience Modal State
+  const [isFleetModalOpen, setIsFleetModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -523,7 +527,10 @@ export function App() {
         />
 
         {/* Featured Premier Carrier Showcase & Fleet Experience */}
-        <FeaturedCarriersShowcase onSelectCarrier={handleSelectCarrierShowcase} />
+        <FeaturedCarriersShowcase
+          onSelectCarrier={handleSelectCarrierShowcase}
+          onOpenFleetModal={() => setIsFleetModalOpen(true)}
+        />
 
         {/* Real-time Dynamic Live Transit & Travel Insights Ticker Tape (Placed at bottom) */}
         <div className="pt-6 pb-2">
@@ -574,6 +581,12 @@ export function App() {
       <TerminalGuideModal
         isOpen={isTerminalGuideOpen}
         onClose={() => setIsTerminalGuideOpen(false)}
+      />
+
+      {/* Global Fleet & Vehicle Standards Modal */}
+      <FleetExperienceModal
+        isOpen={isFleetModalOpen}
+        onClose={() => setIsFleetModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}

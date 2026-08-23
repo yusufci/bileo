@@ -86,10 +86,12 @@ const FEATURED_CARRIERS: FeaturedCarrier[] = [
 
 interface FeaturedCarriersShowcaseProps {
   onSelectCarrier: (carrierName: string, transportType: TransportType) => void;
+  onOpenFleetModal?: () => void;
 }
 
 export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> = ({
   onSelectCarrier,
+  onOpenFleetModal,
 }) => {
   const [activeCategory, setActiveCategory] = useState<'all' | TransportType>('all');
 
@@ -100,9 +102,21 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
 
   return (
     <section className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Section Header with Description Only */}
+      {/* Section Header with Description & Fleet Modal Trigger */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-black text-bordeaux-700 uppercase tracking-wider">Premium Filolar</span>
+            {onOpenFleetModal && (
+              <button
+                type="button"
+                onClick={onOpenFleetModal}
+                className="px-2.5 py-0.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-extrabold transition-colors cursor-pointer"
+              >
+                Araç & Koltuk Standartları ➔
+              </button>
+            )}
+          </div>
           <p className="text-xs sm:text-sm text-charcoal-muted max-w-2xl font-normal leading-relaxed">
             Resmi biletleme güvencesiyle 500+ karayolu, havayolu, demiryolu ve denizyolu taşıyıcısının en son teknoloji araç filoları tek ekranda.
           </p>
