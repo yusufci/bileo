@@ -56,6 +56,7 @@ const MultiModalComparisonModal = lazy(() => import('./components/MultiModalComp
 const CityTransitCardsModal = lazy(() => import('./components/CityTransitCardsModal').then(m => ({ default: m.CityTransitCardsModal })));
 const OvernightTravelModal = lazy(() => import('./components/OvernightTravelModal').then(m => ({ default: m.OvernightTravelModal })));
 const WinterSkiTransitModal = lazy(() => import('./components/WinterSkiTransitModal').then(m => ({ default: m.WinterSkiTransitModal })));
+const SeasonalDealsCalendarModal = lazy(() => import('./components/SeasonalDealsCalendarModal').then(m => ({ default: m.SeasonalDealsCalendarModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -208,6 +209,9 @@ export function App() {
 
   // Winter & Ski Resort Transit, Snow Depth & Equipment Modal State
   const [isSkiModalOpen, setIsSkiModalOpen] = useState(false);
+
+  // Seasonal Peak & Holiday Early Booking Calendar Modal State
+  const [isSeasonsModalOpen, setIsSeasonsModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -770,6 +774,7 @@ export function App() {
         onOpenCityCardModal={() => setIsCityCardModalOpen(true)}
         onOpenOvernightModal={() => setIsOvernightModalOpen(true)}
         onOpenSkiModal={() => setIsSkiModalOpen(true)}
+        onOpenSeasonsModal={() => setIsSeasonsModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1021,6 +1026,17 @@ export function App() {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
+        />
+
+        {/* Global Seasonal Peak & Holiday Early Booking Calendar Modal */}
+        <SeasonalDealsCalendarModal
+          isOpen={isSeasonsModalOpen}
+          onClose={() => setIsSeasonsModalOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onShowToast={showToast}
         />
 
         {/* Global Price Drop Alert Modal */}

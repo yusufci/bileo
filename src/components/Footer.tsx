@@ -34,6 +34,7 @@ interface FooterProps {
   onOpenCityCardModal?: () => void;
   onOpenOvernightModal?: () => void;
   onOpenSkiModal?: () => void;
+  onOpenSeasonsModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -68,6 +69,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCityCardModal,
   onOpenOvernightModal,
   onOpenSkiModal,
+  onOpenSeasonsModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -354,6 +356,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-cyan-950 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
                   <span>⛷️ Kayak & Kış</span>
+                </button>
+              )}
+              {onOpenSeasonsModal && (
+                <button
+                  type="button"
+                  onClick={onOpenSeasonsModal}
+                  className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>📅 Sezon & Bayram</span>
                 </button>
               )}
             </div>
