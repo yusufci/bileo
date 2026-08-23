@@ -43,6 +43,7 @@ interface FooterProps {
   onOpenTransfersModal?: () => void;
   onOpenSeatComfortModal?: () => void;
   onOpenRescheduleModal?: () => void;
+  onOpenEntertainmentModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -86,6 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenTransfersModal,
   onOpenSeatComfortModal,
   onOpenRescheduleModal,
+  onOpenEntertainmentModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -453,6 +455,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-emerald-950 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
                   <span>📅 Bilet Erteleme</span>
+                </button>
+              )}
+              {onOpenEntertainmentModal && (
+                <button
+                  type="button"
+                  onClick={onOpenEntertainmentModal}
+                  className="text-xs font-extrabold text-indigo-950 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                >
+                  <span>🎬 Eğlence & TV</span>
                 </button>
               )}
             </div>

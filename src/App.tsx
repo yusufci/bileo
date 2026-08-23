@@ -65,6 +65,7 @@ const AllProvincesTransitModal = lazy(() => import('./components/AllProvincesTra
 const SmartTransferPlannerModal = lazy(() => import('./components/SmartTransferPlannerModal').then(m => ({ default: m.SmartTransferPlannerModal })));
 const SeatComfortGuideModal = lazy(() => import('./components/SeatComfortGuideModal').then(m => ({ default: m.SeatComfortGuideModal })));
 const TicketRescheduleModal = lazy(() => import('./components/TicketRescheduleModal').then(m => ({ default: m.TicketRescheduleModal })));
+const OnboardEntertainmentModal = lazy(() => import('./components/OnboardEntertainmentModal').then(m => ({ default: m.OnboardEntertainmentModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -244,6 +245,9 @@ export function App() {
 
   // Self-Service Ticket Reschedule & Departure Change Modal State
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
+
+  // Onboard Media & Wi-Fi Entertainment Guide Modal State
+  const [isEntertainmentModalOpen, setIsEntertainmentModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -815,6 +819,7 @@ export function App() {
         onOpenTransfersModal={() => setIsTransfersModalOpen(true)}
         onOpenSeatComfortModal={() => setIsSeatComfortModalOpen(true)}
         onOpenRescheduleModal={() => setIsRescheduleModalOpen(true)}
+        onOpenEntertainmentModal={() => setIsEntertainmentModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1148,6 +1153,13 @@ export function App() {
           isOpen={isRescheduleModalOpen}
           onClose={() => setIsRescheduleModalOpen(false)}
           tickets={tickets}
+          onShowToast={showToast}
+        />
+
+        {/* Global Onboard Multimedia & Wi-Fi Entertainment Guide Modal */}
+        <OnboardEntertainmentModal
+          isOpen={isEntertainmentModalOpen}
+          onClose={() => setIsEntertainmentModalOpen(false)}
           onShowToast={showToast}
         />
 
