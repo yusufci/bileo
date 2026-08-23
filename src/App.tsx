@@ -35,6 +35,7 @@ import { CateringMenuModal } from './components/CateringMenuModal';
 import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
 import { StudentTravelModal } from './components/StudentTravelModal';
 import { OnboardTechModal } from './components/OnboardTechModal';
+import { LostAndFoundModal } from './components/LostAndFoundModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -150,6 +151,9 @@ export function App() {
 
   // Onboard Power Outlets, Wi-Fi & Tech Specs Modal State
   const [isTechModalOpen, setIsTechModalOpen] = useState(false);
+
+  // Lost & Found Luggage & Belongings Tracking Modal State
+  const [isLostFoundModalOpen, setIsLostFoundModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -694,6 +698,7 @@ export function App() {
         onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
         onOpenStudentModal={() => setIsStudentModalOpen(true)}
         onOpenTechModal={() => setIsTechModalOpen(true)}
+        onOpenLostFoundModal={() => setIsLostFoundModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -841,6 +846,13 @@ export function App() {
       <OnboardTechModal
         isOpen={isTechModalOpen}
         onClose={() => setIsTechModalOpen(false)}
+      />
+
+      {/* Global Lost & Found Luggage & Items Modal */}
+      <LostAndFoundModal
+        isOpen={isLostFoundModalOpen}
+        onClose={() => setIsLostFoundModalOpen(false)}
+        onShowToast={showToast}
       />
 
       {/* Global Price Drop Alert Modal */}

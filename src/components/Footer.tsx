@@ -20,6 +20,7 @@ interface FooterProps {
   onOpenAccessibilityModal?: () => void;
   onOpenStudentModal?: () => void;
   onOpenTechModal?: () => void;
+  onOpenLostFoundModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -40,6 +41,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenAccessibilityModal,
   onOpenStudentModal,
   onOpenTechModal,
+  onOpenLostFoundModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -200,6 +202,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-cyan-800 hover:text-cyan-900 flex items-center gap-1.5 cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-200 transition-colors"
                 >
                   <span>🔌 Priz & Wi-Fi</span>
+                </button>
+              )}
+              {onOpenLostFoundModal && (
+                <button
+                  type="button"
+                  onClick={onOpenLostFoundModal}
+                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>📦 Kayıp Eşya</span>
                 </button>
               )}
             </div>
