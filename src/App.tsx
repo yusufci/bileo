@@ -21,6 +21,7 @@ import { FareMatrixModal } from './components/FareMatrixModal';
 import { EcoCarbonModal } from './components/EcoCarbonModal';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { CurrencyConverterModal } from './components/CurrencyConverterModal';
+import { LuggageAllowanceModal } from './components/LuggageAllowanceModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -94,6 +95,9 @@ export function App() {
 
   // Multi-Currency Converter Modal State
   const [isCurrencyModalOpen, setIsCurrencyModalOpen] = useState(false);
+
+  // Luggage Allowance Modal State
+  const [isLuggageModalOpen, setIsLuggageModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -617,6 +621,7 @@ export function App() {
         onOpenEcoModal={() => setIsEcoModalOpen(true)}
         onOpenTerminalGuide={() => setIsTerminalGuideOpen(true)}
         onOpenCurrencyModal={() => setIsCurrencyModalOpen(true)}
+        onOpenLuggageModal={() => setIsLuggageModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -677,6 +682,12 @@ export function App() {
       <CurrencyConverterModal
         isOpen={isCurrencyModalOpen}
         onClose={() => setIsCurrencyModalOpen(false)}
+      />
+
+      {/* Global Luggage Allowance & Rules Modal */}
+      <LuggageAllowanceModal
+        isOpen={isLuggageModalOpen}
+        onClose={() => setIsLuggageModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}

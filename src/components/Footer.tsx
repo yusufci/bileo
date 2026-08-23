@@ -6,12 +6,14 @@ interface FooterProps {
   onOpenEcoModal?: () => void;
   onOpenTerminalGuide?: () => void;
   onOpenCurrencyModal?: () => void;
+  onOpenLuggageModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onOpenEcoModal,
   onOpenTerminalGuide,
   onOpenCurrencyModal,
+  onOpenLuggageModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -45,7 +47,16 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenCurrencyModal}
                   className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>💱 Çoklu Döviz Çevirici</span>
+                  <span>💱 Döviz Çevirici</span>
+                </button>
+              )}
+              {onOpenLuggageModal && (
+                <button
+                  type="button"
+                  onClick={onOpenLuggageModal}
+                  className="text-xs font-extrabold text-blue-800 hover:text-blue-900 flex items-center gap-1.5 cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
+                >
+                  <span>🧳 Bagaj Rehberi</span>
                 </button>
               )}
             </div>
