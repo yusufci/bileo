@@ -35,6 +35,7 @@ interface FooterProps {
   onOpenOvernightModal?: () => void;
   onOpenSkiModal?: () => void;
   onOpenSeasonsModal?: () => void;
+  onOpenFlightRadarModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -70,6 +71,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenOvernightModal,
   onOpenSkiModal,
   onOpenSeasonsModal,
+  onOpenFlightRadarModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -365,6 +367,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-amber-950 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
                   <span>📅 Sezon & Bayram</span>
+                </button>
+              )}
+              {onOpenFlightRadarModal && (
+                <button
+                  type="button"
+                  onClick={onOpenFlightRadarModal}
+                  className="text-xs font-extrabold text-sky-950 hover:text-sky-900 flex items-center gap-1.5 cursor-pointer bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-xl border border-sky-300 transition-colors"
+                >
+                  <span>✈️ Uçuş Radarı</span>
                 </button>
               )}
             </div>

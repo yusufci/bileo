@@ -57,6 +57,7 @@ const CityTransitCardsModal = lazy(() => import('./components/CityTransitCardsMo
 const OvernightTravelModal = lazy(() => import('./components/OvernightTravelModal').then(m => ({ default: m.OvernightTravelModal })));
 const WinterSkiTransitModal = lazy(() => import('./components/WinterSkiTransitModal').then(m => ({ default: m.WinterSkiTransitModal })));
 const SeasonalDealsCalendarModal = lazy(() => import('./components/SeasonalDealsCalendarModal').then(m => ({ default: m.SeasonalDealsCalendarModal })));
+const LiveFlightRadarModal = lazy(() => import('./components/LiveFlightRadarModal').then(m => ({ default: m.LiveFlightRadarModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -212,6 +213,9 @@ export function App() {
 
   // Seasonal Peak & Holiday Early Booking Calendar Modal State
   const [isSeasonsModalOpen, setIsSeasonsModalOpen] = useState(false);
+
+  // Live Aircraft Radar Telemetry & Highway Corridors Modal State
+  const [isFlightRadarOpen, setIsFlightRadarOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -775,6 +779,7 @@ export function App() {
         onOpenOvernightModal={() => setIsOvernightModalOpen(true)}
         onOpenSkiModal={() => setIsSkiModalOpen(true)}
         onOpenSeasonsModal={() => setIsSeasonsModalOpen(true)}
+        onOpenFlightRadarModal={() => setIsFlightRadarOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1037,6 +1042,16 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onShowToast={showToast}
+        />
+
+        {/* Global Live Aircraft Radar Telemetry & Highway Corridors Modal */}
+        <LiveFlightRadarModal
+          isOpen={isFlightRadarOpen}
+          onClose={() => setIsFlightRadarOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         />
 
         {/* Global Price Drop Alert Modal */}
