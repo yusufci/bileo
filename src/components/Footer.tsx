@@ -2,7 +2,12 @@ import React from 'react';
 import { BileoShieldCheck, BileoHeart } from './icons';
 import { SeferLogo } from './SeferLogo';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenEcoModal?: () => void;
+  onOpenTerminalGuide?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenEcoModal, onOpenTerminalGuide }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,6 +24,15 @@ export const Footer: React.FC = () => {
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>TÜRSAB Onaylı & 256-Bit SSL Güvenli Altyapı</span>
             </div>
+            {onOpenEcoModal && (
+              <button
+                type="button"
+                onClick={onOpenEcoModal}
+                className="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+              >
+                <span>🌱 Karbon Ayak İzi & Eko-Hesaplayıcı ➔</span>
+              </button>
+            )}
           </div>
 
           {/* Col 2: Ulaşım Türleri */}
@@ -31,7 +45,17 @@ export const Footer: React.FC = () => {
               <li><a href="#" className="hover:text-bordeaux-700 transition-colors">Uçak Bileti</a></li>
               <li><a href="#" className="hover:text-bordeaux-700 transition-colors">Hızlı Tren Bileti</a></li>
               <li><a href="#" className="hover:text-bordeaux-700 transition-colors">Feribot & Deniz Otobüsü</a></li>
-              <li><a href="#" className="hover:text-bordeaux-700 transition-colors">Şehirlerarası Rota Rehberi</a></li>
+              {onOpenTerminalGuide && (
+                <li>
+                  <button
+                    type="button"
+                    onClick={onOpenTerminalGuide}
+                    className="hover:text-bordeaux-700 transition-colors cursor-pointer text-left"
+                  >
+                    Terminal & Gar Rehberi
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 

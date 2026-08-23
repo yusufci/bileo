@@ -18,6 +18,7 @@ import { PriceAlertModal } from './components/PriceAlertModal';
 import { TerminalGuideModal } from './components/TerminalGuideModal';
 import { FleetExperienceModal } from './components/FleetExperienceModal';
 import { FareMatrixModal } from './components/FareMatrixModal';
+import { EcoCarbonModal } from './components/EcoCarbonModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -81,6 +82,9 @@ export function App() {
 
   // Multimodal Fare Matrix Modal State
   const [isFareMatrixOpen, setIsFareMatrixOpen] = useState(false);
+
+  // Eco Carbon Footprint Modal State
+  const [isEcoModalOpen, setIsEcoModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -561,7 +565,10 @@ export function App() {
       {/* Footer Top Distinct Partner Carriers Ribbon */}
       <FooterPartnerRibbon onSelectCarrier={handleSelectCarrierDirect} />
 
-      <Footer />
+      <Footer
+        onOpenEcoModal={() => setIsEcoModalOpen(true)}
+        onOpenTerminalGuide={() => setIsTerminalGuideOpen(true)}
+      />
 
       {/* Global Authentication Modal */}
       <AuthModal
@@ -603,6 +610,12 @@ export function App() {
           handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+      />
+
+      {/* Global Eco Carbon Footprint Modal */}
+      <EcoCarbonModal
+        isOpen={isEcoModalOpen}
+        onClose={() => setIsEcoModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
