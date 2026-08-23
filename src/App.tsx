@@ -55,6 +55,7 @@ const CampusTransitModal = lazy(() => import('./components/CampusTransitModal').
 const MultiModalComparisonModal = lazy(() => import('./components/MultiModalComparisonModal').then(m => ({ default: m.MultiModalComparisonModal })));
 const CityTransitCardsModal = lazy(() => import('./components/CityTransitCardsModal').then(m => ({ default: m.CityTransitCardsModal })));
 const OvernightTravelModal = lazy(() => import('./components/OvernightTravelModal').then(m => ({ default: m.OvernightTravelModal })));
+const WinterSkiTransitModal = lazy(() => import('./components/WinterSkiTransitModal').then(m => ({ default: m.WinterSkiTransitModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -204,6 +205,9 @@ export function App() {
 
   // Overnight Travel, Sleeper Train Compartments & Checklist Modal State
   const [isOvernightModalOpen, setIsOvernightModalOpen] = useState(false);
+
+  // Winter & Ski Resort Transit, Snow Depth & Equipment Modal State
+  const [isSkiModalOpen, setIsSkiModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -765,6 +769,7 @@ export function App() {
         onOpenCompareModal={() => setIsCompareModalOpen(true)}
         onOpenCityCardModal={() => setIsCityCardModalOpen(true)}
         onOpenOvernightModal={() => setIsOvernightModalOpen(true)}
+        onOpenSkiModal={() => setIsSkiModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1006,6 +1011,16 @@ export function App() {
           isOpen={isOvernightModalOpen}
           onClose={() => setIsOvernightModalOpen(false)}
           onShowToast={showToast}
+        />
+
+        {/* Global Winter & Ski Resort Transit & Equipment Modal */}
+        <WinterSkiTransitModal
+          isOpen={isSkiModalOpen}
+          onClose={() => setIsSkiModalOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         />
 
         {/* Global Price Drop Alert Modal */}
