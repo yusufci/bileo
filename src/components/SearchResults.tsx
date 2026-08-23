@@ -12,6 +12,7 @@ import {
 } from './icons';
 import { RouteItem, SearchFilterState } from '../types';
 import { CompanyLogo } from './CompanyLogo';
+import { sound } from '../utils/sound';
 
 interface SearchResultsProps {
   routes: RouteItem[];
@@ -305,15 +306,18 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
                     <div className="lg:col-span-4 xl:col-span-2 flex lg:flex-col items-center lg:items-end justify-between gap-3 pt-2 lg:pt-0">
                       <div>
-                        <span className="text-[10px] text-charcoal-muted block text-right">Bilet Fiyatı</span>
+                        <span className="text-[10px] text-charcoal-muted block text-left lg:text-right">Bilet Fiyatı</span>
                         <span className="text-2xl font-black text-charcoal font-display">
                           {route.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} TL
                         </span>
                       </div>
                       <button
                         type="button"
-                        onClick={() => onSelectRoute(route)}
-                        className="px-6 py-3.5 rounded-2xl bg-bordeaux-700 hover:bg-bordeaux-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-bordeaux cursor-pointer transition-colors flex items-center gap-2"
+                        onClick={() => {
+                          sound.playTick();
+                          onSelectRoute(route);
+                        }}
+                        className="px-6 py-3.5 rounded-2xl bg-bordeaux-700 hover:bg-bordeaux-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-bordeaux cursor-pointer transition-all flex items-center justify-center gap-2 min-h-[46px] hover:shadow-md"
                       >
                         <span>Bilet Al / İncele</span>
                         <BileoChevronRight className="w-4 h-4" />

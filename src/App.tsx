@@ -644,6 +644,13 @@ export function App() {
           setIsAuthModalOpen(true);
         }}
         activeTicketCount={tickets.filter((t) => t.status === 'active' || t.status === 'confirmed').length}
+        onOpenSupport={() => {
+          showToast(
+            'Bileo 7/24 Müşteri Hizmetleri',
+            '0850 800 00 00 hattımızdan seyahat danışmanlarımıza anında bağlanabilirsiniz.',
+            'info'
+          );
+        }}
       />
 
       {/* Footer Top Distinct Partner Carriers Ribbon */}

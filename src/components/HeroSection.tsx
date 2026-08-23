@@ -8,6 +8,7 @@ import {
 import { TransportType, SearchFilterState } from '../types';
 import { CITIES } from '../data/mockData';
 import { AviationLogosRibbon } from './PartnerLogosRibbon';
+import { sound } from '../utils/sound';
 
 interface HeroSectionProps {
   searchState: SearchFilterState;
@@ -62,6 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   );
 
   const handleSwap = () => {
+    sound.playTick();
     setIsSwapping(true);
     const temp = searchState.fromCity;
     onUpdateSearchState({
@@ -72,6 +74,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   const handleSetQuickDate = (dateLabel: string) => {
+    sound.playTick();
     onUpdateSearchState({ departureDate: dateLabel });
   };
 
@@ -84,15 +87,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* Clean & Borderless Pure Typographic Transport Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mx-auto sm:mx-0">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mx-auto sm:mx-0">
           {transportTabs.map((tab) => {
             const isActive = searchState.transportType === tab.type;
             return (
               <button
                 key={tab.type}
                 type="button"
-                onClick={() => onUpdateSearchState({ transportType: tab.type })}
-                className={`py-2 px-1 text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+                onClick={() => {
+                  sound.playTick();
+                  onUpdateSearchState({ transportType: tab.type });
+                }}
+                className={`py-2 px-2 sm:px-1 text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer min-h-[44px] flex items-center ${
                   isActive
                     ? 'text-bordeaux-700 border-b-2 border-bordeaux-700 font-black'
                     : 'text-charcoal-muted hover:text-charcoal'
@@ -108,8 +114,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {onOpenPnrQuery && (
           <button
             type="button"
-            onClick={onOpenPnrQuery}
-            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-cream-100 border border-[#E8E1D5] text-xs font-bold text-charcoal hover:text-bordeaux-700 transition-colors shadow-2xs cursor-pointer"
+            onClick={() => {
+              sound.playTick();
+              onOpenPnrQuery();
+            }}
+            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-cream-100 border border-[#E8E1D5] text-xs font-bold text-charcoal hover:text-bordeaux-700 transition-colors shadow-2xs cursor-pointer min-h-[36px]"
           >
             <BileoTicket className="w-3.5 h-3.5 text-bordeaux-700" />
             <span>PNR ile Bilet Sorgula</span>
@@ -128,8 +137,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 Nereden
               </label>
               <div
-                className="cursor-pointer group"
+                className="cursor-pointer group min-h-[44px] flex items-center"
                 onClick={() => {
+                  sound.playTick();
                   setShowFromDropdown(!showFromDropdown);
                   setShowToDropdown(false);
                 }}
@@ -140,7 +150,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               {showFromDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
+                <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
                   <div className="relative mb-2">
                     <input
                       type="text"
@@ -158,11 +168,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         key={city}
                         type="button"
                         onClick={() => {
+                          sound.playTick();
                           onUpdateSearchState({ fromCity: city });
                           setShowFromDropdown(false);
                           setFromQuery('');
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-left transition-colors cursor-pointer min-h-[38px] ${
                           searchState.fromCity === city
                             ? 'bg-bordeaux-50 text-bordeaux-700 font-bold'
                             : 'text-charcoal hover:bg-cream-100'
@@ -185,7 +196,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={handleSwap}
-                className={`w-9 h-9 rounded-full text-charcoal hover:text-bordeaux-700 hover:bg-[#FAF7F2] flex items-center justify-center transition-all cursor-pointer ${
+                className={`w-11 h-11 rounded-full text-charcoal hover:text-bordeaux-700 hover:bg-[#FAF7F2] flex items-center justify-center transition-all cursor-pointer min-h-[44px] min-w-[44px] ${
                   isSwapping ? 'rotate-180 scale-110' : ''
                 }`}
                 title="Şehirleri Değiştir"
@@ -200,8 +211,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 Nereye
               </label>
               <div
-                className="cursor-pointer group"
+                className="cursor-pointer group min-h-[44px] flex items-center"
                 onClick={() => {
+                  sound.playTick();
                   setShowToDropdown(!showToDropdown);
                   setShowFromDropdown(false);
                 }}
@@ -212,7 +224,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               {showToDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
+                <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
                   <div className="relative mb-2">
                     <input
                       type="text"
@@ -230,11 +242,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                         key={city}
                         type="button"
                         onClick={() => {
+                          sound.playTick();
                           onUpdateSearchState({ toCity: city });
                           setShowToDropdown(false);
                           setToQuery('');
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-left transition-colors cursor-pointer min-h-[38px] ${
                           searchState.toCity === city
                             ? 'bg-bordeaux-50 text-bordeaux-700 font-bold'
                             : 'text-charcoal hover:bg-cream-100'
@@ -257,17 +270,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <label className="block text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider mb-1">
                 Gidiş Tarihi
               </label>
-              <div>
+              <div className="min-h-[44px] flex flex-col justify-center">
                 <span className="text-xl sm:text-2xl font-extrabold text-[#1E1B18] tracking-tight block truncate">
                   {searchState.departureDate || '24 Mayıs Cuma'}
                 </span>
               </div>
               {/* Fast Date Pills */}
-              <div className="flex items-center gap-1.5 mt-1.5">
+              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                 <button
                   type="button"
                   onClick={() => handleSetQuickDate('Bugün')}
-                  className={`px-2 py-0.5 text-[10px] font-extrabold rounded-md transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
                     searchState.departureDate === 'Bugün'
                       ? 'bg-bordeaux-700 text-white'
                       : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
@@ -278,7 +291,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => handleSetQuickDate('Yarın')}
-                  className={`px-2 py-0.5 text-[10px] font-extrabold rounded-md transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
                     searchState.departureDate === 'Yarın'
                       ? 'bg-bordeaux-700 text-white'
                       : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
@@ -289,7 +302,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => handleSetQuickDate('25 Mayıs Cumartesi')}
-                  className={`px-2 py-0.5 text-[10px] font-extrabold rounded-md transition-colors cursor-pointer ${
+                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
                     searchState.departureDate === '25 Mayıs Cumartesi'
                       ? 'bg-bordeaux-700 text-white'
                       : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
@@ -301,11 +314,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Arama Butonu */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 pt-2 md:pt-0">
               <button
                 type="button"
-                onClick={onPerformSearch}
-                className="w-full py-4 rounded-2xl bg-bordeaux-700 hover:bg-bordeaux-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-bordeaux cursor-pointer transition-all flex items-center justify-center gap-2 hover:shadow-lg"
+                onClick={() => {
+                  sound.playSuccess();
+                  onPerformSearch();
+                }}
+                className="w-full py-4 px-4 rounded-2xl bg-bordeaux-700 hover:bg-bordeaux-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-bordeaux cursor-pointer transition-all flex items-center justify-center gap-2 hover:shadow-lg min-h-[52px]"
               >
                 <BileoSearch className="w-4 h-4" />
                 <span>Sefer Bul</span>
