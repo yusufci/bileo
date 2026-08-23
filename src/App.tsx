@@ -63,6 +63,7 @@ const InteractiveRouteNetworkModal = lazy(() => import('./components/Interactive
 const LiveOccupancyRadarModal = lazy(() => import('./components/LiveOccupancyRadarModal').then(m => ({ default: m.LiveOccupancyRadarModal })));
 const AllProvincesTransitModal = lazy(() => import('./components/AllProvincesTransitModal').then(m => ({ default: m.AllProvincesTransitModal })));
 const SmartTransferPlannerModal = lazy(() => import('./components/SmartTransferPlannerModal').then(m => ({ default: m.SmartTransferPlannerModal })));
+const SeatComfortGuideModal = lazy(() => import('./components/SeatComfortGuideModal').then(m => ({ default: m.SeatComfortGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -236,6 +237,9 @@ export function App() {
 
   // Smart Multi-Leg Layover & Transfer Planner Modal State
   const [isTransfersModalOpen, setIsTransfersModalOpen] = useState(false);
+
+  // Seat Comfort & Sun Direction Simulator Modal State
+  const [isSeatComfortModalOpen, setIsSeatComfortModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -805,6 +809,7 @@ export function App() {
         onOpenOccupancyModal={() => setIsOccupancyOpen(true)}
         onOpenProvincesModal={() => setIsProvincesModalOpen(true)}
         onOpenTransfersModal={() => setIsTransfersModalOpen(true)}
+        onOpenSeatComfortModal={() => setIsSeatComfortModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1125,6 +1130,12 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onShowToast={showToast}
+        />
+
+        {/* Global Vehicle Seating Comfort & Sun Direction Simulator Modal */}
+        <SeatComfortGuideModal
+          isOpen={isSeatComfortModalOpen}
+          onClose={() => setIsSeatComfortModalOpen(false)}
         />
 
         {/* Global Price Drop Alert Modal */}
