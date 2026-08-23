@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BileoUser, BileoTicket, BileoLogOut, BileoSearch, BileoChevronRight } from './icons';
+import { BileoUser, BileoTicket, BileoLogOut, BileoSearch, BileoChevronRight, BileoMapPin } from './icons';
 import { TransportType, User } from '../types';
 import { SeferLogo } from './SeferLogo';
 
@@ -9,18 +9,20 @@ interface HeaderProps {
   onOpenWallet: () => void;
   onOpenAuth: () => void;
   onOpenPnrQuery?: () => void;
+  onOpenTerminalGuide?: () => void;
   onLogout: () => void;
   user: User | null;
-  activeTicketCount: number;
+  activeTicketCount?: number;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenWallet,
   onOpenAuth,
   onOpenPnrQuery,
+  onOpenTerminalGuide,
   onLogout,
   user,
-  activeTicketCount,
+  activeTicketCount = 0,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -62,8 +64,20 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
 
-        {/* Right Actions: PNR Query & Authentication & Profile */}
+        {/* Right Actions: PNR Query & Terminal Guide & Authentication & Profile */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {onOpenTerminalGuide && (
+            <button
+              onClick={onOpenTerminalGuide}
+              type="button"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] text-xs font-extrabold transition-all cursor-pointer"
+              title="Terminal, Otogar, Gar ve Havalimanı Rehberi"
+            >
+              <BileoMapPin className="w-3.5 h-3.5 text-bordeaux-700" />
+              <span>Terminaller</span>
+            </button>
+          )}
+
           {onOpenPnrQuery && (
             <button
               onClick={onOpenPnrQuery}
@@ -142,6 +156,24 @@ export const Header: React.FC<HeaderProps> = ({
                         <div className="flex items-center gap-2.5">
                           <BileoSearch className="w-4 h-4 text-bordeaux-700" />
                           <span>PNR ile Bilet Sorgula</span>
+                        </div>
+                        <BileoChevronRight className="w-3.5 h-3.5 text-charcoal-muted" />
+                      </button>
+                    )}
+
+                    {/* Terminal Rehberi */}
+                    {onOpenTerminalGuide && (
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          onOpenTerminalGuide();
+                        }}
+                        type="button"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <BileoMapPin className="w-4 h-4 text-bordeaux-700" />
+                          <span>Terminal & Gar Rehberi</span>
                         </div>
                         <BileoChevronRight className="w-3.5 h-3.5 text-charcoal-muted" />
                       </button>

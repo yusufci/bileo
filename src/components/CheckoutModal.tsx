@@ -162,6 +162,34 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     setCardCvv('384');
   };
 
+  /**
+   * Autofill from previously saved passenger profiles in localStorage
+   */
+  const handleAutofillSavedPassengers = () => {
+    try {
+      const saved = localStorage.getItem('sefer_saved_passengers');
+      if (saved) {
+        const parsed: PassengerInfo[] = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const updated = passengers.map((p, i) => {
+            const match = parsed[i] || parsed[0];
+            return {
+              ...p,
+              firstName: match.firstName || p.firstName,
+              lastName: match.lastName || p.lastName,
+              idNumber: match.idNumber || p.idNumber,
+              isForeigner: !!match.isForeigner,
+            };
+          });
+          setPassengers(updated);
+          setStep1Errors({});
+        }
+      }
+    } catch {
+      // ignore
+    }
+  };
+
   // Dynamic Pricing Calculation
   const pricing = useMemo(() => {
     return calculatePricing(
@@ -363,6 +391,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       addOns,
     };
 
+    try {
+      localStorage.setItem('sefer_saved_passengers', JSON.stringify(passengers));
+    } catch {
+      // ignore
+    }
+
     setTimeout(() => {
       if (onBookingCompleted) onBookingCompleted(issuedTicket);
       if (onPaymentSuccess) onPaymentSuccess(issuedTicket);
@@ -519,15 +553,26 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     </h3>
                   </div>
 
-                  {/* 1-Click Demo Random Autofill Button */}
-                  <button
-                    type="button"
-                    onClick={handleAutofillDemoData}
-                    className="px-3.5 py-1.5 rounded-xl bg-white text-xs font-black text-bordeaux-700 hover:text-bordeaux-900 shadow-soft hover:shadow-soft-lg transition-all flex items-center gap-1.5 cursor-pointer border border-[#E2DCD2]/60"
-                    title="Tüm yolcular için otomatik geçerli T.C. ve isim oluştur"
-                  >
-                    <span>Rastgele Bilgileri Doldur</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleAutofillSavedPassengers}
+                      className="px-3 py-1.5 rounded-xl bg-amber-50 text-xs font-black text-amber-800 hover:bg-amber-100 shadow-soft transition-all flex items-center gap-1.5 cursor-pointer border border-amber-200"
+                      title="Daha önceki rezervasyonlardan kayıtlı yolcu bilgilerini yükle"
+                    >
+                      <span>Kayıtlı Yolcular</span>
+                    </button>
+
+                    {/* 1-Click Demo Random Autofill Button */}
+                    <button
+                      type="button"
+                      onClick={handleAutofillDemoData}
+                      className="px-3.5 py-1.5 rounded-xl bg-white text-xs font-black text-bordeaux-700 hover:text-bordeaux-900 shadow-soft hover:shadow-soft-lg transition-all flex items-center gap-1.5 cursor-pointer border border-[#E2DCD2]/60"
+                      title="Tüm yolcular için otomatik geçerli T.C. ve isim oluştur"
+                    >
+                      <span>Rastgele Doldur</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-6">

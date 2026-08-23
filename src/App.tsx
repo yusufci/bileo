@@ -15,6 +15,7 @@ import { TicketWalletModal } from './components/TicketWalletModal';
 import { RefundModal } from './components/RefundModal';
 import { PnrQueryModal } from './components/PnrQueryModal';
 import { PriceAlertModal } from './components/PriceAlertModal';
+import { TerminalGuideModal } from './components/TerminalGuideModal';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
@@ -68,6 +69,9 @@ export function App() {
 
   // PNR Query Modal State
   const [isPnrQueryOpen, setIsPnrQueryOpen] = useState(false);
+
+  // Terminal Guide Modal State
+  const [isTerminalGuideOpen, setIsTerminalGuideOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -462,6 +466,7 @@ export function App() {
           setIsAuthModalOpen(true);
         }}
         onOpenPnrQuery={() => setIsPnrQueryOpen(true)}
+        onOpenTerminalGuide={() => setIsTerminalGuideOpen(true)}
         onLogout={handleLogout}
         user={currentUser}
         activeTicketCount={tickets.filter((t) => t.status === 'active' || t.status === 'confirmed').length}
@@ -563,6 +568,12 @@ export function App() {
         tickets={tickets}
         onOpenRefund={handleOpenRefund}
         onShowToast={showToast}
+      />
+
+      {/* Global Terminal & Station Guide Modal */}
+      <TerminalGuideModal
+        isOpen={isTerminalGuideOpen}
+        onClose={() => setIsTerminalGuideOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
