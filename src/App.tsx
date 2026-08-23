@@ -33,6 +33,7 @@ import { LuggageStorageModal } from './components/LuggageStorageModal';
 import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
 import { CateringMenuModal } from './components/CateringMenuModal';
 import { AccessibilityGuideModal } from './components/AccessibilityGuideModal';
+import { StudentTravelModal } from './components/StudentTravelModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -142,6 +143,9 @@ export function App() {
 
   // Reduced Mobility & Accessibility Guide Modal State
   const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState(false);
+
+  // Student & Youth Travel Club Modal State
+  const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -684,6 +688,7 @@ export function App() {
         onOpenTrackerModal={() => setIsTrackerModalOpen(true)}
         onOpenCateringModal={() => setIsCateringModalOpen(true)}
         onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
+        onOpenStudentModal={() => setIsStudentModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -818,6 +823,13 @@ export function App() {
       <AccessibilityGuideModal
         isOpen={isAccessibilityModalOpen}
         onClose={() => setIsAccessibilityModalOpen(false)}
+      />
+
+      {/* Global Student & Youth Travel Club Modal */}
+      <StudentTravelModal
+        isOpen={isStudentModalOpen}
+        onClose={() => setIsStudentModalOpen(false)}
+        onShowToast={showToast}
       />
 
       {/* Global Price Drop Alert Modal */}
