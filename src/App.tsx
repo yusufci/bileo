@@ -61,6 +61,7 @@ const LiveFlightRadarModal = lazy(() => import('./components/LiveFlightRadarModa
 const AirportMetroTransitModal = lazy(() => import('./components/AirportMetroTransitModal').then(m => ({ default: m.AirportMetroTransitModal })));
 const InteractiveRouteNetworkModal = lazy(() => import('./components/InteractiveRouteNetworkModal').then(m => ({ default: m.InteractiveRouteNetworkModal })));
 const LiveOccupancyRadarModal = lazy(() => import('./components/LiveOccupancyRadarModal').then(m => ({ default: m.LiveOccupancyRadarModal })));
+const AllProvincesTransitModal = lazy(() => import('./components/AllProvincesTransitModal').then(m => ({ default: m.AllProvincesTransitModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -228,6 +229,9 @@ export function App() {
 
   // Live Real-Time Seat Occupancy & Scarcity Radar Modal State
   const [isOccupancyOpen, setIsOccupancyOpen] = useState(false);
+
+  // Turkey 81 Provinces & Transit Directory Modal State
+  const [isProvincesModalOpen, setIsProvincesModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -795,6 +799,7 @@ export function App() {
         onOpenAirportMetroModal={() => setIsAirportMetroOpen(true)}
         onOpenRouteNetworkModal={() => setIsRouteNetworkOpen(true)}
         onOpenOccupancyModal={() => setIsOccupancyOpen(true)}
+        onOpenProvincesModal={() => setIsProvincesModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1094,6 +1099,16 @@ export function App() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onShowToast={showToast}
+        />
+
+        {/* Global Turkey 81 Provinces & Transit Directory Modal */}
+        <AllProvincesTransitModal
+          isOpen={isProvincesModalOpen}
+          onClose={() => setIsProvincesModalOpen(false)}
+          onSelectRoute={(from, to, mode) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: mode });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
         />
 
         {/* Global Price Drop Alert Modal */}

@@ -10,6 +10,24 @@ import {
   SeatLayoutType,
   BookingTicket,
 } from '../types';
+import { TURKEY_81_PROVINCES } from './turkeyProvinces';
+
+const ADDITIONAL_DESTINATIONS = [
+  'Bodrum',
+  'Fethiye',
+  'Marmaris',
+  'Alanya',
+  'Çeşme',
+  'Kuşadası',
+  'Ayvalık',
+  'Didim',
+  'Kaş',
+  'Kemer',
+  'Paris',
+  'Londra',
+  'Berlin',
+  'Roma',
+];
 
 export const CITIES = [
   'İstanbul',
@@ -24,10 +42,10 @@ export const CITIES = [
   'Bodrum',
   'Gaziantep',
   'Kayseri',
-  'Paris',
-  'Londra',
-  'Berlin',
-  'Roma',
+  ...TURKEY_81_PROVINCES.map((p) => p.name).filter((n) => ![
+    'İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Eskişehir', 'Konya', 'Trabzon', 'Adana', 'Gaziantep', 'Kayseri'
+  ].includes(n)),
+  ...ADDITIONAL_DESTINATIONS.filter((d) => d !== 'Bodrum'),
 ];
 
 export const TERMINALS: Record<string, string[]> = {
@@ -101,6 +119,17 @@ export const TERMINALS: Record<string, string[]> = {
     'Rome Fiumicino (FCO)',
     'Roma Termini',
   ],
+  // Dynamically map all 81 provinces to their primary terminals and airports
+  ...TURKEY_81_PROVINCES.reduce((acc, prov) => {
+    if (!acc[prov.name]) {
+      const items = [...prov.terminals];
+      if (prov.airports) items.push(...prov.airports.map((a) => `${a.name} (${a.code})`));
+      if (prov.trainStations) items.push(...prov.trainStations);
+      if (prov.ferryPorts) items.push(...prov.ferryPorts);
+      acc[prov.name] = items;
+    }
+    return acc;
+  }, {} as Record<string, string[]>),
 };
 
 export const POPULAR_ROUTES: RouteItem[] = [

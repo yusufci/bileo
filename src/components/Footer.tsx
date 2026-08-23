@@ -39,6 +39,7 @@ interface FooterProps {
   onOpenAirportMetroModal?: () => void;
   onOpenRouteNetworkModal?: () => void;
   onOpenOccupancyModal?: () => void;
+  onOpenProvincesModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -78,6 +79,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenAirportMetroModal,
   onOpenRouteNetworkModal,
   onOpenOccupancyModal,
+  onOpenProvincesModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -409,6 +411,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-rose-950 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
                   <span>🔥 Doluluk Radarı</span>
+                </button>
+              )}
+              {onOpenProvincesModal && (
+                <button
+                  type="button"
+                  onClick={onOpenProvincesModal}
+                  className="text-xs font-extrabold text-red-950 hover:text-red-900 flex items-center gap-1.5 cursor-pointer bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-xl border border-red-300 transition-colors"
+                >
+                  <span>🇹🇷 81 İl Rehberi</span>
                 </button>
               )}
             </div>
