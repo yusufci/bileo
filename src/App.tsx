@@ -31,6 +31,7 @@ import { RestStopGuideModal } from './components/RestStopGuideModal';
 import { DiscountsGuideModal } from './components/DiscountsGuideModal';
 import { LuggageStorageModal } from './components/LuggageStorageModal';
 import { LiveJourneyTrackerModal } from './components/LiveJourneyTrackerModal';
+import { CateringMenuModal } from './components/CateringMenuModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -134,6 +135,9 @@ export function App() {
 
   // Live GPS Journey Tracker Modal State
   const [isTrackerModalOpen, setIsTrackerModalOpen] = useState(false);
+
+  // Special Dietary & In-Transit Catering Menu Modal State
+  const [isCateringModalOpen, setIsCateringModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -674,6 +678,7 @@ export function App() {
         onOpenDiscountsModal={() => setIsDiscountsModalOpen(true)}
         onOpenStorageModal={() => setIsStorageModalOpen(true)}
         onOpenTrackerModal={() => setIsTrackerModalOpen(true)}
+        onOpenCateringModal={() => setIsCateringModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -796,6 +801,12 @@ export function App() {
         isOpen={isTrackerModalOpen}
         onClose={() => setIsTrackerModalOpen(false)}
         onShowToast={showToast}
+      />
+
+      {/* Global Special Dietary & Catering Menu Modal */}
+      <CateringMenuModal
+        isOpen={isCateringModalOpen}
+        onClose={() => setIsCateringModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}

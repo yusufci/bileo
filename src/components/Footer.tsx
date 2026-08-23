@@ -16,6 +16,7 @@ interface FooterProps {
   onOpenDiscountsModal?: () => void;
   onOpenStorageModal?: () => void;
   onOpenTrackerModal?: () => void;
+  onOpenCateringModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -32,6 +33,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenDiscountsModal,
   onOpenStorageModal,
   onOpenTrackerModal,
+  onOpenCateringModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -156,6 +158,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-emerald-800 hover:text-emerald-900 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
                   <span>🛰️ Canlı Takip</span>
+                </button>
+              )}
+              {onOpenCateringModal && (
+                <button
+                  type="button"
+                  onClick={onOpenCateringModal}
+                  className="text-xs font-extrabold text-amber-800 hover:text-amber-900 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
+                >
+                  <span>☕ İkram Menüsü</span>
                 </button>
               )}
             </div>
