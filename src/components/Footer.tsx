@@ -24,6 +24,7 @@ interface FooterProps {
   onOpenHighwayModal?: () => void;
   onOpenGroupModal?: () => void;
   onOpenMedicalModal?: () => void;
+  onOpenRouteStopsModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -48,6 +49,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenHighwayModal,
   onOpenGroupModal,
   onOpenMedicalModal,
+  onOpenRouteStopsModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -244,6 +246,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-rose-800 hover:text-rose-900 flex items-center gap-1.5 cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors"
                 >
                   <span>🩺 Seyahat Sağlığı</span>
+                </button>
+              )}
+              {onOpenRouteStopsModal && (
+                <button
+                  type="button"
+                  onClick={onOpenRouteStopsModal}
+                  className="text-xs font-extrabold text-amber-900 hover:text-amber-950 flex items-center gap-1.5 cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
+                >
+                  <span>🗺️ Güzergah & Duraklar</span>
                 </button>
               )}
             </div>

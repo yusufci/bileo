@@ -39,6 +39,7 @@ import { LostAndFoundModal } from './components/LostAndFoundModal';
 import { HighwayTollModal } from './components/HighwayTollModal';
 import { GroupBookingModal } from './components/GroupBookingModal';
 import { MedicalTravelModal } from './components/MedicalTravelModal';
+import { RouteStopsModal } from './components/RouteStopsModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
@@ -166,6 +167,9 @@ export function App() {
 
   // Travel Health, Medication & Medical Clearance Modal State
   const [isMedicalModalOpen, setIsMedicalModalOpen] = useState(false);
+
+  // Route Intermediate Stops & Timeline Modal State
+  const [isRouteStopsModalOpen, setIsRouteStopsModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -714,6 +718,7 @@ export function App() {
         onOpenHighwayModal={() => setIsHighwayModalOpen(true)}
         onOpenGroupModal={() => setIsGroupModalOpen(true)}
         onOpenMedicalModal={() => setIsMedicalModalOpen(true)}
+        onOpenRouteStopsModal={() => setIsRouteStopsModalOpen(true)}
       />
 
       {/* Global Authentication Modal */}
@@ -887,6 +892,12 @@ export function App() {
       <MedicalTravelModal
         isOpen={isMedicalModalOpen}
         onClose={() => setIsMedicalModalOpen(false)}
+      />
+
+      {/* Global Intermediate Route Stops & Timeline Modal */}
+      <RouteStopsModal
+        isOpen={isRouteStopsModalOpen}
+        onClose={() => setIsRouteStopsModalOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
