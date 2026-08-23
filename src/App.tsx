@@ -54,6 +54,7 @@ const LiveRoadWeatherRadarModal = lazy(() => import('./components/LiveRoadWeathe
 const CampusTransitModal = lazy(() => import('./components/CampusTransitModal').then(m => ({ default: m.CampusTransitModal })));
 const MultiModalComparisonModal = lazy(() => import('./components/MultiModalComparisonModal').then(m => ({ default: m.MultiModalComparisonModal })));
 const CityTransitCardsModal = lazy(() => import('./components/CityTransitCardsModal').then(m => ({ default: m.CityTransitCardsModal })));
+const OvernightTravelModal = lazy(() => import('./components/OvernightTravelModal').then(m => ({ default: m.OvernightTravelModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -200,6 +201,9 @@ export function App() {
 
   // Urban Transit Cards, Fares & NFC Top-up Modal State
   const [isCityCardModalOpen, setIsCityCardModalOpen] = useState(false);
+
+  // Overnight Travel, Sleeper Train Compartments & Checklist Modal State
+  const [isOvernightModalOpen, setIsOvernightModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -760,6 +764,7 @@ export function App() {
         onOpenCampusModal={() => setIsCampusModalOpen(true)}
         onOpenCompareModal={() => setIsCompareModalOpen(true)}
         onOpenCityCardModal={() => setIsCityCardModalOpen(true)}
+        onOpenOvernightModal={() => setIsOvernightModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -993,6 +998,13 @@ export function App() {
         <CityTransitCardsModal
           isOpen={isCityCardModalOpen}
           onClose={() => setIsCityCardModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Overnight Travel & Sleeper Train Experience Modal */}
+        <OvernightTravelModal
+          isOpen={isOvernightModalOpen}
+          onClose={() => setIsOvernightModalOpen(false)}
           onShowToast={showToast}
         />
 

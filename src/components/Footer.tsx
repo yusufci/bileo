@@ -32,6 +32,7 @@ interface FooterProps {
   onOpenCampusModal?: () => void;
   onOpenCompareModal?: () => void;
   onOpenCityCardModal?: () => void;
+  onOpenOvernightModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -64,6 +65,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCampusModal,
   onOpenCompareModal,
   onOpenCityCardModal,
+  onOpenOvernightModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -332,6 +334,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-emerald-900 hover:text-emerald-950 flex items-center gap-1.5 cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-300 transition-colors"
                 >
                   <span>💳 Şehir Kartları</span>
+                </button>
+              )}
+              {onOpenOvernightModal && (
+                <button
+                  type="button"
+                  onClick={onOpenOvernightModal}
+                  className="text-xs font-extrabold text-indigo-950 hover:text-indigo-900 flex items-center gap-1.5 cursor-pointer bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl border border-indigo-300 transition-colors"
+                >
+                  <span>🌙 Gece Seferleri</span>
                 </button>
               )}
             </div>
