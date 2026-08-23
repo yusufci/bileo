@@ -68,6 +68,7 @@ const TicketRescheduleModal = lazy(() => import('./components/TicketRescheduleMo
 const OnboardEntertainmentModal = lazy(() => import('./components/OnboardEntertainmentModal').then(m => ({ default: m.OnboardEntertainmentModal })));
 const ExpressParcelTransitModal = lazy(() => import('./components/ExpressParcelTransitModal').then(m => ({ default: m.ExpressParcelTransitModal })));
 const SleeperTrainGuideModal = lazy(() => import('./components/SleeperTrainGuideModal').then(m => ({ default: m.SleeperTrainGuideModal })));
+const SeaTransitFerryGuideModal = lazy(() => import('./components/SeaTransitFerryGuideModal').then(m => ({ default: m.SeaTransitFerryGuideModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -256,6 +257,9 @@ export function App() {
 
   // Sleeper & Scenic Train Guide Modal State
   const [isSleeperTrainModalOpen, setIsSleeperTrainModalOpen] = useState(false);
+
+  // Sea Transit & Ferry Guide Modal State
+  const [isFerryGuideModalOpen, setIsFerryGuideModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -830,6 +834,7 @@ export function App() {
         onOpenEntertainmentModal={() => setIsEntertainmentModalOpen(true)}
         onOpenParcelModal={() => setIsParcelModalOpen(true)}
         onOpenSleeperTrainModal={() => setIsSleeperTrainModalOpen(true)}
+        onOpenFerryGuideModal={() => setIsFerryGuideModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1186,6 +1191,17 @@ export function App() {
           onClose={() => setIsSleeperTrainModalOpen(false)}
           onSelectRoute={(from, to) => {
             handleUpdateSearchState({ fromCity: from, toCity: to, transportType: 'tren' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onShowToast={showToast}
+        />
+
+        {/* Global Sea Transit & Island Ferry Guide Modal */}
+        <SeaTransitFerryGuideModal
+          isOpen={isFerryGuideModalOpen}
+          onClose={() => setIsFerryGuideModalOpen(false)}
+          onSelectRoute={(from, to) => {
+            handleUpdateSearchState({ fromCity: from, toCity: to, transportType: 'feribot' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           onShowToast={showToast}
