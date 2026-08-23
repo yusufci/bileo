@@ -37,6 +37,7 @@ interface FooterProps {
   onOpenSeasonsModal?: () => void;
   onOpenFlightRadarModal?: () => void;
   onOpenAirportMetroModal?: () => void;
+  onOpenRouteNetworkModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -74,6 +75,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenSeasonsModal,
   onOpenFlightRadarModal,
   onOpenAirportMetroModal,
+  onOpenRouteNetworkModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -387,6 +389,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-extrabold text-teal-950 hover:text-teal-900 flex items-center gap-1.5 cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
                 >
                   <span>🚇 Havalimanı Metrosu</span>
+                </button>
+              )}
+              {onOpenRouteNetworkModal && (
+                <button
+                  type="button"
+                  onClick={onOpenRouteNetworkModal}
+                  className="text-xs font-extrabold text-bordeaux-950 hover:text-bordeaux-900 flex items-center gap-1.5 cursor-pointer bg-rose-50/80 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
+                >
+                  <span>🗺️ Rota Ağı</span>
                 </button>
               )}
             </div>
