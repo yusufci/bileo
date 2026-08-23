@@ -19,11 +19,13 @@ import { TerminalGuideModal } from './components/TerminalGuideModal';
 import { FleetExperienceModal } from './components/FleetExperienceModal';
 import { FareMatrixModal } from './components/FareMatrixModal';
 import { EcoCarbonModal } from './components/EcoCarbonModal';
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { OfflineBanner } from './components/common/OfflineBanner';
 import { ToastNotification, ToastMessage } from './components/common/ToastNotification';
 import { AuthModal } from './components/AuthModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Footer } from './components/Footer';
+import { sound } from './utils/sound';
 import {
   TransportType,
   SearchFilterState,
@@ -85,6 +87,9 @@ export function App() {
 
   // Eco Carbon Footprint Modal State
   const [isEcoModalOpen, setIsEcoModalOpen] = useState(false);
+
+  // Keyboard Shortcuts Modal State
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -367,6 +372,45 @@ export function App() {
     setIsWalletOpen(true);
   };
 
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) || target.isContentEditable) {
+        return;
+      }
+
+      if (e.key === '?') {
+        e.preventDefault();
+        setIsShortcutsOpen((prev) => !prev);
+      } else if (e.key === '1') {
+        sound.playTick();
+        setSearchState((prev) => ({ ...prev, transportType: 'otobus' }));
+      } else if (e.key === '2') {
+        sound.playTick();
+        setSearchState((prev) => ({ ...prev, transportType: 'ucak' }));
+      } else if (e.key === '3') {
+        sound.playTick();
+        setSearchState((prev) => ({ ...prev, transportType: 'tren' }));
+      } else if (e.key === '4') {
+        sound.playTick();
+        setSearchState((prev) => ({ ...prev, transportType: 'feribot' }));
+      } else if (e.key.toLowerCase() === 'w') {
+        e.preventDefault();
+        handleOpenWalletWithAuth();
+      } else if (e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        setIsPnrQueryOpen(true);
+      } else if (e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        setIsTerminalGuideOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleOpenWalletWithAuth]);
+
   if (selectedCarrierForDetail) {
     return (
       <CarrierDetailScreen
@@ -616,6 +660,12 @@ export function App() {
       <EcoCarbonModal
         isOpen={isEcoModalOpen}
         onClose={() => setIsEcoModalOpen(false)}
+      />
+
+      {/* Global Keyboard Shortcuts Modal */}
+      <KeyboardShortcutsModal
+        isOpen={isShortcutsOpen}
+        onClose={() => setIsShortcutsOpen(false)}
       />
 
       {/* Global Price Drop Alert Modal */}
