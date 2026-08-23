@@ -241,4 +241,44 @@ export class RouteController {
       next(error);
     }
   }
+
+  /**
+   * Get real-time transit telemetry metrics across all 4 modes (OpenSky, Bus Carriers, Weather)
+   */
+  public static async getLiveTelemetry(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { TransitDataScraperService } = await import('../services/transitDataScraper');
+      const scraper = TransitDataScraperService.getInstance();
+      const metrics = await scraper.getTelemetryMetrics();
+      const carriers = scraper.getIndexedBusCarriers();
+
+      res.status(200).json({
+        success: true,
+        metrics,
+        carriers,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get live flights in Turkish airspace scraped from OpenSky ADS-B
+   */
+  public static async getLiveAirspace(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { TransitDataScraperService } = await import('../services/transitDataScraper');
+      const scraper = TransitDataScraperService.getInstance();
+      const flights = await scraper.fetchLiveTurkishAirspace();
+
+      res.status(200).json({
+        success: true,
+        count: flights.length,
+        flights,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+

@@ -15,16 +15,23 @@ routeRouter.get(
   RouteController.searchRoutes
 );
 
-// 2. Get Single Route Details by ID
+// 2. Real-Time Telemetry & Scraper Health
+routeRouter.get('/telemetry', RouteController.getLiveTelemetry);
+
+// 3. Live Turkish Airspace ADS-B Feed
+routeRouter.get('/airspace', RouteController.getLiveAirspace);
+
+// 4. Get Single Route Details by ID
 routeRouter.get(
   '/:id',
   validateRequest({ params: routeIdParamSchema }),
   RouteController.getRouteById
 );
 
-// 3. Get Interactive Seat Layout & Occupancy Matrix for Route
+// 5. Get Interactive Seat Layout & Occupancy Matrix for Route
 routeRouter.get(
   '/:id/seats',
   validateRequest({ params: routeIdParamSchema, query: seatsQuerySchema }),
   RouteController.getRouteSeats
 );
+

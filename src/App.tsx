@@ -71,6 +71,7 @@ const SleeperTrainGuideModal = lazy(() => import('./components/SleeperTrainGuide
 const SeaTransitFerryGuideModal = lazy(() => import('./components/SeaTransitFerryGuideModal').then(m => ({ default: m.SeaTransitFerryGuideModal })));
 const BicycleTransitGuideModal = lazy(() => import('./components/BicycleTransitGuideModal').then(m => ({ default: m.BicycleTransitGuideModal })));
 const CarRentalTransitGuideModal = lazy(() => import('./components/CarRentalTransitGuideModal').then(m => ({ default: m.CarRentalTransitGuideModal })));
+const LiveTransitScraperModal = lazy(() => import('./components/LiveTransitScraperModal').then(m => ({ default: m.LiveTransitScraperModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -268,6 +269,9 @@ export function App() {
 
   // Car Rental & Hub Transfer Guide Modal State
   const [isCarRentalModalOpen, setIsCarRentalModalOpen] = useState(false);
+
+  // Live Transit Scraper & Ingestion Status Modal State
+  const [isScraperModalOpen, setIsScraperModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -845,6 +849,7 @@ export function App() {
         onOpenFerryGuideModal={() => setIsFerryGuideModalOpen(true)}
         onOpenBicycleModal={() => setIsBicycleModalOpen(true)}
         onOpenCarRentalModal={() => setIsCarRentalModalOpen(true)}
+        onOpenScraperModal={() => setIsScraperModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1228,6 +1233,13 @@ export function App() {
         <CarRentalTransitGuideModal
           isOpen={isCarRentalModalOpen}
           onClose={() => setIsCarRentalModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Live Transit Scraper & Ingestion Status Modal */}
+        <LiveTransitScraperModal
+          isOpen={isScraperModalOpen}
+          onClose={() => setIsScraperModalOpen(false)}
           onShowToast={showToast}
         />
 
