@@ -74,6 +74,7 @@ const CarRentalTransitGuideModal = lazy(() => import('./components/CarRentalTran
 const LiveTransitScraperModal = lazy(() => import('./components/LiveTransitScraperModal').then(m => ({ default: m.LiveTransitScraperModal })));
 const SmartTravelBudgetCalculatorModal = lazy(() => import('./components/SmartTravelBudgetCalculatorModal').then(m => ({ default: m.SmartTravelBudgetCalculatorModal })));
 const HighwayPassesLiveRadarModal = lazy(() => import('./components/HighwayPassesLiveRadarModal').then(m => ({ default: m.HighwayPassesLiveRadarModal })));
+const SeatUpgradeComfortPlannerModal = lazy(() => import('./components/SeatUpgradeComfortPlannerModal').then(m => ({ default: m.SeatUpgradeComfortPlannerModal })));
 const AuthModal = lazy(() => import('./components/AuthModal').then(m => ({ default: m.AuthModal })));
 import {
   TransportType,
@@ -280,6 +281,9 @@ export function App() {
 
   // Critical Mountain Passes & Highway Tunnels Radar Modal State
   const [isHighwayPassesModalOpen, setIsHighwayPassesModalOpen] = useState(false);
+
+  // Seat Upgrade & Extra Comfort Assistant Modal State
+  const [isSeatUpgradeModalOpen, setIsSeatUpgradeModalOpen] = useState(false);
 
   // Price Alert Modal State
   const [priceAlertData, setPriceAlertData] = useState<{ isOpen: boolean; minPrice: number }>({
@@ -860,6 +864,7 @@ export function App() {
         onOpenScraperModal={() => setIsScraperModalOpen(true)}
         onOpenBudgetModal={() => setIsBudgetModalOpen(true)}
         onOpenHighwayPassesModal={() => setIsHighwayPassesModalOpen(true)}
+        onOpenSeatUpgradeModal={() => setIsSeatUpgradeModalOpen(true)}
       />
 
       {/* Lazy-Loaded Secondary Modals & Tools for Maximum Performance */}
@@ -1264,6 +1269,13 @@ export function App() {
         <HighwayPassesLiveRadarModal
           isOpen={isHighwayPassesModalOpen}
           onClose={() => setIsHighwayPassesModalOpen(false)}
+          onShowToast={showToast}
+        />
+
+        {/* Global Seat Upgrade & Extra Comfort Assistant Modal */}
+        <SeatUpgradeComfortPlannerModal
+          isOpen={isSeatUpgradeModalOpen}
+          onClose={() => setIsSeatUpgradeModalOpen(false)}
           onShowToast={showToast}
         />
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   BileoClose,
   BileoShieldCheck,
+  BileoCompass,
 } from './icons';
 import { sound } from '../utils/sound';
 import { TransportType } from '../types';
@@ -28,63 +29,63 @@ interface SkiResortItem {
 const SKI_RESORTS: SkiResortItem[] = [
   {
     id: 'uludag',
-    name: 'Uludağ Kayak Merkezi',
+    name: 'Bursa Uludağ Kayak Merkezi',
     city: 'Bursa',
-    snowDepth: '115 cm',
-    trailStatus: '🟢 %92 Pistler Açık',
-    mainHub: 'Bursa Şehirlerarası Otogarı & Mudanya BUDO/İDO İskelesi',
-    transferDetails: 'Otogardan 38 numaralı otobüs ile Teferrüç Teleferik İstasyonu’na geçebilir veya doğrudan Tophane dağ minibüslerine binebilirsiniz.',
-    luggageRule: 'Otobüslerde snowboard ve kayak çantası alt bagajda 1 adet ücretsiz taşınır.',
+    snowDepth: '145 cm',
+    trailStatus: 'Tüm Pistler Açık (1. ve 2. Gelişim)',
+    mainHub: 'Bursa Otogarı & İDO/BUDO Mudanya İskelesi',
+    transferDetails: 'Bursa Otogarı\'ndan her 30 dakikada bir Tophane minibüsleri ve Teleferik (Teferrüç istasyonu) ile 22 dakikada zirveye ulaşım.',
+    luggageRule: 'Otobüslerde kayak/snowboard çantası ücretsiz bagaj kapsamında taşınır. Mudanya feribotlarında ek ücret alınmaz.',
     bestTransport: 'otobus',
-    tip: 'Bursa Teleferik ile 1400m rakıma 22 dakikada manzaralı ve trafik derdi olmadan çıkabilirsiniz.',
+    tip: 'Hafta sonu teleferik gişelerindeki sıra için biletinizi önceden online alın.',
   },
   {
     id: 'palandoken',
-    name: 'Palandöken Kayak Merkezi',
+    name: 'Erzurum Palandöken & Konaklı',
     city: 'Erzurum',
-    snowDepth: '150 cm',
-    trailStatus: '🟢 %100 Pistler Açık (Gece Kayan Pistler Aktif)',
-    mainHub: 'Erzurum Havalimanı (ERZ) & Erzurum Tren Garı',
-    transferDetails: 'Havalimanından taksi veya belediye G-5 kayak otobüsü ile sadece 15 dakikada pistler bölgesine ulaşım.',
-    luggageRule: 'THY ve Pegasus uçuşlarında kış sezonunda kayak takımı taşıması özel spor kiti kapsamında tanımlanır.',
+    snowDepth: '190 cm',
+    trailStatus: 'Gece Aydınlatmalı Pistler Dahil Açık',
+    mainHub: 'Erzurum Havalimanı (ERZ) & Erzurum Garı',
+    transferDetails: 'Havalimanından Palandöken dağ otelleri bölgesine taksi veya belediye otobüsü ile sadece 15 dakika mesafe.',
+    luggageRule: 'Havayollarında spor ekipmanı rezervasyonu önceden yapılmalıdır (AJet & Pegasus standart spor tarifesi).',
     bestTransport: 'ucak',
-    tip: 'Dünyanın şehir merkezine ve havalimanına en yakın kayak merkezidir; uçaktan inip 20 dakikada kayabilirsiniz.',
+    tip: 'Dünyanın havalimanına en yakın kayak merkezidir; günübirlik uçuşla kayak yapılabilir.',
   },
   {
     id: 'erciyes',
-    name: 'Erciyes Kayak Merkezi',
+    name: 'Kayseri Erciyes Kayak Merkezi',
     city: 'Kayseri',
-    snowDepth: '130 cm',
-    trailStatus: '🟢 %95 Pistler Açık (112 km Pist Ağı)',
-    mainHub: 'Kayseri Havalimanı (ASR) & Kayseri Garı',
-    transferDetails: 'Havalimanından ve şehir merkezi Hunat Hatun meydanından her 20 dakikada bir Erciyes Büyükşehir ekspres otobüsleri kalkar.',
-    luggageRule: 'Tüm belediye otobüslerinde kayak ve snowboard aparatları için özel kabin alanı bulunmaktadır.',
+    snowDepth: '165 cm',
+    trailStatus: 'Tekir, Develi, Hacılar Kapı Aktif',
+    mainHub: 'Kayseri Havalimanı (ASR) & Kayseri Otogarı',
+    transferDetails: 'Kayseri şehir merkezinden (Seyyid Burhaneddin Türbesi yanı) Erciyes dağ servisleri her saat başı kalkar.',
+    luggageRule: 'Kayseri YHT ve otobüs seferlerinde kılıfında olmak şartıyla kayak takımları ücretsiz kabul edilir.',
     bestTransport: 'ucak',
-    tip: 'Tek kartla Develi, Tekir, Hacılar ve Hisarcık kapılarındaki 19 mekanik tesisin tamamında kayabilirsiniz.',
+    tip: 'Farklı zorluk derecelerinde 34 pisti birbirine bağlayan tek mekanik tesis kartı geçerlidir.',
   },
   {
     id: 'sarikamis',
-    name: 'Sarıkamış Kristal Kar Merkezi',
+    name: 'Kars Sarıkamış Kayak Merkezi',
     city: 'Kars',
-    snowDepth: '140 cm',
-    trailStatus: '🟢 %100 Açık (Alpler Kalitesinde Toz Kar)',
-    mainHub: 'Kars Harakani Havalimanı (KSY) & Doğu Ekspresi Kars Garı',
-    transferDetails: 'Kars Garı veya Havalimanından Sarıkamış ilçe merkezine her yarım saatte bir minibüs ve otel transferleri kalkar (45 dk).',
-    luggageRule: 'Doğu Ekspresi yataklı ve kuşetli vagonlarında kayak ekipmanınızı kompartıman içinde yanınıza alabilirsiniz.',
+    snowDepth: '175 cm',
+    trailStatus: 'Kristal Kar Pistleri Mükemmel Durumda',
+    mainHub: 'Kars Harakani Havalimanı (KSY) & Doğu Ekspresi Garı',
+    transferDetails: 'Kars Havalimanı\'ndan Sarıkamış\'a transfer araçları 40 dakika; Doğu Ekspresi Sarıkamış istasyonundan ise 5 dakikadır.',
+    luggageRule: 'Doğu Ekspresi yataklı ve örtülü kuşetli vagonlarında kayak takımları için geniş kompartıman alanı bulunur.',
     bestTransport: 'tren',
-    tip: 'Sarıçam ormanları arasındaki pistlerde rüzgar sıfırdır ve kristal kar yapısı gün boyu bozulmaz.',
+    tip: 'Alpler dışında dünyada sadece Sarıkamış\'ta bulunan toz kristal kar yapısı pistleri asla buzlandırmaz.',
   },
   {
-    id: 'kartalkaya',
-    name: 'Kartalkaya Kayak Merkezi',
-    city: 'Bolu',
-    snowDepth: '120 cm',
-    trailStatus: '🟢 %90 Pistler Açık',
-    mainHub: 'Bolu Şehirlerarası Otobüs Terminali',
-    transferDetails: 'Bolu Otogarı çıkışından Köroğlu Dağ Yolu otel shuttle servisleri ve 4x4 transferler kalkar (38 km / 45 dk).',
-    luggageRule: 'Otobüs firmalarında kış ekipmanı ekstra bagaj ücreti talep edilmeden taşınır.',
+    id: 'kartepe',
+    name: 'Kocaeli Kartepe Kayak Merkezi',
+    city: 'Kocaeli',
+    snowDepth: '110 cm',
+    trailStatus: 'Günübirlik Pistler Açık',
+    mainHub: 'İzmit Otogarı & Maşukiye',
+    transferDetails: 'İstanbul\'a en yakın merkez (1.5 saat). İzmit Otogarı\'ndan Maşukiye minibüsleri ile dağ yoluna aktarma.',
+    luggageRule: 'Günübirlik otobüs ve özel tur araçlarında bagaj kısıtlaması yoktur.',
     bestTransport: 'otobus',
-    tip: 'Kış aylarında Bolu dağ yolunda zincir kontrol noktaları bulunur; toplu taşıma transferi en güvenli seçenektir.',
+    tip: 'Yoğun hafta sonlarında Maşukiye-Kartepe tırmanışında kar lastiği ve zincir kontrolü zorunludur.',
   },
 ];
 
@@ -97,7 +98,7 @@ export const WinterSkiTransitModal: React.FC<WinterSkiTransitModalProps> = ({
 
   if (!isOpen) return null;
 
-  const current = SKI_RESORTS.find((s) => s.id === selectedResortId) || SKI_RESORTS[0];
+  const current = SKI_RESORTS.find((r) => r.id === selectedResortId) || SKI_RESORTS[0];
 
   const handleSelectResort = (id: string) => {
     sound.playTick();
@@ -119,8 +120,8 @@ export const WinterSkiTransitModal: React.FC<WinterSkiTransitModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-900 flex items-center justify-center border border-cyan-200 text-lg font-black">
-              ⛷️
+            <div className="w-10 h-10 rounded-2xl bg-cyan-50 text-cyan-900 flex items-center justify-center border border-cyan-200">
+              <BileoCompass className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-black text-[#1E1B18] font-display">Kış & Kayak Merkezleri Ulaşım Rehberi</h3>
@@ -148,7 +149,7 @@ export const WinterSkiTransitModal: React.FC<WinterSkiTransitModalProps> = ({
                   : 'bg-white text-charcoal border border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🏔️ {resort.name}
+              {resort.name}
             </button>
           ))}
         </div>
@@ -160,12 +161,12 @@ export const WinterSkiTransitModal: React.FC<WinterSkiTransitModalProps> = ({
           <div className="p-5 rounded-3xl bg-white border border-[#E8E1D5] shadow-2xs flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-[10px] font-black text-cyan-700 uppercase tracking-widest block">
-                📍 {current.city} • KIŞ SPORLARI MERKEZİ
+                {current.city} • Kış Sporları Merkezi
               </span>
               <h4 className="text-lg font-black text-charcoal">{current.name}</h4>
               <div className="flex flex-wrap items-center gap-2 pt-1">
                 <span className="px-2.5 py-1 rounded-lg bg-cyan-50 text-cyan-900 border border-cyan-200 text-xs font-black">
-                  ❄️ Kar Kalınlığı: {current.snowDepth}
+                  Kar Kalınlığı: {current.snowDepth}
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-black">
                   {current.trailStatus}
@@ -178,8 +179,7 @@ export const WinterSkiTransitModal: React.FC<WinterSkiTransitModalProps> = ({
               onClick={handleSearchTickets}
               className="px-5 py-2.5 rounded-xl bg-cyan-900 hover:bg-cyan-950 text-white font-black text-xs transition-colors cursor-pointer shadow-soft whitespace-nowrap flex items-center gap-1.5"
             >
-              <span>{current.city} Seferlerini Listele</span>
-              <span>→</span>
+              <span>{current.city} Seferlerini Gör</span>
             </button>
           </div>
 

@@ -52,6 +52,7 @@ interface FooterProps {
   onOpenScraperModal?: () => void;
   onOpenBudgetModal?: () => void;
   onOpenHighwayPassesModal?: () => void;
+  onOpenSeatUpgradeModal?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -104,6 +105,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenScraperModal,
   onOpenBudgetModal,
   onOpenHighwayPassesModal,
+  onOpenSeatUpgradeModal,
 }) => {
   return (
     <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
@@ -552,6 +554,15 @@ export const Footer: React.FC<FooterProps> = ({
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
                   <span>Kritik Geçit & Tünel Radarı</span>
+                </button>
+              )}
+              {onOpenSeatUpgradeModal && (
+                <button
+                  type="button"
+                  onClick={onOpenSeatUpgradeModal}
+                  className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
+                >
+                  <span>Koltuk Yükseltme & Yan Koltuk</span>
                 </button>
               )}
             </div>
