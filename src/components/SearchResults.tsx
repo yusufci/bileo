@@ -118,10 +118,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     const min = Math.min(...filteredRoutes.map((r) => r.price));
                     onOpenPriceAlert(min);
                   }}
-                  className="self-start sm:self-center flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-extrabold transition-colors cursor-pointer"
+                  className="self-start sm:self-center px-3 py-1.5 rounded-xl bg-cream-200 hover:bg-cream-300 text-charcoal text-xs font-extrabold transition-colors cursor-pointer"
                   title="Fiyatlar düştüğünde e-posta ile bildirim al"
                 >
-                  <BileoSparkles className="w-3.5 h-3.5 text-amber-600" />
                   <span>Fiyat Alarmı Kur</span>
                 </button>
               )}
@@ -143,7 +142,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     className={`px-3 py-1.5 rounded-xl font-extrabold transition-colors cursor-pointer ${
                       selectedTimeFilter === time.id
                         ? 'bg-bordeaux-700 text-white shadow-2xs'
-                        : 'bg-white hover:bg-cream-100 text-charcoal-muted hover:text-charcoal border border-[#E8E1D5]'
+                        : 'bg-cream-200 hover:bg-cream-300 text-charcoal'
                     }`}
                   >
                     {time.label}
@@ -157,7 +156,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                     className={`px-3 py-1.5 rounded-xl font-extrabold transition-colors cursor-pointer ${
                       only2Plus1
                         ? 'bg-bordeaux-700 text-white shadow-2xs'
-                        : 'bg-white hover:bg-cream-100 text-charcoal-muted hover:text-charcoal border border-[#E8E1D5]'
+                        : 'bg-cream-200 hover:bg-cream-300 text-charcoal'
                     }`}
                   >
                     Sadece 2+1
@@ -170,7 +169,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-white px-2.5 py-1.5 rounded-xl border border-[#E8E1D5] text-xs font-extrabold text-charcoal focus:outline-none cursor-pointer"
+                  className="bg-cream-200 hover:bg-cream-300 px-2.5 py-1.5 rounded-xl text-xs font-extrabold text-charcoal focus:outline-none cursor-pointer border-0"
                 >
                   <option value="cheapest">En Düşük Fiyat</option>
                   <option value="earliest">En Erken Kalkış</option>
@@ -192,7 +191,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer shrink-0 ${
                   selectedCompanyFilter === 'all'
                     ? 'bg-[#1E1B18] text-white'
-                    : 'bg-white hover:bg-[#FAF7F2] text-charcoal border border-[#E8E1D5]'
+                    : 'bg-cream-200 hover:bg-cream-300 text-charcoal'
                 }`}
               >
                 Tümü ({routes.filter((r) => r.transportType === searchState.transportType).length})
@@ -205,7 +204,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer shrink-0 ${
                     selectedCompanyFilter === comp
                       ? 'bg-[#1E1B18] text-white'
-                      : 'bg-white hover:bg-[#FAF7F2] text-charcoal border border-[#E8E1D5]'
+                      : 'bg-cream-200 hover:bg-cream-300 text-charcoal'
                   }`}
                 >
                   {comp}
