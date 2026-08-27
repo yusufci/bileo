@@ -108,7 +108,8 @@ export function App() {
     sortBy: 'cheapest',
   });
 
-  const [routes, setRoutes] = useState<RouteItem[]>(TURNA_SCRAPED_ROUTES);
+  const [routes, setRoutes] = useState<RouteItem[]>([]);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [isLiveScraping, setIsLiveScraping] = useState<boolean>(false);
 
   // Authentication State
@@ -435,11 +436,7 @@ export function App() {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          setRoutes((prev) => {
-            const liveIds = new Set(data.map((r: RouteItem) => r.id));
-            const filteredPrev = prev.filter((r) => !liveIds.has(r.id));
-            return [...data, ...filteredPrev];
-          });
+          setRoutes(data);
           showToast('Turna.com Canlı Senkronizasyon', `${from} - ${to} rotasında ${data.length} adet anlık güncel bilet çekildi.`, 'promo');
         }
       }
@@ -450,19 +447,21 @@ export function App() {
     }
   }, [showToast]);
 
-  // 60-second automatic live background sync from Turna.com
+  // 60-second automatic live background sync from Turna.com (sadece arama yapıldıysa)
   useEffect(() => {
+    if (!hasSearched) return;
     const interval = setInterval(() => {
       fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
     }, 60000);
     return () => clearInterval(interval);
-  }, [searchState.fromCity, searchState.toCity, searchState.transportType, fetchLiveTurnaTickets]);
+  }, [hasSearched, searchState.fromCity, searchState.toCity, searchState.transportType, fetchLiveTurnaTickets]);
 
   const handleUpdateSearchState = (updates: Partial<SearchFilterState>) => {
     setSearchState((prev) => ({ ...prev, ...updates }));
   };
 
   const handlePerformSearch = () => {
+    setHasSearched(true);
     if (
       !requireAuth(
         'Sefer aramak ve sefer saatlerini listelemek için lütfen giriş yapın veya kayıt olun.',
@@ -788,12 +787,10 @@ export function App() {
         {/* 100+ Transport Brands Infinite Scrolling Ribbon */}
         <PartnerLogosRibbon onSelectCarrier={handleSelectCarrierDirect} />
 
-        {/* Creative Editorial Travel Discovery Passes */}
-        <div id="discover-section">
-          <DiscoveryCarousel onSelectRoute={handleSelectDiscoveryRoute} />
-        </div>
-
-        <SearchResults
+        {/* Turna Canlı Sefer Arama Sonuçları (Sadece arama yapıldığında gösterilir) */}
+        {hasSearched && (
+          <div id="search-results-section">
+            <SearchResults
           routes={routes}
           searchState={searchState}
           isLiveScraping={isLiveScraping}
@@ -801,7 +798,9 @@ export function App() {
           onUpdateSearchState={handleUpdateSearchState}
           onSelectRoute={handleSelectRouteFromResults}
           onOpenPriceAlert={(minPrice) => setPriceAlertData({ isOpen: true, minPrice })}
-        />
+            />
+          </div>
+        )}
 
         <WhyBileoSection
           onSelectCarrier={(carrier, type) => {
