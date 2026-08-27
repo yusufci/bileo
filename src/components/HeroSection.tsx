@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   BileoSwapHorizontal,
-  BileoSearch,
-  BileoCheck,
-  BileoTicket,
+  BileoCalendar,
+  BileoClock,
+  BileoCreditCard,
+  BileoPlane,
+  BileoBus,
+  BileoFerry,
+  BileoClose,
 } from './icons';
 import { TransportType, SearchFilterState } from '../types';
-import { CITIES } from '../data/mockData';
-import { AviationLogosRibbon } from './PartnerLogosRibbon';
 import { sound } from '../utils/sound';
 
 interface HeroSectionProps {
@@ -18,319 +20,537 @@ interface HeroSectionProps {
   onOpenPnrQuery?: () => void;
 }
 
+const HotelIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9" />
+    <circle cx="6" cy="11" r="2" />
+  </svg>
+);
+
+const CarIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9C2.1 11 2 11.5 2 12v4c0 .6.4 1 1 1h2" />
+    <circle cx="7" cy="17" r="2" />
+    <path d="M9 17h6" />
+    <circle cx="17" cy="17" r="2" />
+  </svg>
+);
+
+const AIRPORT_DATABASE: { city: string; name: string; code: string; country: string }[] = [
+  { city: 'Hatay', name: 'Hatay Havalimanı', code: 'HTY', country: 'Türkiye' },
+  { city: 'Şanlıurfa', name: 'Urfa Güney Anadolu Havalimanı', code: 'GNY', country: 'Türkiye' },
+  { city: 'İstanbul', name: 'İstanbul Havalimanı', code: 'IST', country: 'Türkiye' },
+  { city: 'İstanbul', name: 'Sabiha Gökçen Havalimanı', code: 'SAW', country: 'Türkiye' },
+  { city: 'İzmir', name: 'Adnan Menderes Havalimanı', code: 'ADB', country: 'Türkiye' },
+  { city: 'Ankara', name: 'Esenboğa Havalimanı', code: 'ESB', country: 'Türkiye' },
+  { city: 'Antalya', name: 'Antalya Havalimanı', code: 'AYT', country: 'Türkiye' },
+  { city: 'Adana', name: 'Adana Mersin Çukurova Havalimanı', code: 'COV', country: 'Türkiye' },
+  { city: 'Bodrum', name: 'Milas-Bodrum Havalimanı', code: 'BJV', country: 'Türkiye' },
+  { city: 'Dalaman', name: 'Dalaman Havalimanı', code: 'DLM', country: 'Türkiye' },
+  { city: 'Trabzon', name: 'Trabzon Havalimanı', code: 'TZX', country: 'Türkiye' },
+  { city: 'Malatya', name: 'Erhaç Havalimanı', code: 'MLX', country: 'Türkiye' },
+  { city: 'Kayseri', name: 'Erkilet Havalimanı', code: 'ASR', country: 'Türkiye' },
+  { city: 'Gaziantep', name: 'Gaziantep Havalimanı', code: 'GZT', country: 'Türkiye' },
+  { city: 'Diyarbakır', name: 'Diyarbakır Havalimanı', code: 'DIY', country: 'Türkiye' },
+  { city: 'Samsun', name: 'Çarşamba Havalimanı', code: 'SZF', country: 'Türkiye' },
+  { city: 'Bursa', name: 'Yenişehir Havalimanı', code: 'YEI', country: 'Türkiye' },
+  { city: 'Eskişehir', name: 'Hasan Polatkan Havalimanı', code: 'AOE', country: 'Türkiye' },
+  { city: 'Konya', name: 'Konya Havalimanı', code: 'KYA', country: 'Türkiye' },
+  { city: 'Van', name: 'Ferit Melen Havalimanı', code: 'VAN', country: 'Türkiye' },
+  { city: 'Erzurum', name: 'Erzurum Havalimanı', code: 'ERZ', country: 'Türkiye' },
+];
+
+const POPULAR_CHIPS = [
+  'İstanbul', 'İzmir', 'Antalya', 'Malatya', 'Ankara',
+  'Kayseri', 'Adana', 'Bodrum', 'Dalaman'
+];
+
 export const HeroSection: React.FC<HeroSectionProps> = ({
   searchState,
   onUpdateSearchState,
   onPerformSearch,
-  onSelectCarrier,
-  onOpenPnrQuery,
 }) => {
-  const [showFromDropdown, setShowFromDropdown] = useState(false);
-  const [showToDropdown, setShowToDropdown] = useState(false);
-  const [isSwapping, setIsSwapping] = useState(false);
-  const [fromQuery, setFromQuery] = useState('');
-  const [toQuery, setToQuery] = useState('');
+  const [activeDropdown, setActiveDropdown] = useState<'from' | 'to' | null>(null);
+  const [fromInputText, setFromInputText] = useState(searchState.fromCity || 'Hatay');
+  const [toInputText, setToInputText] = useState(searchState.toCity || '');
+  const [tripType, setTripType] = useState<'single' | 'round' | 'multi'>('single');
+  const [onlyDirect, setOnlyDirect] = useState(false);
+  const [cabinClass, setCabinClass] = useState<'Ekonomi' | 'Business'>('Ekonomi');
+  const [showPassengerModal, setShowPassengerModal] = useState(false);
 
-  const fromDropdownRef = useRef<HTMLDivElement>(null);
-  const toDropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFromInputText(searchState.fromCity || 'Hatay');
+  }, [searchState.fromCity]);
+
+  useEffect(() => {
+    setToInputText(searchState.toCity || '');
+  }, [searchState.toCity]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (fromDropdownRef.current && !fromDropdownRef.current.contains(event.target as Node)) {
-        setShowFromDropdown(false);
-      }
-      if (toDropdownRef.current && !toDropdownRef.current.contains(event.target as Node)) {
-        setShowToDropdown(false);
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+        setShowPassengerModal(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const transportTabs: { type: TransportType; label: string }[] = [
-    { type: 'otobus', label: 'Otobüs' },
-    { type: 'ucak', label: 'Uçak' },
-    { type: 'tren', label: 'Tren' },
-    { type: 'feribot', label: 'Feribot' },
-  ];
-
-  const filteredFromCities = CITIES.filter((c) =>
-    c.toLowerCase().includes(fromQuery.toLowerCase().trim())
-  );
-
-  const filteredToCities = CITIES.filter((c) =>
-    c.toLowerCase().includes(toQuery.toLowerCase().trim())
-  );
-
   const handleSwap = () => {
     sound.playTick();
-    setIsSwapping(true);
     const temp = searchState.fromCity;
     onUpdateSearchState({
       fromCity: searchState.toCity,
       toCity: temp,
     });
-    setTimeout(() => setIsSwapping(false), 300);
   };
 
-  const handleSetQuickDate = (dateLabel: string) => {
+  const selectAirport = (item: { city: string; name: string; code: string }) => {
     sound.playTick();
-    onUpdateSearchState({ departureDate: dateLabel });
+    if (activeDropdown === 'from') {
+      onUpdateSearchState({ fromCity: item.city });
+      setFromInputText(item.city);
+    } else if (activeDropdown === 'to') {
+      onUpdateSearchState({ toCity: item.city });
+      setToInputText(item.city);
+    }
+    setActiveDropdown(null);
   };
+
+  const currentQuery = activeDropdown === 'from' ? fromInputText : toInputText;
+  const filteredAirports = AIRPORT_DATABASE.filter(a =>
+    a.city.toLowerCase().includes(currentQuery.toLowerCase().trim()) ||
+    a.name.toLowerCase().includes(currentQuery.toLowerCase().trim()) ||
+    a.code.toLowerCase().includes(currentQuery.toLowerCase().trim())
+  );
 
   return (
-    <div className="space-y-6 py-2 sm:py-4">
-      {/* Top Aviation Partner Carrier Ribbon */}
-      <div className="mb-2">
-        <AviationLogosRibbon onSelectCarrier={onSelectCarrier} />
+    <div className="w-full pt-10 sm:pt-16 pb-8 select-none">
+      {/* 1. Modality Navigation Tabs */}
+      <div className="flex items-center gap-6 sm:gap-9 border-b border-[#E8E1D5] pb-4 mb-6 overflow-x-auto no-scrollbar">
+        {/* Uçak */}
+        <button
+          type="button"
+          onClick={() => {
+            sound.playTick();
+            onUpdateSearchState({ transportType: 'ucak' });
+          }}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
+            searchState.transportType === 'ucak'
+              ? 'bg-[#0a1172] text-white shadow-md'
+              : 'text-charcoal-muted hover:bg-cream-100 hover:text-charcoal'
+          }`}>
+            <BileoPlane className="w-6 h-6" />
+          </div>
+          <span className={`text-xs font-black tracking-tight ${
+            searchState.transportType === 'ucak' ? 'text-[#0a1172]' : 'text-charcoal-muted group-hover:text-charcoal'
+          }`}>
+            Uçak
+          </span>
+        </button>
+
+        {/* Otel */}
+        <button
+          type="button"
+          onClick={() => sound.playTick()}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-charcoal-muted hover:bg-cream-100 hover:text-charcoal transition-all">
+            <HotelIcon className="w-6 h-6" />
+          </div>
+          <span className="text-xs font-black tracking-tight text-charcoal-muted group-hover:text-charcoal">
+            Otel
+          </span>
+        </button>
+
+        {/* Otobüs */}
+        <button
+          type="button"
+          onClick={() => {
+            sound.playTick();
+            onUpdateSearchState({ transportType: 'otobus' });
+          }}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
+            searchState.transportType === 'otobus'
+              ? 'bg-[#0a1172] text-white shadow-md'
+              : 'text-charcoal-muted hover:bg-cream-100 hover:text-charcoal'
+          }`}>
+            <BileoBus className="w-6 h-6" />
+          </div>
+          <span className={`text-xs font-black tracking-tight ${
+            searchState.transportType === 'otobus' ? 'text-[#0a1172]' : 'text-charcoal-muted group-hover:text-charcoal'
+          }`}>
+            Otobüs
+          </span>
+        </button>
+
+        {/* Araç */}
+        <button
+          type="button"
+          onClick={() => sound.playTick()}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-charcoal-muted hover:bg-cream-100 hover:text-charcoal transition-all">
+            <CarIcon className="w-6 h-6" />
+          </div>
+          <span className="text-xs font-black tracking-tight text-charcoal-muted group-hover:text-charcoal">
+            Araç
+          </span>
+        </button>
+
+        {/* Feribot */}
+        <button
+          type="button"
+          onClick={() => {
+            sound.playTick();
+            onUpdateSearchState({ transportType: 'feribot' });
+          }}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
+            searchState.transportType === 'feribot'
+              ? 'bg-[#0a1172] text-white shadow-md'
+              : 'text-charcoal-muted hover:bg-cream-100 hover:text-charcoal'
+          }`}>
+            <BileoFerry className="w-6 h-6" />
+          </div>
+          <span className={`text-xs font-black tracking-tight ${
+            searchState.transportType === 'feribot' ? 'text-[#0a1172]' : 'text-charcoal-muted group-hover:text-charcoal'
+          }`}>
+            Feribot
+          </span>
+        </button>
+
+        {/* Puan */}
+        <button
+          type="button"
+          onClick={() => sound.playTick()}
+          className="flex flex-col items-center gap-1.5 group cursor-pointer shrink-0"
+        >
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-charcoal-muted hover:bg-cream-100 hover:text-charcoal transition-all">
+            <BileoCreditCard className="w-6 h-6" />
+          </div>
+          <span className="text-xs font-black tracking-tight text-charcoal-muted group-hover:text-charcoal">
+            Puan
+          </span>
+        </button>
       </div>
 
-      {/* Clean & Borderless Pure Typographic Transport Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mx-auto sm:mx-0">
-          {transportTabs.map((tab) => {
-            const isActive = searchState.transportType === tab.type;
-            return (
-              <button
-                key={tab.type}
-                type="button"
-                onClick={() => {
-                  sound.playTick();
-                  onUpdateSearchState({ transportType: tab.type });
-                }}
-                className={`py-2 px-2 sm:px-1 text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer min-h-[44px] flex items-center ${
-                  isActive
-                    ? 'text-bordeaux-700 border-b-2 border-bordeaux-700 font-black'
-                    : 'text-charcoal-muted hover:text-charcoal'
-                }`}
-              >
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
+      {/* 2. Trip Type Radio Buttons */}
+      <div className="flex items-center gap-6 mb-4 text-xs font-extrabold text-[#1E1B18]">
+        <label className="flex items-center gap-2 cursor-pointer group">
+          <input
+            type="radio"
+            name="tripType"
+            checked={tripType === 'single'}
+            onChange={() => setTripType('single')}
+            className="w-4 h-4 text-[#0a1172] accent-[#0a1172] cursor-pointer"
+          />
+          <span className="group-hover:text-[#0a1172] transition-colors">Tek Yön</span>
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer group text-charcoal-muted hover:text-charcoal">
+          <input
+            type="radio"
+            name="tripType"
+            checked={tripType === 'round'}
+            onChange={() => setTripType('round')}
+            className="w-4 h-4 text-[#0a1172] accent-[#0a1172] cursor-pointer"
+          />
+          <span className="group-hover:text-[#0a1172] transition-colors">Gidiş Dönüş</span>
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer group text-charcoal-muted hover:text-charcoal">
+          <input
+            type="radio"
+            name="tripType"
+            checked={tripType === 'multi'}
+            onChange={() => setTripType('multi')}
+            className="w-4 h-4 text-[#0a1172] accent-[#0a1172] cursor-pointer"
+          />
+          <span className="group-hover:text-[#0a1172] transition-colors">Çoklu Uçuş</span>
+        </label>
+      </div>
 
-        {/* Fast PNR Quick Query Button on Hero Top */}
-        {onOpenPnrQuery && (
+      {/* 3. Main Search Bar */}
+      <div className="relative z-30" ref={dropdownRef}>
+        <div className="bg-white rounded-3xl border border-[#E8E1D5] shadow-soft-lg p-2 flex flex-col lg:flex-row items-stretch lg:items-center gap-2">
+          
+          {/* Nereden Box (Editable Real Input) */}
+          <div
+            className={`flex-1 px-4 py-2.5 rounded-2xl transition-all border ${
+              activeDropdown === 'from'
+                ? 'border-[#0a1172] ring-2 ring-[#0a1172]/15 bg-blue-50/10'
+                : 'border-transparent hover:bg-cream-50'
+            }`}
+          >
+            <span className="text-[11px] font-bold text-charcoal-muted block">Nereden?</span>
+            <input
+              type="text"
+              value={fromInputText}
+              onFocus={() => setActiveDropdown('from')}
+              onChange={(e) => {
+                setFromInputText(e.target.value);
+                onUpdateSearchState({ fromCity: e.target.value });
+                setActiveDropdown('from');
+              }}
+              placeholder="Kalkış Şehri veya Havalimanı"
+              className="w-full text-sm sm:text-base font-extrabold text-[#1E1B18] font-display bg-transparent border-0 p-0 focus:outline-none placeholder-gray-400 truncate"
+            />
+          </div>
+
+          {/* Swap Button */}
+          <button
+            type="button"
+            onClick={handleSwap}
+            className="w-9 h-9 rounded-full bg-cream-100 hover:bg-cream-200 border border-[#E8E1D5] text-charcoal hover:text-[#0a1172] flex items-center justify-center mx-auto lg:-mx-2 z-10 cursor-pointer shrink-0 transition-transform active:scale-95 shadow-2xs"
+            title="Kalkış ve Varış Noktalarını Değiştir"
+          >
+            <BileoSwapHorizontal className="w-4 h-4" />
+          </button>
+
+          {/* Nereye Box (Editable Real Input) */}
+          <div
+            className={`flex-1 px-4 py-2.5 rounded-2xl transition-all border ${
+              activeDropdown === 'to'
+                ? 'border-[#0a1172] ring-2 ring-[#0a1172]/15 bg-blue-50/10'
+                : 'border-transparent hover:bg-cream-50'
+            }`}
+          >
+            <span className="text-[11px] font-bold text-charcoal-muted block">Nereye?</span>
+            <input
+              type="text"
+              value={toInputText}
+              onFocus={() => setActiveDropdown('to')}
+              onChange={(e) => {
+                setToInputText(e.target.value);
+                onUpdateSearchState({ toCity: e.target.value });
+                setActiveDropdown('to');
+              }}
+              placeholder="Nereye?"
+              className="w-full text-sm sm:text-base font-extrabold text-[#1E1B18] font-display bg-transparent border-0 p-0 focus:outline-none placeholder-gray-400 truncate"
+            />
+          </div>
+
+          <div className="w-[1px] h-10 bg-[#E8E1D5] hidden lg:block mx-1" />
+
+          {/* Gidiş Tarihi Box */}
+          <div className="flex-1 px-4 py-2.5 rounded-2xl hover:bg-cream-50 cursor-pointer flex items-center justify-between border border-transparent">
+            <div>
+              <span className="text-[11px] font-bold text-charcoal-muted block">Gidiş Tarihi</span>
+              <span className="text-sm sm:text-base font-extrabold text-[#1E1B18] font-display block">
+                {searchState.departureDate || '28 Ağu, Cum'}
+              </span>
+            </div>
+            <BileoCalendar className="w-5 h-5 text-gray-500 shrink-0" />
+          </div>
+
+          {/* Dönüş Ekle Button */}
+          <button
+            type="button"
+            onClick={() => sound.playTick()}
+            className="px-3 py-2.5 rounded-xl text-xs font-extrabold text-charcoal-muted hover:text-[#0a1172] hover:bg-cream-100 cursor-pointer text-left shrink-0 transition-colors"
+          >
+            + Dönüş Ekle
+          </button>
+
+          <div className="w-[1px] h-10 bg-[#E8E1D5] hidden lg:block mx-1" />
+
+          {/* Yolcu ve Sınıf Box */}
+          <div
+            onClick={() => setShowPassengerModal(!showPassengerModal)}
+            className="flex-1 px-4 py-2.5 rounded-2xl hover:bg-cream-50 cursor-pointer border border-transparent"
+          >
+            <span className="text-[11px] font-bold text-charcoal-muted block">Yolcu ve Sınıf</span>
+            <span className="text-sm font-extrabold text-[#1E1B18] font-display block">
+              {searchState.passengerCount || 1} Yolcu, {cabinClass}
+            </span>
+          </div>
+
+          {/* Primary CTA: Ucuz Bilet Ara ≫ */}
           <button
             type="button"
             onClick={() => {
-              sound.playTick();
-              onOpenPnrQuery();
+              sound.playSuccess();
+              onPerformSearch();
             }}
-            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-cream-100 border border-[#E8E1D5] text-xs font-bold text-charcoal hover:text-bordeaux-700 transition-colors shadow-2xs cursor-pointer min-h-[36px]"
+            className="bg-[#0a1172] hover:bg-[#070b4f] text-white px-7 py-4 rounded-2xl font-black text-sm tracking-wide shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98] shrink-0 min-h-[50px]"
           >
-            <BileoTicket className="w-3.5 h-3.5 text-bordeaux-700" />
-            <span>PNR ile Bilet Sorgula</span>
+            <span>Ucuz Bilet Ara</span>
+            <span className="text-base font-black">≫</span>
           </button>
-        )}
-      </div>
+        </div>
 
-      {/* Clean & Borderless Search Area */}
-      <div className="max-w-5xl mx-auto relative z-20 pt-2">
-        <div className="py-2 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        {/* 4. Autocomplete Popup Menu matching Turna */}
+        {activeDropdown && (
+          <div className="absolute top-full left-0 mt-3 w-full max-w-md bg-white rounded-3xl shadow-soft-xl border border-[#E8E1D5] p-5 z-50 animate-fadeIn space-y-4">
             
-            {/* Nereden */}
-            <div className="md:col-span-3 relative py-2" ref={fromDropdownRef}>
-              <label className="block text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider mb-1">
-                Nereden
-              </label>
-              <div
-                className="cursor-pointer group min-h-[44px] flex items-center"
-                onClick={() => {
-                  sound.playTick();
-                  setShowFromDropdown(!showFromDropdown);
-                  setShowToDropdown(false);
-                }}
-              >
-                <span className="text-xl sm:text-2xl font-extrabold text-[#1E1B18] group-hover:text-bordeaux-700 transition-colors tracking-tight block truncate">
-                  {searchState.fromCity || 'İstanbul'}
-                </span>
-              </div>
-
-              {showFromDropdown && (
-                <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
-                  <div className="relative mb-2">
-                    <input
-                      type="text"
-                      value={fromQuery}
-                      onChange={(e) => setFromQuery(e.target.value)}
-                      placeholder="Şehir veya terminal ara..."
-                      autoFocus
-                      className="w-full px-3 py-2 text-xs font-bold bg-[#FAF7F2] rounded-xl border border-[#E8E1D5] focus:outline-none focus:border-bordeaux-700"
-                    />
+            {/* Filtered Airports List */}
+            {filteredAirports.length > 0 && currentQuery.trim().length > 0 && (
+              <div className="space-y-1.5 max-h-60 overflow-y-auto no-scrollbar">
+                {filteredAirports.slice(0, 8).map((airport) => (
+                  <div
+                    key={`${airport.city}-${airport.code}`}
+                    onClick={() => selectAirport(airport)}
+                    className="flex items-center justify-between p-2.5 rounded-2xl hover:bg-blue-50/50 cursor-pointer transition-colors border border-transparent hover:border-blue-100"
+                  >
+                    <div className="flex items-center gap-3">
+                      <BileoPlane className="w-4 h-4 text-gray-500 shrink-0" />
+                      <div>
+                        <div className="text-xs font-extrabold text-[#1E1B18] font-display">
+                          {airport.city} - {airport.name}
+                        </div>
+                        <div className="text-[11px] text-gray-400">{airport.country}</div>
+                      </div>
+                    </div>
+                    <span className="text-xs font-black text-gray-500 bg-gray-100 px-2 py-0.5 rounded-lg">
+                      {airport.code}
+                    </span>
                   </div>
-                  <div className="text-[10px] font-extrabold text-charcoal-muted uppercase px-1 py-1">Kalkış Noktaları</div>
-                  <div className="max-h-48 overflow-y-auto no-scrollbar space-y-0.5">
-                    {filteredFromCities.map((city) => (
+                ))}
+              </div>
+            )}
+
+            {/* Default Sections if input is empty or has recent */}
+            {currentQuery.trim().length === 0 && (
+              <>
+                {/* Son Aramalar */}
+                <div className="space-y-2">
+                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Son Aramalar</div>
+                  <div
+                    onClick={() => selectAirport({ city: 'İzmir', name: 'Adnan Menderes', code: 'ADB' })}
+                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cream-100 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <BileoClock className="w-4 h-4 text-[#0a1172]" />
+                      <div>
+                        <div className="text-xs font-bold text-[#1E1B18]">İstanbul → İzmir</div>
+                        <div className="text-[10px] text-charcoal-muted">28 Ağu</div>
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-extrabold text-charcoal-muted bg-cream-200 px-2 py-0.5 rounded-md">IST-ADB</span>
+                  </div>
+                </div>
+
+                {/* Yakındaki Havalimanları */}
+                <div className="space-y-2 pt-2 border-t border-[#E8E1D5]">
+                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Yakındaki Havalimanları</div>
+                  <div
+                    onClick={() => selectAirport({ city: 'Adana', name: 'Adana Mersin Çukurova (COV)', code: 'COV' })}
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cream-100 cursor-pointer transition-colors"
+                  >
+                    <BileoPlane className="w-4 h-4 text-[#0a1172] shrink-0" />
+                    <div>
+                      <div className="text-xs font-bold text-[#1E1B18]">Adana - Adana Mersin Çukurova (COV)</div>
+                      <div className="text-[10px] text-charcoal-muted">Adana, Türkiye - Adana Mersin Çukurova Havalimanı (COV)</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Popüler Şehirler */}
+                <div className="space-y-2.5 pt-2 border-t border-[#E8E1D5]">
+                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Popüler Şehirler</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {POPULAR_CHIPS.map((city) => (
                       <button
                         key={city}
                         type="button"
-                        onClick={() => {
-                          sound.playTick();
-                          onUpdateSearchState({ fromCity: city });
-                          setShowFromDropdown(false);
-                          setFromQuery('');
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-left transition-colors cursor-pointer min-h-[38px] ${
-                          searchState.fromCity === city
-                            ? 'bg-bordeaux-50 text-bordeaux-700 font-bold'
-                            : 'text-charcoal hover:bg-cream-100'
-                        }`}
+                        onClick={() => selectAirport({ city, name: city, code: 'TUR' })}
+                        className="px-3 py-1.5 rounded-xl border border-[#E8E1D5] bg-[#FAF7F2] hover:bg-blue-50 hover:border-[#0a1172] text-xs font-bold text-charcoal transition-colors cursor-pointer shadow-2xs"
                       >
-                        <span>{city}</span>
-                        {searchState.fromCity === city && <BileoCheck className="w-3.5 h-3.5 text-bordeaux-700" />}
+                        {city}
                       </button>
                     ))}
-                    {filteredFromCities.length === 0 && (
-                      <div className="text-xs text-charcoal-muted p-2 text-center">Sonuç bulunamadı</div>
-                    )}
                   </div>
                 </div>
-              )}
-            </div>
-
-            {/* Swap Button */}
-            <div className="md:col-span-1 flex justify-center -my-2 md:my-0">
-              <button
-                type="button"
-                onClick={handleSwap}
-                className={`w-11 h-11 rounded-full text-charcoal hover:text-bordeaux-700 hover:bg-[#FAF7F2] flex items-center justify-center transition-all cursor-pointer min-h-[44px] min-w-[44px] ${
-                  isSwapping ? 'rotate-180 scale-110' : ''
-                }`}
-                title="Şehirleri Değiştir"
-              >
-                <BileoSwapHorizontal className="w-4 h-4 text-bordeaux-700" />
-              </button>
-            </div>
-
-            {/* Nereye */}
-            <div className="md:col-span-3 relative py-2" ref={toDropdownRef}>
-              <label className="block text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider mb-1">
-                Nereye
-              </label>
-              <div
-                className="cursor-pointer group min-h-[44px] flex items-center"
-                onClick={() => {
-                  sound.playTick();
-                  setShowToDropdown(!showToDropdown);
-                  setShowFromDropdown(false);
-                }}
-              >
-                <span className="text-xl sm:text-2xl font-extrabold text-[#1E1B18] group-hover:text-bordeaux-700 transition-colors tracking-tight block truncate">
-                  {searchState.toCity || 'Ankara'}
-                </span>
-              </div>
-
-              {showToDropdown && (
-                <div className="absolute top-full left-0 right-0 sm:right-auto mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-soft-lg p-3 z-50 animate-fadeIn border border-[#E8E1D5]">
-                  <div className="relative mb-2">
-                    <input
-                      type="text"
-                      value={toQuery}
-                      onChange={(e) => setToQuery(e.target.value)}
-                      placeholder="Şehir veya terminal ara..."
-                      autoFocus
-                      className="w-full px-3 py-2 text-xs font-bold bg-[#FAF7F2] rounded-xl border border-[#E8E1D5] focus:outline-none focus:border-bordeaux-700"
-                    />
-                  </div>
-                  <div className="text-[10px] font-extrabold text-charcoal-muted uppercase px-1 py-1">Varış Noktaları</div>
-                  <div className="max-h-48 overflow-y-auto no-scrollbar space-y-0.5">
-                    {filteredToCities.map((city) => (
-                      <button
-                        key={city}
-                        type="button"
-                        onClick={() => {
-                          sound.playTick();
-                          onUpdateSearchState({ toCity: city });
-                          setShowToDropdown(false);
-                          setToQuery('');
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-left transition-colors cursor-pointer min-h-[38px] ${
-                          searchState.toCity === city
-                            ? 'bg-bordeaux-50 text-bordeaux-700 font-bold'
-                            : 'text-charcoal hover:bg-cream-100'
-                        }`}
-                      >
-                        <span>{city}</span>
-                        {searchState.toCity === city && <BileoCheck className="w-3.5 h-3.5 text-bordeaux-700" />}
-                      </button>
-                    ))}
-                    {filteredToCities.length === 0 && (
-                      <div className="text-xs text-charcoal-muted p-2 text-center">Sonuç bulunamadı</div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Tarih & Hızlı Seçim */}
-            <div className="md:col-span-3 py-2">
-              <label className="block text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider mb-1">
-                Gidiş Tarihi
-              </label>
-              <div className="min-h-[44px] flex flex-col justify-center">
-                <span className="text-xl sm:text-2xl font-extrabold text-[#1E1B18] tracking-tight block truncate">
-                  {searchState.departureDate || '24 Mayıs Cuma'}
-                </span>
-              </div>
-              {/* Fast Date Pills */}
-              <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => handleSetQuickDate('Bugün')}
-                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
-                    searchState.departureDate === 'Bugün'
-                      ? 'bg-bordeaux-700 text-white'
-                      : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
-                  }`}
-                >
-                  Bugün
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetQuickDate('Yarın')}
-                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
-                    searchState.departureDate === 'Yarın'
-                      ? 'bg-bordeaux-700 text-white'
-                      : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
-                  }`}
-                >
-                  Yarın
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetQuickDate('25 Mayıs Cumartesi')}
-                  className={`px-2.5 py-1 text-[11px] font-extrabold rounded-lg transition-colors cursor-pointer min-h-[28px] ${
-                    searchState.departureDate === '25 Mayıs Cumartesi'
-                      ? 'bg-bordeaux-700 text-white'
-                      : 'bg-white hover:bg-cream-100 text-charcoal border border-[#E8E1D5]'
-                  }`}
-                >
-                  Hafta Sonu
-                </button>
-              </div>
-            </div>
-
-            {/* Arama Butonu */}
-            <div className="md:col-span-2 pt-2 md:pt-0">
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playSuccess();
-                  onPerformSearch();
-                }}
-                className="w-full py-4 px-4 rounded-2xl bg-bordeaux-700 hover:bg-bordeaux-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-bordeaux cursor-pointer transition-all flex items-center justify-center gap-2 hover:shadow-lg min-h-[52px]"
-              >
-                <BileoSearch className="w-4 h-4" />
-                <span>Sefer Bul</span>
-              </button>
-            </div>
+              </>
+            )}
 
           </div>
-        </div>
+        )}
+
+        {/* Passenger & Cabin Modal */}
+        {showPassengerModal && (
+          <div className="absolute top-full right-0 mt-3 w-72 bg-white rounded-3xl shadow-soft-xl border border-[#E8E1D5] p-5 z-50 animate-fadeIn space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-extrabold text-[#1E1B18]">Yolcu Sayısı</span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => onUpdateSearchState({ passengerCount: Math.max(1, (searchState.passengerCount || 1) - 1) })}
+                  className="w-8 h-8 rounded-xl bg-cream-100 hover:bg-cream-200 text-charcoal flex items-center justify-center font-bold text-sm cursor-pointer"
+                >
+                  -
+                </button>
+                <span className="text-sm font-black text-charcoal">{searchState.passengerCount || 1}</span>
+                <button
+                  type="button"
+                  onClick={() => onUpdateSearchState({ passengerCount: Math.min(9, (searchState.passengerCount || 1) + 1) })}
+                  className="w-8 h-8 rounded-xl bg-cream-100 hover:bg-cream-200 text-charcoal flex items-center justify-center font-bold text-sm cursor-pointer"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-[#E8E1D5]">
+              <span className="text-xs font-extrabold text-[#1E1B18] block">Kabin Sınıfı</span>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCabinClass('Ekonomi')}
+                  className={`py-2 rounded-xl text-xs font-black transition-colors cursor-pointer ${
+                    cabinClass === 'Ekonomi'
+                      ? 'bg-[#0a1172] text-white shadow-2xs'
+                      : 'bg-[#FAF7F2] text-charcoal hover:bg-cream-200 border border-[#E8E1D5]'
+                  }`}
+                >
+                  Ekonomi
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCabinClass('Business')}
+                  className={`py-2 rounded-xl text-xs font-black transition-colors cursor-pointer ${
+                    cabinClass === 'Business'
+                      ? 'bg-[#0a1172] text-white shadow-2xs'
+                      : 'bg-[#FAF7F2] text-charcoal hover:bg-cream-200 border border-[#E8E1D5]'
+                  }`}
+                >
+                  Business
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
+
+      {/* 5. Sub-bar Checkbox: [ ] Sadece direkt uçuşlar */}
+      <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+        <label className="flex items-center gap-2 cursor-pointer group">
+          <input
+            type="checkbox"
+            checked={onlyDirect}
+            onChange={(e) => {
+              setOnlyDirect(e.target.checked);
+              onUpdateSearchState({ onlyDirect: e.target.checked });
+            }}
+            className="w-4 h-4 rounded text-[#0a1172] accent-[#0a1172] cursor-pointer"
+          />
+          <span className="group-hover:text-gray-800 transition-colors font-medium">
+            {searchState.transportType === 'ucak' ? 'Sadece direkt uçuşlar' : 'Sadece direkt seferler'}
+          </span>
+        </label>
+        <span className="text-[11px] text-gray-400">
+          Bileo Turizm, Belge No: 10357
+        </span>
+      </div>
+
     </div>
   );
 };
