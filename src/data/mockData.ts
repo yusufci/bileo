@@ -1,3 +1,4 @@
+import { TURNA_SCRAPED_ROUTES } from './turnaScrapedRoutes';
 // Bileo Multi-Modal Transport Mock Dataset & Procedural Cabin Seat Map Generators
 // Eliminates all amateur badges and generates authentic multi-modal transport configurations.
 
@@ -386,8 +387,10 @@ export const POPULAR_ROUTES: RouteItem[] = [
     serviceClass: 'standard',
     seatLayoutType: 'ferry_deck',
     gateOrPlatform: 'İskele 1',
-  },
+  }
 ];
+
+export const ALL_ROUTES: RouteItem[] = [...POPULAR_ROUTES, ...TURNA_SCRAPED_ROUTES];
 
 export const DISCOVERY_CARDS: DiscoveryCardItem[] = [
   {

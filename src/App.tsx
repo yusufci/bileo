@@ -90,7 +90,8 @@ import {
   DiscoveryCardItem,
   User,
 } from './types';
-import { POPULAR_ROUTES, SEED_TICKETS } from './data/mockData';
+import { SEED_TICKETS } from './data/mockData';
+import { TURNA_SCRAPED_ROUTES } from './data/turnaScrapedRoutes';
 
 export function App() {
   const [searchState, setSearchState] = useState<SearchFilterState>({
@@ -107,7 +108,8 @@ export function App() {
     sortBy: 'cheapest',
   });
 
-  const [routes] = useState<RouteItem[]>(POPULAR_ROUTES);
+  const [routes, setRoutes] = useState<RouteItem[]>(TURNA_SCRAPED_ROUTES);
+  const [isLiveScraping, setIsLiveScraping] = useState<boolean>(false);
 
   // Authentication State
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -424,6 +426,38 @@ export function App() {
     window.open(url, '_blank');
   };
 
+  const fetchLiveTurnaTickets = useCallback(async (from: string, to: string, type: TransportType) => {
+    if (type !== 'ucak' && type !== 'otobus') return;
+    try {
+      setIsLiveScraping(true);
+      const url = `/api/live-scrape?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&type=${encodeURIComponent(type)}`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setRoutes((prev) => {
+            const liveIds = new Set(data.map((r: RouteItem) => r.id));
+            const filteredPrev = prev.filter((r) => !liveIds.has(r.id));
+            return [...data, ...filteredPrev];
+          });
+          showToast('Turna.com Canlı Senkronizasyon', `${from} - ${to} rotasında ${data.length} adet anlık güncel bilet çekildi.`, 'promo');
+        }
+      }
+    } catch (err) {
+      console.error('Live scrape error:', err);
+    } finally {
+      setIsLiveScraping(false);
+    }
+  }, [showToast]);
+
+  // 60-second automatic live background sync from Turna.com
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [searchState.fromCity, searchState.toCity, searchState.transportType, fetchLiveTurnaTickets]);
+
   const handleUpdateSearchState = (updates: Partial<SearchFilterState>) => {
     setSearchState((prev) => ({ ...prev, ...updates }));
   };
@@ -447,6 +481,7 @@ export function App() {
     if (resultsElement) {
       resultsElement.scrollIntoView({ behavior: 'smooth' });
     }
+    fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
   };
 
   const handleSelectDiscoveryRoute = (card: DiscoveryCardItem) => {
@@ -761,6 +796,8 @@ export function App() {
         <SearchResults
           routes={routes}
           searchState={searchState}
+          isLiveScraping={isLiveScraping}
+          onTriggerLiveScrape={() => fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType)}
           onUpdateSearchState={handleUpdateSearchState}
           onSelectRoute={handleSelectRouteFromResults}
           onOpenPriceAlert={(minPrice) => setPriceAlertData({ isOpen: true, minPrice })}

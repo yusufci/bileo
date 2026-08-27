@@ -5,6 +5,7 @@ import {
   BileoRefreshCw,
 } from './icons';
 import { sound } from '../utils/sound';
+import { TURNA_SCRAPED_ROUTES } from '../data/turnaScrapedRoutes';
 
 interface LiveTransitScraperModalProps {
   isOpen: boolean;
@@ -135,7 +136,7 @@ export const LiveTransitScraperModal: React.FC<LiveTransitScraperModalProps> = (
   const [flights, setFlights] = useState<LiveFlightItem[]>(DEFAULT_REAL_FLIGHTS);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [lastSyncTime, setLastSyncTime] = useState<string>('Az Önce');
-  const [activeTab, setActiveTab] = useState<'flights' | 'carriers' | 'hubs'>('flights');
+  const [activeTab, setActiveTab] = useState<'turna' | 'flights' | 'carriers' | 'hubs'>('turna');
   const [liveFlightCount, setLiveFlightCount] = useState<number>(164);
 
   // Fetch live OpenSky data on open
@@ -309,7 +310,18 @@ export const LiveTransitScraperModal: React.FC<LiveTransitScraperModalProps> = (
           </div>
 
           {/* Sub Navigation */}
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button
+              type="button"
+              onClick={() => { sound.playTick(); setActiveTab('turna'); }}
+              className={`py-3 px-4 rounded-2xl text-center font-black text-xs transition-all cursor-pointer border shadow-2xs ${
+                activeTab === 'turna'
+                  ? 'bg-bordeaux-700 text-white border-bordeaux-700 shadow-md'
+                  : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
+              }`}
+            >
+              🔥 Turna.com Canlı Fiyat Radarı ({TURNA_SCRAPED_ROUTES.length})
+            </button>
             <button
               type="button"
               onClick={() => { sound.playTick(); setActiveTab('flights'); }}
@@ -344,6 +356,73 @@ export const LiveTransitScraperModal: React.FC<LiveTransitScraperModalProps> = (
               🏢 Terminal & Radar Altyapısı
             </button>
           </div>
+
+                    {activeTab === 'turna' && (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-2xl bg-bordeaux-50 border border-bordeaux-200">
+                <div>
+                  <h4 className="text-xs font-black text-bordeaux-900 uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-bordeaux-600 animate-ping"></span>
+                    Turna.com Canlı Bilet & Piyasa Fiyatları
+                  </h4>
+                  <p className="text-xs text-bordeaux-700 mt-0.5">
+                    fastCRW motoru ile taranmış doğrulanmış uçak ve otobüs bilet tarifeleri ({TURNA_SCRAPED_ROUTES.length} Sefer)
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold bg-white text-bordeaux-800 px-3 py-1 rounded-xl border border-bordeaux-200 shadow-2xs">
+                    En Ucuz: 450 TL / 1.350 TL
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {TURNA_SCRAPED_ROUTES.map((route, idx) => (
+                  <div
+                    key={route.id || idx}
+                    className="p-4 rounded-2xl bg-white border border-[#E8E1D5] space-y-2.5 shadow-2xs hover:border-bordeaux-400 hover:shadow-sm transition-all"
+                  >
+                    <div className="flex items-center justify-between pb-2 border-b border-[#E8E1D5]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-bordeaux-50 text-bordeaux-800 border border-bordeaux-200">
+                          {route.transportType === 'ucak' ? 'Uçak' : 'Otobüs'}
+                        </span>
+                        <strong className="text-xs font-black text-charcoal">{route.company}</strong>
+                      </div>
+                      <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-mono">
+                        {route.price.toLocaleString('tr-TR')} TL
+                      </span>
+                    </div>
+
+                    <div className="text-xs font-extrabold text-charcoal flex items-center justify-between">
+                      <span>{route.from}</span>
+                      <span className="text-charcoal-muted font-normal text-[11px]">→</span>
+                      <span>{route.to}</span>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-1 text-[11px] bg-[#FAF7F2] p-2 rounded-xl border border-[#E8E1D5] font-mono">
+                      <div>
+                        <span className="text-[9px] text-charcoal-muted block">Kalkış</span>
+                        <strong className="text-charcoal">{route.departureTime}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-charcoal-muted block">Süre</span>
+                        <strong className="text-charcoal">{route.duration}</strong>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-charcoal-muted block">Koltuk</span>
+                        <strong className="text-emerald-700 font-bold">{route.availableSeats} Boş</strong>
+                      </div>
+                    </div>
+
+                    <div className="text-[10px] text-charcoal-muted truncate">
+                      📍 {route.fromTerminal.split(' (')[0]} → {route.toTerminal.split(' (')[0]}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {activeTab === 'flights' && (
             <div className="space-y-3">
