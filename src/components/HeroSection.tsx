@@ -36,33 +36,17 @@ const CarIcon: React.FC<{ className?: string }> = ({ className = "w-6 h-6" }) =>
   </svg>
 );
 
-const AIRPORT_DATABASE: { city: string; name: string; code: string; country: string }[] = [
-  { city: 'Hatay', name: 'Hatay Havalimanı', code: 'HTY', country: 'Türkiye' },
-  { city: 'Şanlıurfa', name: 'Urfa Güney Anadolu Havalimanı', code: 'GNY', country: 'Türkiye' },
-  { city: 'İstanbul', name: 'İstanbul Havalimanı', code: 'IST', country: 'Türkiye' },
-  { city: 'İstanbul', name: 'Sabiha Gökçen Havalimanı', code: 'SAW', country: 'Türkiye' },
-  { city: 'İzmir', name: 'Adnan Menderes Havalimanı', code: 'ADB', country: 'Türkiye' },
-  { city: 'Ankara', name: 'Esenboğa Havalimanı', code: 'ESB', country: 'Türkiye' },
-  { city: 'Antalya', name: 'Antalya Havalimanı', code: 'AYT', country: 'Türkiye' },
-  { city: 'Adana', name: 'Adana Mersin Çukurova Havalimanı', code: 'COV', country: 'Türkiye' },
-  { city: 'Bodrum', name: 'Milas-Bodrum Havalimanı', code: 'BJV', country: 'Türkiye' },
-  { city: 'Dalaman', name: 'Dalaman Havalimanı', code: 'DLM', country: 'Türkiye' },
-  { city: 'Trabzon', name: 'Trabzon Havalimanı', code: 'TZX', country: 'Türkiye' },
-  { city: 'Malatya', name: 'Erhaç Havalimanı', code: 'MLX', country: 'Türkiye' },
-  { city: 'Kayseri', name: 'Erkilet Havalimanı', code: 'ASR', country: 'Türkiye' },
-  { city: 'Gaziantep', name: 'Gaziantep Havalimanı', code: 'GZT', country: 'Türkiye' },
-  { city: 'Diyarbakır', name: 'Diyarbakır Havalimanı', code: 'DIY', country: 'Türkiye' },
-  { city: 'Samsun', name: 'Çarşamba Havalimanı', code: 'SZF', country: 'Türkiye' },
-  { city: 'Bursa', name: 'Yenişehir Havalimanı', code: 'YEI', country: 'Türkiye' },
-  { city: 'Eskişehir', name: 'Hasan Polatkan Havalimanı', code: 'AOE', country: 'Türkiye' },
-  { city: 'Konya', name: 'Konya Havalimanı', code: 'KYA', country: 'Türkiye' },
-  { city: 'Van', name: 'Ferit Melen Havalimanı', code: 'VAN', country: 'Türkiye' },
-  { city: 'Erzurum', name: 'Erzurum Havalimanı', code: 'ERZ', country: 'Türkiye' },
-];
+interface SuggestionItem {
+  code?: string;
+  cityName: string;
+  airportName?: string;
+  countryName?: string;
+  label?: string;
+}
 
 const POPULAR_CHIPS = [
-  'İstanbul', 'İzmir', 'Antalya', 'Malatya', 'Ankara',
-  'Kayseri', 'Adana', 'Bodrum', 'Dalaman'
+  'İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Trabzon',
+  'Adana', 'Şanlıurfa', 'Londra', 'Paris', 'Berlin', 'Amsterdam'
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
@@ -73,6 +57,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [activeDropdown, setActiveDropdown] = useState<'from' | 'to' | null>(null);
   const [fromInputText, setFromInputText] = useState(searchState.fromCity || 'Hatay');
   const [toInputText, setToInputText] = useState(searchState.toCity || '');
+  const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [tripType, setTripType] = useState<'single' | 'round' | 'multi'>('single');
   const [onlyDirect, setOnlyDirect] = useState(false);
   const [cabinClass, setCabinClass] = useState<'Ekonomi' | 'Business'>('Ekonomi');
@@ -99,6 +85,55 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Fetch real Turna autocomplete suggestions (Domestic & International)
+  useEffect(() => {
+    const query = activeDropdown === 'from' ? fromInputText : toInputText;
+    if (!activeDropdown || !query || query.trim().length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsLoadingSuggestions(true);
+      try {
+        const type = searchState.transportType === 'otobus' ? 'bus' : 'flight';
+        const res = await fetch(`/api/autocomplete?term=${encodeURIComponent(query.trim())}&type=${type}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            const mapped: SuggestionItem[] = data.map((item: any) => {
+              if (type === 'bus') {
+                const name = item.label || item.value || '';
+                const parts = name.split('-');
+                return {
+                  cityName: parts[0]?.trim() || name,
+                  airportName: `${parts[0]?.trim()} Otogarı`,
+                  countryName: 'Türkiye',
+                  code: 'OTG',
+                  label: name
+                };
+              }
+              return {
+                cityName: item.cityName || item.label || '',
+                airportName: item.airportName || item.label || '',
+                countryName: item.countryName || '',
+                code: item.code || '',
+                label: item.label || ''
+              };
+            });
+            setSuggestions(mapped);
+          }
+        }
+      } catch (err) {
+        // fail gracefully
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, [activeDropdown, fromInputText, toInputText, searchState.transportType]);
+
   const handleSwap = () => {
     sound.playTick();
     const temp = searchState.fromCity;
@@ -108,24 +143,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     });
   };
 
-  const selectAirport = (item: { city: string; name: string; code: string }) => {
+  const selectCityOrAirport = (item: SuggestionItem) => {
     sound.playTick();
+    const targetCity = item.cityName || item.label || '';
     if (activeDropdown === 'from') {
-      onUpdateSearchState({ fromCity: item.city });
-      setFromInputText(item.city);
+      onUpdateSearchState({ fromCity: targetCity });
+      setFromInputText(targetCity);
     } else if (activeDropdown === 'to') {
-      onUpdateSearchState({ toCity: item.city });
-      setToInputText(item.city);
+      onUpdateSearchState({ toCity: targetCity });
+      setToInputText(targetCity);
     }
     setActiveDropdown(null);
   };
 
   const currentQuery = activeDropdown === 'from' ? fromInputText : toInputText;
-  const filteredAirports = AIRPORT_DATABASE.filter(a =>
-    a.city.toLowerCase().includes(currentQuery.toLowerCase().trim()) ||
-    a.name.toLowerCase().includes(currentQuery.toLowerCase().trim()) ||
-    a.code.toLowerCase().includes(currentQuery.toLowerCase().trim())
-  );
 
   return (
     <div className="w-full pt-10 sm:pt-16 pb-8 select-none">
@@ -281,7 +312,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="relative z-30" ref={dropdownRef}>
         <div className="bg-white rounded-3xl border border-[#E8E1D5] shadow-soft-lg p-2 flex flex-col lg:flex-row items-stretch lg:items-center gap-2">
           
-          {/* Nereden Box (Editable Real Input) */}
+          {/* Nereden Box */}
           <div
             className={`flex-1 px-4 py-2.5 rounded-2xl transition-all border ${
               activeDropdown === 'from'
@@ -299,7 +330,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onUpdateSearchState({ fromCity: e.target.value });
                 setActiveDropdown('from');
               }}
-              placeholder="Kalkış Şehri veya Havalimanı"
+              placeholder="Şehir, havalimanı veya ülke yazın..."
               className="w-full text-sm sm:text-base font-extrabold text-[#1E1B18] font-display bg-transparent border-0 p-0 focus:outline-none placeholder-gray-400 truncate"
             />
           </div>
@@ -314,7 +345,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <BileoSwapHorizontal className="w-4 h-4" />
           </button>
 
-          {/* Nereye Box (Editable Real Input) */}
+          {/* Nereye Box */}
           <div
             className={`flex-1 px-4 py-2.5 rounded-2xl transition-all border ${
               activeDropdown === 'to'
@@ -332,7 +363,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onUpdateSearchState({ toCity: e.target.value });
                 setActiveDropdown('to');
               }}
-              placeholder="Nereye?"
+              placeholder="Şehir, havalimanı veya ülke yazın..."
               className="w-full text-sm sm:text-base font-extrabold text-[#1E1B18] font-display bg-transparent border-0 p-0 focus:outline-none placeholder-gray-400 truncate"
             />
           </div>
@@ -386,44 +417,61 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </button>
         </div>
 
-        {/* 4. Autocomplete Popup Menu matching Turna */}
+        {/* 4. Autocomplete Popup Menu (Turna Live Worldwide Database) */}
         {activeDropdown && (
-          <div className="absolute top-full left-0 mt-3 w-full max-w-md bg-white rounded-3xl shadow-soft-xl border border-[#E8E1D5] p-5 z-50 animate-fadeIn space-y-4">
+          <div className="absolute top-full left-0 mt-3 w-full max-w-lg bg-white rounded-3xl shadow-soft-xl border border-[#E8E1D5] p-5 z-50 animate-fadeIn space-y-4">
             
-            {/* Filtered Airports List */}
-            {filteredAirports.length > 0 && currentQuery.trim().length > 0 && (
-              <div className="space-y-1.5 max-h-60 overflow-y-auto no-scrollbar">
-                {filteredAirports.slice(0, 8).map((airport) => (
+            {/* Live Autocomplete Results from Turna API */}
+            {suggestions.length > 0 && currentQuery.trim().length >= 2 && (
+              <div className="space-y-1.5 max-h-72 overflow-y-auto no-scrollbar">
+                <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted px-1">
+                  Sonuçlar ({suggestions.length})
+                </div>
+                {suggestions.map((item, idx) => (
                   <div
-                    key={`${airport.city}-${airport.code}`}
-                    onClick={() => selectAirport(airport)}
-                    className="flex items-center justify-between p-2.5 rounded-2xl hover:bg-blue-50/50 cursor-pointer transition-colors border border-transparent hover:border-blue-100"
+                    key={`${item.cityName}-${item.code}-${idx}`}
+                    onClick={() => selectCityOrAirport(item)}
+                    className="flex items-center justify-between p-2.5 rounded-2xl hover:bg-blue-50/60 cursor-pointer transition-colors border border-transparent hover:border-blue-100"
                   >
-                    <div className="flex items-center gap-3">
-                      <BileoPlane className="w-4 h-4 text-gray-500 shrink-0" />
-                      <div>
-                        <div className="text-xs font-extrabold text-[#1E1B18] font-display">
-                          {airport.city} - {airport.name}
+                    <div className="flex items-center gap-3 min-w-0">
+                      {searchState.transportType === 'otobus' ? (
+                        <BileoBus className="w-4 h-4 text-gray-500 shrink-0" />
+                      ) : (
+                        <BileoPlane className="w-4 h-4 text-gray-500 shrink-0" />
+                      )}
+                      <div className="min-w-0">
+                        <div className="text-xs font-extrabold text-[#1E1B18] font-display truncate">
+                          {item.cityName} - {item.airportName || item.cityName}
                         </div>
-                        <div className="text-[11px] text-gray-400">{airport.country}</div>
+                        {item.countryName && (
+                          <div className="text-[11px] text-gray-400 truncate">{item.countryName}</div>
+                        )}
                       </div>
                     </div>
-                    <span className="text-xs font-black text-gray-500 bg-gray-100 px-2 py-0.5 rounded-lg">
-                      {airport.code}
-                    </span>
+                    {item.code && (
+                      <span className="text-xs font-black text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-lg shrink-0 ml-2">
+                        {item.code}
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Default Sections if input is empty or has recent */}
-            {currentQuery.trim().length === 0 && (
+            {isLoadingSuggestions && (
+              <div className="text-xs font-bold text-gray-400 py-3 text-center animate-pulse">
+                Turna veritabanından aranıyor...
+              </div>
+            )}
+
+            {/* Default Sections if input has <2 characters */}
+            {(!currentQuery || currentQuery.trim().length < 2) && (
               <>
                 {/* Son Aramalar */}
                 <div className="space-y-2">
                   <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Son Aramalar</div>
                   <div
-                    onClick={() => selectAirport({ city: 'İzmir', name: 'Adnan Menderes', code: 'ADB' })}
+                    onClick={() => selectCityOrAirport({ cityName: 'İzmir', airportName: 'Adnan Menderes', code: 'ADB', countryName: 'Türkiye' })}
                     className="flex items-center justify-between p-2.5 rounded-xl hover:bg-cream-100 cursor-pointer transition-colors"
                   >
                     <div className="flex items-center gap-3">
@@ -437,30 +485,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   </div>
                 </div>
 
-                {/* Yakındaki Havalimanları */}
-                <div className="space-y-2 pt-2 border-t border-[#E8E1D5]">
-                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Yakındaki Havalimanları</div>
-                  <div
-                    onClick={() => selectAirport({ city: 'Adana', name: 'Adana Mersin Çukurova (COV)', code: 'COV' })}
-                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cream-100 cursor-pointer transition-colors"
-                  >
-                    <BileoPlane className="w-4 h-4 text-[#0a1172] shrink-0" />
-                    <div>
-                      <div className="text-xs font-bold text-[#1E1B18]">Adana - Adana Mersin Çukurova (COV)</div>
-                      <div className="text-[10px] text-charcoal-muted">Adana, Türkiye - Adana Mersin Çukurova Havalimanı (COV)</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Popüler Şehirler */}
+                {/* Popüler Şehirler (Yurt İçi & Yurt Dışı) */}
                 <div className="space-y-2.5 pt-2 border-t border-[#E8E1D5]">
-                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">Popüler Şehirler</div>
+                  <div className="text-[11px] font-black uppercase tracking-wider text-charcoal-muted">
+                    Popüler Şehirler (Yurt İçi & Yurt Dışı)
+                  </div>
                   <div className="flex flex-wrap gap-1.5">
                     {POPULAR_CHIPS.map((city) => (
                       <button
                         key={city}
                         type="button"
-                        onClick={() => selectAirport({ city, name: city, code: 'TUR' })}
+                        onClick={() => selectCityOrAirport({ cityName: city, airportName: city, countryName: 'Dünya' })}
                         className="px-3 py-1.5 rounded-xl border border-[#E8E1D5] bg-[#FAF7F2] hover:bg-blue-50 hover:border-[#0a1172] text-xs font-bold text-charcoal transition-colors cursor-pointer shadow-2xs"
                       >
                         {city}
@@ -530,7 +565,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       </div>
 
-      {/* 5. Sub-bar Checkbox: [ ] Sadece direkt uçuşlar */}
+      {/* 5. Sub-bar Checkbox */}
       <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
         <label className="flex items-center gap-2 cursor-pointer group">
           <input

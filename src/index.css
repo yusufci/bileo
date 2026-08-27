@@ -206,3 +206,107 @@
   padding-top: max(0.75rem, env(safe-area-inset-top, 0.75rem));
 }
 
+
+
+/* ==========================================================================
+   BILEO COHESIVE DARK THEME (EYE-FRIENDLY & ARTISANAL WARM CHARCOAL)
+   ========================================================================== */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #12100E !important;
+  color: #F5F2EB !important;
+}
+
+html.dark header {
+  background-color: rgba(22, 20, 18, 0.95) !important;
+  border-bottom: 1px solid #2B2724 !important;
+}
+
+html.dark .bg-white {
+  background-color: #1C1917 !important;
+  border-color: #2E2A27 !important;
+}
+
+html.dark .text-\[\#1E1B18\] {
+  color: #F5F2EB !important;
+}
+
+html.dark .text-charcoal {
+  color: #F5F2EB !important;
+}
+
+html.dark .text-charcoal-muted {
+  color: #A39E98 !important;
+}
+
+html.dark .bg-\[\#FAF7F2\] {
+  background-color: #262320 !important;
+  border-color: #383430 !important;
+  color: #F5F2EB !important;
+}
+
+html.dark .bg-cream-50,
+html.dark .bg-cream-100,
+html.dark .bg-cream-200 {
+  background-color: #262320 !important;
+  color: #F5F2EB !important;
+}
+
+html.dark .hover\:bg-cream-50:hover,
+html.dark .hover\:bg-cream-100:hover,
+html.dark .hover\:bg-cream-200:hover {
+  background-color: #332F2B !important;
+}
+
+html.dark .border-\[\#E8E1D5\] {
+  border-color: #332F2C !important;
+}
+
+html.dark .shadow-soft,
+html.dark .shadow-soft-lg,
+html.dark .shadow-soft-xl {
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55), 0 4px 12px -2px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Ticket dark mode */
+html.dark .ticket-paper {
+  background-color: #1C1917 !important;
+  border: 1px solid #2E2A27 !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6) !important;
+  color: #F5F2EB !important;
+}
+
+html.dark .ticket-stub {
+  background-color: #181513 !important;
+  border-left-color: #2E2A27 !important;
+}
+
+html.dark .ticket-notch {
+  background-color: #12100E !important;
+}
+
+/* Inputs & Autocomplete dropdowns in dark mode */
+html.dark input {
+  color: #F5F2EB !important;
+}
+
+html.dark input::placeholder {
+  color: #78726D !important;
+}
+
+html.dark .bg-gray-100 {
+  background-color: #2E2A27 !important;
+  color: #D6D0C7 !important;
+}
+
+html.dark .border-gray-200 {
+  border-color: #2E2A27 !important;
+}
+
+html.dark .bg-white\/95 {
+  background-color: rgba(22, 20, 18, 0.95) !important;
+}

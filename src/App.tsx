@@ -132,6 +132,17 @@ export function App() {
   // PNR Query Modal State
   const [isPnrQueryOpen, setIsPnrQueryOpen] = useState(false);
 
+  // Restore user dark/light mode preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('bileo_theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+
   // Terminal Guide Modal State
   const [isTerminalGuideOpen, setIsTerminalGuideOpen] = useState(false);
 

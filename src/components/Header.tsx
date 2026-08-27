@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BileoUser, BileoTicket, BileoLogOut, BileoSearch, BileoChevronRight, BileoMapPin } from './icons';
 import { TransportType, User } from '../types';
 import { SeferLogo } from './SeferLogo';
+import { sound } from '../utils/sound';
 
 interface HeaderProps {
   activeTransport?: TransportType;
@@ -15,6 +16,19 @@ interface HeaderProps {
   activeTicketCount?: number;
 }
 
+const SunIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </svg>
+);
+
+const MoonIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+);
+
 export const Header: React.FC<HeaderProps> = ({
   onOpenWallet,
   onOpenAuth,
@@ -25,6 +39,13 @@ export const Header: React.FC<HeaderProps> = ({
   activeTicketCount = 0,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return document.documentElement.classList.contains('dark') || localStorage.getItem('bileo_theme') === 'dark';
+    }
+    return false;
+  });
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,6 +59,19 @@ export const Header: React.FC<HeaderProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const toggleTheme = () => {
+    sound.playTick();
+    const nextMode = !isDarkMode;
+    setIsDarkMode(nextMode);
+    if (nextMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('bileo_theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('bileo_theme', 'light');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md transition-all duration-200 shadow-xs">
@@ -64,8 +98,24 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
 
-        {/* Right Actions: PNR Query & Terminal Guide & Authentication & Profile */}
+        {/* Right Actions: Theme Toggle, PNR Query & Terminal Guide & Authentication & Profile */}
         <div className="flex items-center gap-2 sm:gap-3">
+          
+          {/* Day / Night Dark Mode Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            type="button"
+            className="p-2.5 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] transition-all cursor-pointer flex items-center justify-center shadow-2xs"
+            title={isDarkMode ? "Gündüz Moduna Geç" : "Gece Moduna Geç (Göz Yormayan Tema)"}
+            aria-label="Gece Gündüz Modu"
+          >
+            {isDarkMode ? (
+              <SunIcon className="w-4 h-4 text-amber-400" />
+            ) : (
+              <MoonIcon className="w-4 h-4 text-bordeaux-700" />
+            )}
+          </button>
+
           {onOpenTerminalGuide && (
             <button
               onClick={onOpenTerminalGuide}
@@ -195,7 +245,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <BileoChevronRight className="w-3.5 h-3.5 text-charcoal-muted" />
                     </button>
 
-                    {/* Çıkış Yap */}
+                    {/* Güvenli Çıkış Yap */}
                     <button
                       onClick={() => {
                         setIsDropdownOpen(false);
