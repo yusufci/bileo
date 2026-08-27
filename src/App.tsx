@@ -768,7 +768,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] text-charcoal flex flex-col selection:bg-bordeaux-700 selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F5] dark:bg-[#12100E] text-charcoal dark:text-[#F5F2EB] flex flex-col selection:bg-bordeaux-700 selection:text-white">
       <Header
         activeTransport={searchState.transportType}
         onSelectTransport={(type) => handleUpdateSearchState({ transportType: type })}
