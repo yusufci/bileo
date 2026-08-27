@@ -114,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenEvChargingModal,
 }) => {
   return (
-    <footer className="bg-white pt-16 pb-24 sm:pb-16 text-charcoal-muted">
+    <footer className="bg-white dark:bg-[#0D0C0B] border-t border-[#E8E1D5] dark:border-[#24201D] pt-16 pb-24 sm:pb-16 text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-12">
@@ -122,10 +122,10 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">
             <SeferLogo size="md" variant="bordeaux" showTagline={true} />
-            <p className="text-xs sm:text-sm text-charcoal-muted max-w-sm leading-relaxed">
+            <p className="text-xs sm:text-sm text-charcoal dark:text-[#F5F2EB]-muted max-w-sm leading-relaxed">
               Yolculuğun en keyifli, en dürüst ve en zarif hali. Otobüs, uçak, hızlı tren ve feribot biletlerini sıfır gizli masrafla saniyeler içinde alın.
             </p>
-            <div className="flex items-center gap-2 text-xs font-semibold text-charcoal">
+            <div className="flex items-center gap-2 text-xs font-semibold text-charcoal dark:text-[#F5F2EB]">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>TÜRSAB Onaylı & 256-Bit SSL Güvenli Altyapı</span>
             </div>
@@ -603,7 +603,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Col 2: Ulaşım Türleri */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-charcoal dark:text-[#F5F2EB] uppercase tracking-wider">
               Ulaşım Türleri
             </h4>
             <ul className="space-y-2 text-xs">
@@ -627,7 +627,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Col 3: Popüler Güzergahlar */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-charcoal dark:text-[#F5F2EB] uppercase tracking-wider">
               Popüler Rotalar
             </h4>
             <ul className="space-y-2 text-xs">
@@ -641,7 +641,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Col 4: Kurumsal & Güvenlik */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-charcoal uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-charcoal dark:text-[#F5F2EB] uppercase tracking-wider">
               Sefer Hakkında
             </h4>
             <ul className="space-y-2 text-xs">
@@ -660,7 +660,7 @@ export const Footer: React.FC<FooterProps> = ({
           <div>
             © 2026 Sefer Biletleme ve Teknoloji A.Ş. Tüm hakları saklıdır.
           </div>
-          <div className="flex items-center gap-1 text-charcoal-muted">
+          <div className="flex items-center gap-1 text-charcoal dark:text-[#F5F2EB]-muted">
             <span>Yolculuk tutkusu ile tasarlandı</span>
             <BileoHeart className="w-3.5 h-3.5 text-bordeaux-700 fill-bordeaux-700" />
           </div>

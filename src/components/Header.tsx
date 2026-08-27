@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md transition-all duration-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#12100E]/95 backdrop-blur-md transition-all duration-200 shadow-xs border-b border-transparent dark:border-[#26221F]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo */}
@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Center Slogan */}
         <div className="hidden sm:flex items-center justify-center flex-1 px-6 text-center">
-          <span className="text-sm md:text-base font-extrabold text-[#1E1B18] tracking-tight font-display">
+          <span className="text-sm md:text-base font-extrabold text-[#1E1B18] dark:text-[#F5F2EB] tracking-tight font-display">
             Yolculuğun <span className="text-bordeaux-700">En Keyifli Hali</span>
           </span>
         </div>
@@ -105,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={toggleTheme}
             type="button"
-            className="p-2.5 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] transition-all cursor-pointer flex items-center justify-center shadow-2xs"
+            className="p-2.5 rounded-2xl bg-[#FAF7F2] dark:bg-[#1C1917] hover:bg-cream-100 dark:hover:bg-[#26221F] border border-[#E8E1D5] dark:border-[#2E2A27] text-[#1E1B18] dark:text-[#F5F2EB] dark:text-[#F5F2EB] transition-all cursor-pointer flex items-center justify-center shadow-2xs"
             title={isDarkMode ? "Gündüz Moduna Geç" : "Gece Moduna Geç (Göz Yormayan Tema)"}
             aria-label="Gece Gündüz Modu"
           >
@@ -120,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenTerminalGuide}
               type="button"
-              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] text-xs font-extrabold transition-all cursor-pointer"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] dark:bg-[#1C1917] hover:bg-cream-100 dark:hover:bg-[#26221F] border border-[#E8E1D5] dark:border-[#2E2A27] text-[#1E1B18] dark:text-[#F5F2EB] dark:text-[#F5F2EB] text-xs font-extrabold transition-all cursor-pointer"
               title="Terminal, Otogar, Gar ve Havalimanı Rehberi"
             >
               <BileoMapPin className="w-3.5 h-3.5 text-bordeaux-700" />
@@ -132,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenPnrQuery}
               type="button"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] hover:bg-cream-100 border border-[#E8E1D5] text-[#1E1B18] text-xs font-extrabold transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-[#FAF7F2] dark:bg-[#1C1917] hover:bg-cream-100 dark:hover:bg-[#26221F] border border-[#E8E1D5] dark:border-[#2E2A27] text-[#1E1B18] dark:text-[#F5F2EB] dark:text-[#F5F2EB] text-xs font-extrabold transition-all cursor-pointer"
               title="PNR Numarası ile Bilet Sorgula & İptal Et"
             >
               <BileoTicket className="w-3.5 h-3.5 text-bordeaux-700" />
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="w-8 h-8 rounded-full bg-bordeaux-700 text-white flex items-center justify-center text-xs font-black font-display shadow-2xs">
                   {user.avatarInitials || user.name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-xs font-bold text-[#1E1B18] hidden sm:inline">
+                <span className="text-xs font-bold text-[#1E1B18] dark:text-[#F5F2EB] hidden sm:inline">
                   {user.name}
                 </span>
               </button>
@@ -162,7 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="absolute right-0 mt-2 w-64 rounded-3xl bg-white shadow-soft-lg p-3 z-50 animate-fadeIn">
                   {/* User info card */}
                   <div className="p-3 bg-[#FAF7F2] rounded-2xl mb-2">
-                    <div className="text-xs font-black text-[#1E1B18] font-display">
+                    <div className="text-xs font-black text-[#1E1B18] dark:text-[#F5F2EB] font-display">
                       {user.name} {user.surname}
                     </div>
                     <div className="text-[11px] text-charcoal-muted truncate mt-0.5 font-medium">
@@ -178,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
                         onOpenWallet();
                       }}
                       type="button"
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] dark:text-[#F5F2EB] transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <BileoTicket className="w-4 h-4 text-bordeaux-700" />
@@ -201,7 +201,7 @@ export const Header: React.FC<HeaderProps> = ({
                           onOpenPnrQuery();
                         }}
                         type="button"
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] dark:text-[#F5F2EB] transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-2.5">
                           <BileoSearch className="w-4 h-4 text-bordeaux-700" />
@@ -219,7 +219,7 @@ export const Header: React.FC<HeaderProps> = ({
                           onOpenTerminalGuide();
                         }}
                         type="button"
-                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                        className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] dark:text-[#F5F2EB] transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-2.5">
                           <BileoMapPin className="w-4 h-4 text-bordeaux-700" />
@@ -236,7 +236,7 @@ export const Header: React.FC<HeaderProps> = ({
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
                       type="button"
-                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF7F2] text-xs font-bold text-[#1E1B18] dark:text-[#F5F2EB] transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <BileoSearch className="w-4 h-4 text-bordeaux-700" />

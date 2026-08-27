@@ -117,20 +117,20 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
               </button>
             )}
           </div>
-          <p className="text-xs sm:text-sm text-charcoal-muted max-w-2xl font-normal leading-relaxed">
+          <p className="text-xs sm:text-sm text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] max-w-2xl font-normal leading-relaxed">
             Resmi biletleme güvencesiyle 500+ karayolu, havayolu, demiryolu ve denizyolu taşıyıcısının en son teknoloji araç filoları tek ekranda.
           </p>
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="flex items-center gap-1.5 bg-[#FAF7F2] p-1.5 rounded-2xl self-start md:self-auto overflow-x-auto max-w-full">
+        <div className="flex items-center gap-1.5 bg-[#FAF7F2] dark:bg-[#211D1A] p-1.5 rounded-2xl border border-[#E8E1D5] dark:border-[#2E2A27] self-start md:self-auto overflow-x-auto max-w-full">
           <button
             type="button"
             onClick={() => setActiveCategory('all')}
             className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'all'
-                ? 'bg-white text-charcoal shadow-soft'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-white dark:bg-[#2E2A27] text-charcoal dark:text-[#F5F2EB] dark:text-[#F5F2EB] shadow-soft'
+                : 'text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] hover:text-charcoal dark:text-[#F5F2EB]'
             }`}
           >
             Tüm Taşıyıcılar
@@ -140,8 +140,8 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
             onClick={() => setActiveCategory('otobus')}
             className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'otobus'
-                ? 'bg-white text-charcoal shadow-soft'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-white dark:bg-[#2E2A27] text-charcoal dark:text-[#F5F2EB] dark:text-[#F5F2EB] shadow-soft'
+                : 'text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] hover:text-charcoal dark:text-[#F5F2EB]'
             }`}
           >
             Otobüs Filoları
@@ -151,8 +151,8 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
             onClick={() => setActiveCategory('ucak')}
             className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'ucak'
-                ? 'bg-white text-charcoal shadow-soft'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-white dark:bg-[#2E2A27] text-charcoal dark:text-[#F5F2EB] dark:text-[#F5F2EB] shadow-soft'
+                : 'text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] hover:text-charcoal dark:text-[#F5F2EB]'
             }`}
           >
             Havayolları
@@ -162,8 +162,8 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
             onClick={() => setActiveCategory('tren')}
             className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'tren'
-                ? 'bg-white text-charcoal shadow-soft'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-white dark:bg-[#2E2A27] text-charcoal dark:text-[#F5F2EB] dark:text-[#F5F2EB] shadow-soft'
+                : 'text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] hover:text-charcoal dark:text-[#F5F2EB]'
             }`}
           >
             Hızlı Tren & Deniz
@@ -176,7 +176,7 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
         {filteredCarriers.map((carrier) => (
           <div
             key={carrier.id}
-            className="group bg-white rounded-3xl p-6 shadow-soft hover:shadow-soft-lg transition-all duration-200 flex flex-col justify-between select-none"
+            className="group bg-white dark:bg-[#1C1917] border border-[#E8E1D5] dark:border-[#2E2A27] rounded-3xl p-6 shadow-soft hover:shadow-soft-lg transition-all duration-200 flex flex-col justify-between select-none"
           >
             {/* Top Row: Authentic SVG Brand Logo & Category Tag */}
             <div>
@@ -184,14 +184,14 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
                 <div className="h-8 flex items-center">
                   {renderBrandSVG(carrier.name)}
                 </div>
-                <span className="text-[11px] font-bold text-charcoal-muted">
+                <span className="text-[11px] font-bold text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98]">
                   {carrier.tag}
                 </span>
               </div>
 
               {/* Fleet & Model Info */}
               <div className="space-y-1 mb-4">
-                <div className="text-[10px] font-bold text-charcoal-muted uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] uppercase tracking-wider">
                   Filo & Araç Donanımı
                 </div>
                 <div className="text-xs font-bold text-[#1E1B18] leading-snug">
@@ -201,16 +201,16 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
 
               {/* Popular Transit Corridor */}
               <div className="space-y-1 mb-4">
-                <div className="text-[10px] font-bold text-charcoal-muted uppercase tracking-wider">
+                <div className="text-[10px] font-bold text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] uppercase tracking-wider">
                   Ana Hatlar & Güzergahlar
                 </div>
-                <div className="text-xs font-medium text-charcoal truncate">
+                <div className="text-xs font-medium text-charcoal dark:text-[#F5F2EB] truncate">
                   {carrier.routes}
                 </div>
               </div>
 
               {/* Feature Highlights Text List (Sade, İkonsuz & Arka Plansız) */}
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-6 text-[11px] text-charcoal-muted font-medium">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-6 text-[11px] text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] font-medium">
                 {carrier.highlights.map((highlight, idx) => (
                   <React.Fragment key={idx}>
                     <span>{highlight}</span>
@@ -223,10 +223,10 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
             {/* Bottom Action & Satisfaction Strip */}
             <div className="pt-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-black text-charcoal font-display">
+                <span className="text-xs font-black text-charcoal dark:text-[#F5F2EB] font-display">
                   ★ {carrier.satisfactionRate}
                 </span>
-                <span className="text-[11px] text-charcoal-muted font-medium">
+                <span className="text-[11px] text-charcoal dark:text-[#F5F2EB]-muted dark:text-[#A39E98] font-medium">
                   • {carrier.dailyTrips}
                 </span>
               </div>
@@ -234,7 +234,7 @@ export const FeaturedCarriersShowcase: React.FC<FeaturedCarriersShowcaseProps> =
               <button
                 type="button"
                 onClick={() => onSelectCarrier(carrier.name, carrier.category)}
-                className="inline-flex items-center gap-1.5 text-xs font-black text-charcoal hover:text-bordeaux-700 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-black text-charcoal dark:text-[#F5F2EB] hover:text-bordeaux-700 transition-colors cursor-pointer"
               >
                 <span>Seferleri Gör</span>
                 <BileoChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
