@@ -158,8 +158,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const currentQuery = activeDropdown === 'from' ? fromInputText : toInputText;
 
   return (
-    <div className="w-full pt-10 sm:pt-16 pb-8 select-none">
-      {/* 1. Modality Navigation Tabs */}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full pt-10 sm:pt-16 pb-8 select-none">
+        {/* 1. Modality Navigation Tabs */}
       <div className="flex items-center gap-6 sm:gap-9 border-b border-[#E8E1D5] pb-4 mb-6 overflow-x-auto no-scrollbar">
         {/* Uçak */}
         <button
@@ -584,7 +585,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           Bileo Turizm, Belge No: 10357
         </span>
       </div>
-
+      </div>
     </div>
   );
 };
