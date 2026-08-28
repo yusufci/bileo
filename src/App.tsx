@@ -4,7 +4,6 @@ import { LiveTransitTicker } from './components/LiveTransitTicker';
 import { HeroSection } from './components/HeroSection';
 import { PartnerLogosRibbon, FooterPartnerRibbon } from './components/PartnerLogosRibbon';
 import { FeaturedCarriersShowcase } from './components/FeaturedCarriersShowcase';
-import { DiscoveryCarousel } from './components/DiscoveryCarousel';
 import { SearchResults } from './components/SearchResults';
 import { WhyBileoSection } from './components/WhyBileoSection';
 import { TicketExperienceScreen } from './components/TicketExperienceScreen';
@@ -87,11 +86,9 @@ import {
   SeatGender,
   SeatItem,
   RefundDetails,
-  DiscoveryCardItem,
   User,
 } from './types';
 import { SEED_TICKETS } from './data/mockData';
-import { TURNA_SCRAPED_ROUTES } from './data/turnaScrapedRoutes';
 
 export function App() {
   const [searchState, setSearchState] = useState<SearchFilterState>({
@@ -442,17 +439,31 @@ export function App() {
     if (type !== 'ucak' && type !== 'otobus') return;
     try {
       setIsLiveScraping(true);
-      const url = `/api/live-scrape?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&type=${encodeURIComponent(type)}`;
+      const today = new Date().toISOString().split('T')[0];
+      const url = `/api/live-scrape?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&type=${encodeURIComponent(type)}&date=${today}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
           setRoutes(data);
-          showToast('Turna.com Canlı Senkronizasyon', `${from} - ${to} rotasında ${data.length} adet anlık güncel bilet çekildi.`, 'promo');
+          showToast(
+            'Turna.com Canlı Senkronizasyon',
+            `${from} → ${to} rotasında ${data.length} adet anlık güncel ${type === 'ucak' ? 'uçuş' : 'otobüs'} bileti çekildi.`,
+            'promo'
+          );
+        } else {
+          showToast(
+            'Sonuç Bulunamadı',
+            `${from} → ${to} rotasında şu an müsait ${type === 'ucak' ? 'uçuş' : 'otobüs'} bileti bulunamadı. Lütfen başka bir tarih veya rota deneyin.`,
+            'info'
+          );
         }
+      } else {
+        showToast('Bağlantı Hatası', 'Turna.com sunucularına bağlanılamadı. Lütfen tekrar deneyin.', 'info');
       }
     } catch (err) {
-      console.error('Live scrape error:', err);
+      console.error('[bileo] Live scrape error:', err);
+      showToast('Tarama Hatası', 'Canlı bilet taraması sırasında bir hata oluştu. Otomatik olarak tekrar denenecek.', 'info');
     } finally {
       setIsLiveScraping(false);
     }
@@ -492,53 +503,6 @@ export function App() {
       resultsElement.scrollIntoView({ behavior: 'smooth' });
     }
     fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
-  };
-
-  const handleSelectDiscoveryRoute = (card: DiscoveryCardItem) => {
-    if (
-      !requireAuth(
-        'Öne çıkan rotaları incelemek ve biletinizi almak için lütfen giriş yapın.',
-        () => {
-          setSearchState((prev) => ({
-            ...prev,
-            transportType: card.transportType,
-            fromCity: card.from,
-            toCity: card.to,
-            departureDate: card.date,
-          }));
-
-          const match =
-            routes.find(
-              (r) =>
-                r.from === card.from &&
-                r.to === card.to &&
-                r.transportType === card.transportType
-            ) || routes[0];
-
-          setSelectedRouteForExperience(match);
-        }
-      )
-    ) {
-      return;
-    }
-
-    setSearchState((prev) => ({
-      ...prev,
-      transportType: card.transportType,
-      fromCity: card.from,
-      toCity: card.to,
-      departureDate: card.date,
-    }));
-
-    const match =
-      routes.find(
-        (r) =>
-          r.from === card.from &&
-          r.to === card.to &&
-          r.transportType === card.transportType
-      ) || routes[0];
-
-    setSelectedRouteForExperience(match);
   };
 
   const handleSelectRouteFromResults = (route: RouteItem) => {

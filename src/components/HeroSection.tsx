@@ -7,9 +7,8 @@ import {
   BileoPlane,
   BileoBus,
   BileoFerry,
-  BileoClose,
 } from './icons';
-import { TransportType, SearchFilterState } from '../types';
+import { SearchFilterState } from '../types';
 import { sound } from '../utils/sound';
 
 interface HeroSectionProps {
