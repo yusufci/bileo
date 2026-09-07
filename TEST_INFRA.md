@@ -3,7 +3,7 @@
 ## 1. Test Philosophy & Architecture
 - **Philosophy**: Opaque-box, requirement-driven, zero-regression verification. Tests exercise the platform strictly through public API boundaries, schemas, database interfaces, and security perimeters.
 - **Methodology**: Systematic 4-tier testing (Category-Partition, Boundary Value Analysis, Pairwise Combinatorial Testing, Real-World Workloads) plus dedicated Enterprise Security & Fuzzing Suites.
-- **Harness & Runner**: Zero external test runner dependencies. Uses in-house `test_framework.ts` executed via `tsx src/tests/test_runner.ts`. High-precision microsecond execution profiling and colorized TAP/ANSI summaries.
+- **Harness & Runner**: Zero external test runner dependencies. Uses in-house `test_framework.ts` executed via `tsx src/tests/test_runner.ts`. Per-test millisecond timing and a plain console summary grouped by suite; suites are registered explicitly in `test_runner.ts` (no auto-discovery).
 
 ```
                                       [ MASTER TEST RUNNER ]
@@ -14,10 +14,12 @@
  [ Tiers 1-4 Feature Tests ]           [ Security Test Suites ]                  [ Specialized Stress Tests ]
  ├── Tier 1: Feature Coverage (60+)    ├── Suite 1: SQLi Fuzzing (8)             ├── Adversarial OCC Locks (12)
  ├── Tier 2: Boundary & Corner (60+)   ├── Suite 2: XSS Sanitization (6)         ├── Multithread Simulation (8)
- ├── Tier 3: Pairwise Combos (40+)     ├── Suite 3: Rate Limiting 429 (6)        └── Icon System Matrices (24)
- └── Tier 4: E2E Scenarios (8)         ├── Suite 4: JWT Cryptography (8)
-                                       ├── Suite 5: Bcrypt Hashing (6)
-                                       └── Suite 6: Zod Perimeter (8)
+ ├── Tier 3: Pairwise Combos (40+)     ├── Suite 3: Rate Limiting 429 (6)        ├── Icon System Matrices (24)
+ └── Tier 4: E2E Scenarios (8)         ├── Suite 4: JWT Cryptography (8)         └── Turna Scraper Integration (149)
+                                       ├── Suite 5: Bcrypt Hashing (6)               A urls, B parse, C analytics,
+                                       └── Suite 6: Zod Perimeter (8)                D fetch, E pipeline/HTTP, F history,
+                                                                                     G guard/adapter, H places,
+                                                                                     I static guards, J SSR (offline)
 ```
 
 ---
@@ -151,16 +153,33 @@
   - 6.7 Unknown Property Stripping: Strips prototype pollution vectors
   - 6.8 Standardized Structured 400 Response Format: Conforms to `{ success: false, error: ..., details: [...] }`
 
+### Turna.com Scraper Integration Suite (`src/tests/turna_scraper.test.ts`, 149 tests)
+- **Objective**: Prove the live-search path (landing-page scraper, `/api/turna` contract, browser guard and adapter, results UI) end to end without touching the network. Every `fetch` is injected via `fakeFetch(scenario)` and every page is an offline fixture.
+- **Fixtures**: `src/tests/fixtures/turna_fixtures.ts`, a TypeScript port of the Python package's `turna/tests/fixtures.py` (`FLIGHT_PAGE` with a duplicate and an unpriced item, `BUS_PAGE`, `HOTEL_PAGE`, `FERRY_PAGE`, `BLOCKED_PAGE`) plus `HOMEPAGE_PAGE` (6 KB, zero JSON-LD), `ROBOTS_ALLOW` / `ROBOTS_DENY_ALL`, ready-made `TurnaSuccess` envelopes and Response helpers (`htmlResponse`, `jsonResponse`, `timeoutError`, `erroringBodyResponse`). Private-API and dated-search URLs are assembled at runtime so the repo-wide literal gate (spec section 8) stays clean.
+- **Groups** (registered by `runTurnaScraperTests()`):
+  - A. URLs (10): `slugifyTr`, `resolveTurnaTarget`, every `TURNA_PRESETS` entry resolves, `isAllowedLandingUrl` rejects the private API proxy and dated one-way pages.
+  - B. JSON-LD parser (19): port of `test_parse.py`; `stableId` determinism and 12-hex shape; parity constant flight `eee39b67f15c`; bus ids recomputed through the TS function; facts from the FAQ prose.
+  - C. Analytics (5): `computeStats` medians, company/day grouping, rounding.
+  - D. Fetch hardening (29): cache hit keeps `fetchedAt`, TTL, refresh throttle, 403 and Akamai wall cooldown with stale cache and zero upstream calls, 404 and redirect as `route_not_found`, missing JSON-LD as `no_structured_data`, 429/5xx retry with the recorded 800 ms backoff, two timeouts, total budget, 6 MB body cap, host gate spacing, in-flight coalescing, queue-depth and per-minute budget `rate_limited`, 64-entry cache eviction, URL allowlist, config parsing, robots deny/allow/fail-open.
+  - E. Pipeline and HTTP (20): `toQuery`, status map, cache-hit `scrapedAt` equality, ferry facts-only, store failures and timeouts as warnings, headers (`Cache-Control` variants, `X-Turna-*`, no CORS), POST invalid JSON 400, PUT 405 with `Allow`, OPTIONS 204, `Retry-After`, Node adapter (pre-parsed query/body, streamed body, 413), Vite middleware 404.
+  - F. History store (9): Noop contract, opt-in wiring, DDL, Pg SQL text with a fake pool (BEGIN/COMMIT/ROLLBACK, `ON CONFLICT (observation_id, offer_id)`, placeholders, delta excludes the current id).
+  - G. Guard, adapter, format, client (21): string prices dropped and counted, `09:50`/`10:50` under four process timezones, `1s 00dk`/`2s 10dk`, `24 Eylül Perşembe`, provenance fields, every unpublished field `undefined`, bus `İstanbul Avrupa` / `7s 00dk` / `6s 15dk`, canonical `/api/turna` URLs, `fetchTurna` state mapping.
+  - H. Places (12): `ist` -> İstanbul with IST/SAW, `ıst`/`IST`/`İst` equivalence, `adb` -> İzmir, `esenler` -> İstanbul, feribot -> only `FERRY_STOPS`, tren -> `[]`, slug/cityName invariant, recent searches in a fake `localStorage`.
+  - I. Static guards (14): no `node:`/`server/turna` imports in browser code, no `lucide-react` under `src/components` and `src/data`, no retired scraper literals under `api/`, `src/`, `vite.config.ts`, no em/en dashes in new files, honest TicketExperienceScreen/SearchResults/HeroSection/App copy, tsconfig/package/vercel/.env contract, deletions, `POPULAR_ROUTES` formats.
+  - J. SearchResults SSR (10): `renderToStaticMarkup` of every `LiveSearchState` branch plus the legacy path.
+- **Measured (2026-09-06)**: 149/149 passed, about 0.6 s of the 39 s total run.
+
 ---
 
 ## 4. Execution Commands & Verification Pass Criteria
 
-- **Command**: `npm test` (`npx tsx src/tests/test_runner.ts`)
-- **Expected Outcome**:
-  - 100% Pass Rate across all registered test suites (375+ total tests).
-  - 0 Failed Tests.
-  - Duration < 3.0 seconds.
-  - Exit code `0`.
+- **Command**: `npm test` (`tsx src/tests/test_runner.ts`)
+- **Expected Outcome (measured 2026-09-06)**:
+  - 100% pass rate across all registered suites: `Total Tests: 646`, `Passed: 646`, `Failed: 0`.
+  - Duration about 39 s (sequential runner; bcrypt work-factor-12 suites account for most of it).
+  - Exit code `0`; `git status --short` shows no test artefacts afterwards.
+- **Type Check**: `npm run typecheck` (`tsc --noEmit`, `include` = `src`, `api`, `vite.config.ts`; `src/tests` is excluded and is exercised by `npm test` through tsx).
 - **Production Build Verification**:
   - Command: `npm run build` (`tsc && vite build`)
-  - Expected Outcome: 0 TypeScript errors, successful bundle generation.
+  - Expected Outcome: 0 TypeScript errors, successful bundle generation, and `grep -rl "createHash\|node:crypto" dist/assets/` prints nothing (the parser is server-only).
+- **Live smoke (optional, network)**: `npm run smoke:turna` runs `scripts/turna_smoke.ts` over `TURNA_PRESETS`; it is deliberately not part of `npm test`.
