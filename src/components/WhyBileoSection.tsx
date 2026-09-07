@@ -59,7 +59,7 @@ export const WhyBileoSection: React.FC<WhyBileoSectionProps> = ({ onSelectCarrie
               onClick={onOpenFareMatrix}
               className="self-start md:self-auto text-xs font-extrabold text-bordeaux-700 hover:text-bordeaux-900 bg-white hover:bg-cream-100 border border-[#E8E1D5] px-3.5 py-2 rounded-xl transition-all shadow-2xs cursor-pointer flex items-center gap-1.5"
             >
-              <span>Çok Modlu Karşılaştırma & Süre Tablosu ➔</span>
+              <span>Çok Modlu Karşılaştırma & Süre Tablosu (örnek) ➔</span>
             </button>
           )}
         </div>

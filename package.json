@@ -3,11 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "tsx src/tests/test_runner.ts"
+    "test": "tsx src/tests/test_runner.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke:turna": "tsx scripts/turna_smoke.ts"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",

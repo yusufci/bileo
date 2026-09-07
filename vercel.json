@@ -1,5 +1,13 @@
 {
   "framework": "vite",
+  "functions": {
+    "api/turna.ts": {
+      "maxDuration": 30
+    },
+    "api/search.ts": {
+      "maxDuration": 30
+    }
+  },
   "headers": [
     {
       "source": "/assets/(.*)",

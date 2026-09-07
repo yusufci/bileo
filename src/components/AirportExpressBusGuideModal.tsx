@@ -7,6 +7,7 @@ import {
   BileoCheckCircle,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface AirportExpressBusGuideModalProps {
   isOpen: boolean;
@@ -208,8 +209,8 @@ export const AirportExpressBusGuideModal: React.FC<AirportExpressBusGuideModalPr
               <BileoBus className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı Servis & Transfer Rehberi</h3>
-              <p className="text-xs text-charcoal-muted font-medium">HAVAİST, HAVABÜS, HAVAŞ ve belediye ekspres hatları, peronlar ve güncel tarifeler</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı Servis & Transfer Rehberi (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">HAVAİST, HAVABÜS, HAVAŞ ve belediye ekspres hatları, peronlar ve temsili tarife örnekleri</p>
             </div>
           </div>
           <button
@@ -219,6 +220,8 @@ export const AirportExpressBusGuideModal: React.FC<AirportExpressBusGuideModalPr
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">
@@ -253,7 +256,7 @@ export const AirportExpressBusGuideModal: React.FC<AirportExpressBusGuideModalPr
             </div>
             <div className="flex items-center gap-2 text-xs text-charcoal-muted font-medium">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Resmi Tarife & 2 Bagaj Ücretsiz Taşıma</span>
+              <span>Temsili tarife; bagaj kuralları için taşıyıcının güncel duyurularına bakın</span>
             </div>
           </div>
 

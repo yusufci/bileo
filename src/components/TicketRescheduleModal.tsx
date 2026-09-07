@@ -80,6 +80,13 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
   const [selectedAction, setSelectedAction] = useState<'earlier' | 'later' | 'open_voucher'>('earlier');
   const [selectedAlternativeId, setSelectedAlternativeId] = useState<string>('alt-1');
 
+  // A Turna landing page publishes no alternative departures or seat counts for a ticket, so the
+  // demo alternatives below are only offered for mock tickets; Turna-derived tickets keep the open voucher.
+  const fromTurna = Boolean(activeTicket.route.provenance);
+  const effectiveAction: 'earlier' | 'later' | 'open_voucher' = fromTurna ? 'open_voucher' : selectedAction;
+  const NO_ALTERNATIVES_NOTE = 'Turna sayfası alternatif sefer yayımlamaz.';
+
+  // Demo alternatives (mock tickets only).
   const alternativeTrips: AlternativeTrip[] = [
     {
       id: 'alt-1',
@@ -120,7 +127,7 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
   const handleConfirmReschedule = () => {
     sound.playSuccess();
     if (onShowToast) {
-      if (selectedAction === 'open_voucher') {
+      if (effectiveAction === 'open_voucher') {
         onShowToast(
           'Bilet Açığa Alındı',
           `${activeTicket.pnr} PNR nolu biletiniz 1 yıl geçerli açık kupona dönüştürüldü.`,
@@ -216,15 +223,25 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
             </div>
           </div>
 
+          {fromTurna && (
+            <p className="text-xs text-charcoal-muted font-medium px-1">
+              {NO_ALTERNATIVES_NOTE} Bu bilet için yalnızca açık bilete dönüştürme seçeneği sunulur.
+            </p>
+          )}
+
           {/* Action Selector: Earlier / Later / Open Ticket */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <button
               type="button"
+              disabled={fromTurna}
+              title={fromTurna ? NO_ALTERNATIVES_NOTE : undefined}
               onClick={() => { sound.playTick(); setSelectedAction('earlier'); }}
-              className={`p-4 rounded-2xl text-left border transition-all cursor-pointer shadow-2xs space-y-1.5 ${
-                selectedAction === 'earlier'
-                  ? 'border-bordeaux-900 bg-bordeaux-50/40 ring-2 ring-bordeaux-900/10'
-                  : 'bg-white border-[#E8E1D5] hover:border-bordeaux-300'
+              className={`p-4 rounded-2xl text-left border transition-all shadow-2xs space-y-1.5 ${
+                fromTurna
+                  ? 'bg-white border-[#E8E1D5] opacity-50 cursor-not-allowed'
+                  : effectiveAction === 'earlier'
+                    ? 'border-bordeaux-900 bg-bordeaux-50/40 ring-2 ring-bordeaux-900/10 cursor-pointer'
+                    : 'bg-white border-[#E8E1D5] hover:border-bordeaux-300 cursor-pointer'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -238,11 +255,15 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
 
             <button
               type="button"
+              disabled={fromTurna}
+              title={fromTurna ? NO_ALTERNATIVES_NOTE : undefined}
               onClick={() => { sound.playTick(); setSelectedAction('later'); }}
-              className={`p-4 rounded-2xl text-left border transition-all cursor-pointer shadow-2xs space-y-1.5 ${
-                selectedAction === 'later'
-                  ? 'border-bordeaux-900 bg-bordeaux-50/40 ring-2 ring-bordeaux-900/10'
-                  : 'bg-white border-[#E8E1D5] hover:border-bordeaux-300'
+              className={`p-4 rounded-2xl text-left border transition-all shadow-2xs space-y-1.5 ${
+                fromTurna
+                  ? 'bg-white border-[#E8E1D5] opacity-50 cursor-not-allowed'
+                  : effectiveAction === 'later'
+                    ? 'border-bordeaux-900 bg-bordeaux-50/40 ring-2 ring-bordeaux-900/10 cursor-pointer'
+                    : 'bg-white border-[#E8E1D5] hover:border-bordeaux-300 cursor-pointer'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -258,7 +279,7 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
               type="button"
               onClick={() => { sound.playTick(); setSelectedAction('open_voucher'); }}
               className={`p-4 rounded-2xl text-left border transition-all cursor-pointer shadow-2xs space-y-1.5 ${
-                selectedAction === 'open_voucher'
+                effectiveAction === 'open_voucher'
                   ? 'border-bordeaux-900 bg-bordeaux-50/40 ring-2 ring-bordeaux-900/10'
                   : 'bg-white border-[#E8E1D5] hover:border-bordeaux-300'
               }`}
@@ -273,11 +294,11 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
             </button>
           </div>
 
-          {/* Alternative Trips Selection for Time Change */}
-          {selectedAction !== 'open_voucher' ? (
+          {/* Alternative Trips Selection for Time Change (demo data, mock tickets only) */}
+          {effectiveAction !== 'open_voucher' ? (
             <div className="space-y-3">
               <h5 className="text-xs font-black text-charcoal uppercase tracking-wider">
-                {selectedAction === 'earlier' ? 'Kullanılabilir Erken Kalkışlar' : 'Kullanılabilir İleri Saatli Seferler'}
+                {effectiveAction === 'earlier' ? 'Kullanılabilir Erken Kalkışlar' : 'Kullanılabilir İleri Saatli Seferler'}
               </h5>
 
               <div className="space-y-2.5">
@@ -356,7 +377,7 @@ export const TicketRescheduleModal: React.FC<TicketRescheduleModalProps> = ({
                 onClick={handleConfirmReschedule}
                 className="px-5 py-2.5 rounded-xl bg-bordeaux-900 hover:bg-bordeaux-950 text-white font-black text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-soft"
               >
-                <span>{selectedAction === 'open_voucher' ? 'Açık Bilete Dönüştür' : 'Sefer Değişikliğini Onayla'}</span>
+                <span>{effectiveAction === 'open_voucher' ? 'Açık Bilete Dönüştür' : 'Sefer Değişikliğini Onayla'}</span>
                 <BileoArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

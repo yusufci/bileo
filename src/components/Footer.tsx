@@ -163,7 +163,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenWeatherModal}
                   className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50/80 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>Hava Durumu</span>
+                  <span>Hava Durumu (örnek)</span>
                 </button>
               )}
               {onOpenShuttleModal && (
@@ -172,7 +172,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenShuttleModal}
                   className="text-xs font-bold text-bordeaux-800 hover:text-bordeaux-950 flex items-center cursor-pointer bg-cream-100 hover:bg-cream-200 px-3 py-1.5 rounded-xl border border-[#E8E1D5] transition-colors"
                 >
-                  <span>Servis Saatleri</span>
+                  <span>Servis Saatleri (örnek)</span>
                 </button>
               )}
               {onOpenPetModal && (
@@ -190,7 +190,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenInsuranceModal}
                   className="text-xs font-bold text-emerald-900 hover:text-emerald-950 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
-                  <span>Seyahat Sigortası</span>
+                  <span>Seyahat Sigortası (örnek)</span>
                 </button>
               )}
               {onOpenTaxiModal && (
@@ -199,7 +199,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenTaxiModal}
                   className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>Taksi Tarifesi</span>
+                  <span>Taksi Tarifesi (örnek)</span>
                 </button>
               )}
               {onOpenRestStopModal && (
@@ -226,7 +226,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenStorageModal}
                   className="text-xs font-bold text-blue-900 hover:text-blue-950 flex items-center cursor-pointer bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-200 transition-colors"
                 >
-                  <span>Emanet Dolapları</span>
+                  <span>Emanet Dolapları (örnek)</span>
                 </button>
               )}
               {onOpenTrackerModal && (
@@ -235,7 +235,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenTrackerModal}
                   className="text-xs font-bold text-emerald-900 hover:text-emerald-950 flex items-center cursor-pointer bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
                 >
-                  <span>Canlı Araç Takibi</span>
+                  <span>Araç Takibi (örnek)</span>
                 </button>
               )}
               {onOpenCateringModal && (
@@ -289,7 +289,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenHighwayModal}
                   className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>Otoyol & Köprü Geçişleri</span>
+                  <span>Otoyol & Köprü Geçişleri (örnek)</span>
                 </button>
               )}
               {onOpenGroupModal && (
@@ -316,7 +316,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenRouteStopsModal}
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>Güzergah & Duraklar</span>
+                  <span>Güzergah & Duraklar (örnek)</span>
                 </button>
               )}
               {onOpenRightsModal && (
@@ -334,7 +334,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenGuidesModal}
                   className="text-xs font-bold text-amber-900 hover:text-amber-950 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors"
                 >
-                  <span>Tatil & Gezi Rehberi</span>
+                  <span>Tatil & Gezi Rehberi (örnek)</span>
                 </button>
               )}
               {onOpenRewardsModal && (
@@ -352,7 +352,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenRadarModal}
                   className="text-xs font-bold text-cyan-950 hover:text-cyan-900 flex items-center cursor-pointer bg-cyan-50 hover:bg-cyan-100 px-3 py-1.5 rounded-xl border border-cyan-300 transition-colors"
                 >
-                  <span>Yol & Radar Durumu</span>
+                  <span>Yol & Radar (örnek)</span>
                 </button>
               )}
               {onOpenCampusModal && (
@@ -370,7 +370,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenCompareModal}
                   className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-bordeaux-50 hover:bg-bordeaux-100 px-3 py-1.5 rounded-xl border border-bordeaux-300 transition-colors"
                 >
-                  <span>Mod Karşılaştırma</span>
+                  <span>Mod Karşılaştırma (örnek)</span>
                 </button>
               )}
               {onOpenCityCardModal && (
@@ -415,7 +415,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenFlightRadarModal}
                   className="text-xs font-bold text-sky-950 hover:text-sky-900 flex items-center cursor-pointer bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-xl border border-sky-300 transition-colors"
                 >
-                  <span>Uçuş Radarı</span>
+                  <span>Uçuş Radarı (örnek)</span>
                 </button>
               )}
               {onOpenAirportMetroModal && (
@@ -424,7 +424,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenAirportMetroModal}
                   className="text-xs font-bold text-teal-950 hover:text-teal-900 flex items-center cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
                 >
-                  <span>Havalimanı Metrosu</span>
+                  <span>Havalimanı Metrosu (örnek)</span>
                 </button>
               )}
               {onOpenRouteNetworkModal && (
@@ -433,7 +433,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenRouteNetworkModal}
                   className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50/80 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
-                  <span>Rota Ağı Haritası</span>
+                  <span>Rota Ağı Haritası (örnek)</span>
                 </button>
               )}
               {onOpenOccupancyModal && (
@@ -442,7 +442,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenOccupancyModal}
                   className="text-xs font-bold text-rose-950 hover:text-rose-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
-                  <span>Doluluk Radarı</span>
+                  <span>Doluluk Radarı (örnek)</span>
                 </button>
               )}
               {onOpenProvincesModal && (
@@ -460,7 +460,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenTransfersModal}
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>Akıllı Aktarma</span>
+                  <span>Akıllı Aktarma (örnek)</span>
                 </button>
               )}
               {onOpenSeatComfortModal && (
@@ -496,7 +496,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenParcelModal}
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>Hızlı Kargo</span>
+                  <span>Hızlı Kargo (örnek)</span>
                 </button>
               )}
               {onOpenSleeperTrainModal && (
@@ -532,7 +532,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenCarRentalModal}
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>Araç Kiralama</span>
+                  <span>Araç Kiralama (örnek)</span>
                 </button>
               )}
               {onOpenScraperModal && (
@@ -550,7 +550,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenBudgetModal}
                   className="text-xs font-bold text-bordeaux-950 hover:text-bordeaux-900 flex items-center cursor-pointer bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-300 transition-colors"
                 >
-                  <span>Seyahat Bütçe Planlayıcı</span>
+                  <span>Seyahat Bütçe Planlayıcı (örnek)</span>
                 </button>
               )}
               {onOpenHighwayPassesModal && (
@@ -559,7 +559,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenHighwayPassesModal}
                   className="text-xs font-bold text-amber-950 hover:text-amber-900 flex items-center cursor-pointer bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-300 transition-colors"
                 >
-                  <span>Kritik Geçit & Tünel Radarı</span>
+                  <span>Geçit & Tünel Radarı (örnek)</span>
                 </button>
               )}
               {onOpenSeatUpgradeModal && (
@@ -586,7 +586,7 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenAirportShuttleModal}
                   className="text-xs font-bold text-teal-950 hover:text-teal-900 flex items-center cursor-pointer bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-300 transition-colors"
                 >
-                  <span>Havalimanı Servisleri</span>
+                  <span>Havalimanı Servisleri (örnek)</span>
                 </button>
               )}
               {onOpenEvChargingModal && (

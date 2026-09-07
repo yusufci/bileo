@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useDialogFocus } from '../lib/useDialogFocus';
 import {
   BileoClose,
   BileoMail,
@@ -88,6 +89,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       };
     }
   }, [isOpen]);
+
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -218,8 +221,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl w-full max-w-lg shadow-soft-lg overflow-hidden my-6 select-none animate-fadeIn">
+    <div
+      className="fixed inset-0 z-[1000] overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Giriş ve kayıt"
+    >
+      <div ref={dialogRef} tabIndex={-1} className="bg-white rounded-3xl w-full max-w-lg shadow-soft-lg overflow-hidden my-6 select-none animate-fadeIn outline-none">
         
         {/* Top Header with Sefer Branding & Close */}
         <div className="p-6 sm:p-8 pb-4 flex items-center justify-between">
@@ -230,6 +238,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <button
             onClick={onClose}
             type="button"
+            aria-label="Kapat"
             className="w-9 h-9 rounded-full bg-[#FAF7F2] hover:bg-cream-100 text-charcoal flex items-center justify-center transition-colors cursor-pointer"
             title="Kapat"
           >

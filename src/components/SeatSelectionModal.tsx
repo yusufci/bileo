@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useScreenEntry } from '../lib/useScreenEntry';
 import {
   BileoArrowLeft,
   BileoArrowRight,
@@ -34,6 +35,7 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
   onClose,
   onConfirmSeats,
 }) => {
+  const entryRef = useScreenEntry<HTMLHeadingElement>();
   const [selectedCarriage, setSelectedCarriage] = useState<number>(1);
   const [selectedDeck, setSelectedDeck] = useState<'main' | 'upper'>('main');
   const [selectedSeats, setSelectedSeats] = useState<(number | string)[]>([]);
@@ -46,15 +48,19 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
+  // A Turna offer carries exactly one published fare; the representative layout must not price tiers above it.
+  const flatFare = Boolean(route.provenance);
+
   const cabinSeats = useMemo(() => {
-    if (route.transportType === 'tren') {
-      return generateTrainSeats(route.price, route.vehicleType, selectedCarriage);
-    }
-    if (route.transportType === 'feribot') {
-      return generateFerrySeats(route.price, selectedDeck);
-    }
-    return generateCabinSeats(route.transportType, route.seatLayoutType || 'bus_2_1', route.price);
-  }, [route.transportType, route.price, route.vehicleType, route.seatLayoutType, selectedCarriage, selectedDeck]);
+    const generated =
+      route.transportType === 'tren'
+        ? generateTrainSeats(route.price, route.vehicleType, selectedCarriage)
+        : route.transportType === 'feribot'
+          ? generateFerrySeats(route.price, selectedDeck)
+          : generateCabinSeats(route.transportType, route.seatLayoutType || 'bus_2_1', route.price);
+    if (!flatFare) return generated;
+    return generated.map((seat) => ({ ...seat, price: route.price }));
+  }, [route.transportType, route.price, route.vehicleType, route.seatLayoutType, selectedCarriage, selectedDeck, flatFare]);
 
   const maxRow = useMemo(() => {
     return cabinSeats.reduce((max, s) => Math.max(max, s.row), 1);
@@ -130,9 +136,11 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
                 size="md"
               />
               <div>
-                <h2 className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2">
+                <h2 ref={entryRef} tabIndex={-1} className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2 outline-none">
                   <span>{route.company}</span>
-                  <span className="text-xs font-semibold text-charcoal-muted hidden md:inline">({route.vehicleType})</span>
+                  {route.vehicleType && (
+                    <span className="text-xs font-semibold text-charcoal-muted hidden md:inline">({route.vehicleType})</span>
+                  )}
                 </h2>
                 <div className="flex items-center gap-2 text-xs text-charcoal-muted">
                   <span className="font-semibold text-[#1E1B18]">{route.from} → {route.to}</span>
@@ -249,7 +257,7 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
                       : 'text-charcoal-muted hover:text-charcoal'
                   }`}
                 >
-                  Üst VIP Salonu (+60 TL)
+                  {flatFare ? 'Üst Salon' : 'Üst VIP Salonu (+60 TL)'}
                 </button>
               </div>
             </div>
@@ -292,6 +300,12 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
                 <div className="w-3.5 h-4.5 rounded-md bg-[#EDE7DE] border border-[#DBD4C8] opacity-60" />
                 <span className="text-[11px] font-semibold text-charcoal-muted">Dolu</span>
               </div>
+              {/* The seat map is procedurally generated; no source publishes live occupancy or seat tiers. */}
+              <span className="basis-full text-center text-[11px] text-charcoal-muted pt-1">
+                {route.provenance
+                  ? 'Koltuk düzeni temsilidir; canlı doluluk Turna sayfasında yayımlanmaz. Tüm koltuklar Turna fiyatıyla listelenir; koltuk farkı alınmaz.'
+                  : 'Koltuk düzeni temsilidir.'}
+              </span>
             </div>
 
             <div className="flex items-center justify-center pb-4 mb-4">
@@ -305,7 +319,7 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
                 const rowSeats = cabinSeats.filter((s) => s.row === rowNum);
                 return (
                   <div key={rowNum} className="flex items-center justify-center gap-3">
-                    <span className="w-6 text-[11px] font-mono font-bold text-charcoal-light text-center">
+                    <span className="w-6 text-[11px] font-mono font-bold text-charcoal-muted text-center">
                       {rowNum}
                     </span>
                     <div className="flex items-center gap-3 sm:gap-4">

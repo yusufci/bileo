@@ -4,6 +4,7 @@ import {
   BileoShieldCheck,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface AirportMetroTransitModalProps {
   isOpen: boolean;
@@ -124,7 +125,7 @@ export const AirportMetroTransitModal: React.FC<AirportMetroTransitModalProps> =
               🚇
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı & Terminal Şehir İçi Metro Rehberi</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı & Terminal Şehir İçi Metro Rehberi (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">İGA, Sabiha Gökçen, Esenboğa, Adnan Menderes & Antalya Metro/Tramvay Hatları</p>
             </div>
           </div>
@@ -135,6 +136,8 @@ export const AirportMetroTransitModal: React.FC<AirportMetroTransitModalProps> =
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Airport Hub Tabs */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -235,7 +238,7 @@ export const AirportMetroTransitModal: React.FC<AirportMetroTransitModalProps> =
           <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-center justify-between text-xs text-charcoal-muted font-medium">
             <div className="flex items-center gap-2">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>İBB Ulaşım, EGO Genel Müdürlüğü, ESHOT ve UKOME resmi güncel tarifeleri baz alınmıştır.</span>
+              <span>Hat, süre ve ücretler temsili örneklerdir; güncel tarifeler için İBB Ulaşım, EGO, ESHOT ve UKOME duyurularına bakın.</span>
             </div>
           </div>
 

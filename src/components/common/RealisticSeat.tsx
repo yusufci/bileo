@@ -25,6 +25,19 @@ export const RealisticSeat: React.FC<RealisticSeatProps> = ({
 }) => {
   const isDisabled = isMale || isFemale || isBooked || seat.status === 'disabled';
 
+  // Accessible name carries the state that the colours convey visually.
+  const genderWord = (g: 'male' | 'female' | undefined): string => (g === 'male' ? ', bay' : g === 'female' ? ', bayan' : '');
+  const stateLabel = isSelected
+    ? `seçili${genderWord(selectedGender)}`
+    : isMale
+      ? 'dolu, bay'
+      : isFemale
+        ? 'dolu, bayan'
+        : isBooked || seat.status === 'disabled'
+          ? 'dolu'
+          : 'boş';
+  const accessibleName = `Koltuk ${seat.number}${isSingleVIP ? ', tekli VIP' : ''}, ${stateLabel}`;
+
   // Base state styles for physical armchair rendering
   let containerStyles = 'bg-white border-[1.5px] border-[#D8D0C5] text-[#1E1B18] shadow-[0_2px_4px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] hover:border-bordeaux-700 hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer';
   let headrestStyles = 'bg-[#F2ECE1] border-b border-[#E2D8C9] text-[#7A7062]';
@@ -80,7 +93,9 @@ export const RealisticSeat: React.FC<RealisticSeatProps> = ({
       type="button"
       onClick={() => onClick(seat)}
       disabled={isDisabled}
-      className="group relative select-none outline-none focus:outline-none border-none ring-0 p-0 transition-transform"
+      aria-pressed={isSelected}
+      aria-label={accessibleName}
+      className="group relative select-none rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-bordeaux-700 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF7F2] border-none p-0 transition-transform motion-reduce:transition-none"
       title={seat.label || `Koltuk ${seat.number}${isSingleVIP ? ' (Tekli VIP)' : ''}`}
     >
       {/* 3D Contoured Ergonomic Passenger Armchair Chassis */}

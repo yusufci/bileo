@@ -33,7 +33,7 @@ export default {
         },
         charcoal: {
           DEFAULT: '#1E1B18',
-          muted: '#78726D',
+          muted: '#6B655F', // AA on every cream shade up to 300 (>= 4.6:1); #78726D failed on cream-200 (4.24)
           light: '#A39E98',
           surface: '#2C2825',
         }

@@ -8,6 +8,7 @@ import {
   BileoPlane,
   BileoFerry,
 } from './icons';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { sound } from '../utils/sound';
 
 interface LiveJourneyTrackerModalProps {
@@ -184,12 +185,12 @@ export const LiveJourneyTrackerModal: React.FC<LiveJourneyTrackerModalProps> = (
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-black text-[#1E1B18] font-display">Canlı Sefer & GPS Yol Takibi</h3>
+                <h3 className="text-lg font-black text-[#1E1B18] font-display">Sefer & GPS Yol Takibi (örnek)</h3>
                 <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider">
-                  Canlı Sinyal
+                  Örnek Sinyal
                 </span>
               </div>
-              <p className="text-xs text-charcoal-muted font-medium">Aktif sefer konumu, anlık hız ve tahmini varış süresi</p>
+              <p className="text-xs text-charcoal-muted font-medium">Örnek sefer konumu, hız ve tahmini varış; canlı GPS bağlantısı yoktur</p>
             </div>
           </div>
           <button
@@ -199,6 +200,8 @@ export const LiveJourneyTrackerModal: React.FC<LiveJourneyTrackerModalProps> = (
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* PNR Search & Demo Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -308,7 +311,7 @@ export const LiveJourneyTrackerModal: React.FC<LiveJourneyTrackerModalProps> = (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
               
               <div className="p-3.5 rounded-2xl bg-[#FAF7F2] border border-[#E8E1D5] space-y-0.5">
-                <span className="text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider block">🚗 Anlık Hız</span>
+                <span className="text-[10px] font-extrabold text-charcoal-muted uppercase tracking-wider block">🚗 Örnek Hız</span>
                 <span className="text-base font-black text-charcoal font-display block">{selectedJourney.currentSpeed}</span>
               </div>
 

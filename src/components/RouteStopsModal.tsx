@@ -8,6 +8,7 @@ import {
   BileoMapPin,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface RouteStopsModalProps {
   isOpen: boolean;
@@ -147,8 +148,8 @@ export const RouteStopsModal: React.FC<RouteStopsModalProps> = ({
               <BileoMapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Güzergah & Durak Çizelgesi Portalı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Seferlerin Ara Durakları, Varış Saatleri, Mola Yerleri ve İstasyon Bağlantıları</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Güzergah & Durak Çizelgesi Portalı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Örnek Seferlerin Ara Durakları, Temsili Varış Saatleri, Mola Yerleri ve İstasyon Bağlantıları</p>
             </div>
           </div>
           <button
@@ -158,6 +159,8 @@ export const RouteStopsModal: React.FC<RouteStopsModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Route Selector Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

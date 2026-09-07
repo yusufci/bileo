@@ -11,6 +11,7 @@ import {
   BileoSparkles,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { TransportType } from '../types';
 
 interface SmartTransferPlannerModalProps {
@@ -264,7 +265,7 @@ export const SmartTransferPlannerModal: React.FC<SmartTransferPlannerModalProps>
               <BileoTrain className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Akıllı Aktarma & Bağlantılı Sefer Planlayıcı</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Akıllı Aktarma & Bağlantılı Sefer Planlayıcı (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Doğrudan hat bulunmayan rotalarda optimize edilmiş hızlı ve ekonomik aktarmalar</p>
             </div>
           </div>
@@ -275,6 +276,8 @@ export const SmartTransferPlannerModal: React.FC<SmartTransferPlannerModalProps>
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">

@@ -7,6 +7,7 @@ import {
   BileoTrain,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { TransportType } from '../types';
 
 interface MultiModalComparisonModalProps {
@@ -190,8 +191,8 @@ export const MultiModalComparisonModal: React.FC<MultiModalComparisonModalProps>
               ⚖️
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Sefer Karşılaştırma & Seyahat Modu Optimizatörü</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Uçak, YHT, Otobüs ve Feribot Arasında Fiyat, Süre ve Karbon Analizi</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Sefer Karşılaştırma & Seyahat Modu Optimizatörü (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Uçak, YHT, Otobüs ve Feribot Arasında Temsili Fiyat, Süre ve Karbon Karşılaştırması</p>
             </div>
           </div>
           <button
@@ -201,6 +202,8 @@ export const MultiModalComparisonModal: React.FC<MultiModalComparisonModalProps>
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Corridor Tabs */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

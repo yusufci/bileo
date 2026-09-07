@@ -5,6 +5,7 @@ import {
   BileoBus,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface HighwayTollModalProps {
   isOpen: boolean;
@@ -106,8 +107,8 @@ export const HighwayTollModal: React.FC<HighwayTollModalProps> = ({
               🛣️
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otoyol, Köprü & HGS Ücretleri Rehberi</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Osmangazi, 1915 Çanakkale, Kuzey Marmara ve Ankara-Niğde Geçiş Tarifeleri</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otoyol, Köprü & HGS Ücretleri Rehberi (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Osmangazi, 1915 Çanakkale, Kuzey Marmara ve Ankara-Niğde için temsili geçiş tarifesi örnekleri</p>
             </div>
           </div>
           <button
@@ -117,6 +118,8 @@ export const HighwayTollModal: React.FC<HighwayTollModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Route Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

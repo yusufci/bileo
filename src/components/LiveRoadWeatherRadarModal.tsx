@@ -7,6 +7,7 @@ import {
   BileoTrain,
   BileoFerry,
 } from './icons';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { sound } from '../utils/sound';
 
 interface LiveRoadWeatherRadarModalProps {
@@ -136,7 +137,7 @@ export const LiveRoadWeatherRadarModal: React.FC<LiveRoadWeatherRadarModalProps>
               🛰️
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Canlı Yol, Hava Muhalefeti & Radar Takip</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Yol, Hava Muhalefeti & Radar Takip (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Karayolları, Boğaz/Deniz Seferleri ve Havalimanı Meteoroloji Durumu</p>
             </div>
           </div>
@@ -147,6 +148,8 @@ export const LiveRoadWeatherRadarModal: React.FC<LiveRoadWeatherRadarModalProps>
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Filter Bar */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

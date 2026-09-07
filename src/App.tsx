@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { Header } from './components/Header';
 import { LiveTransitTicker } from './components/LiveTransitTicker';
 import { HeroSection } from './components/HeroSection';
 import { PartnerLogosRibbon, FooterPartnerRibbon } from './components/PartnerLogosRibbon';
 import { FeaturedCarriersShowcase } from './components/FeaturedCarriersShowcase';
-import { SearchResults } from './components/SearchResults';
+import { SearchResults, preloadCityResults } from './components/SearchResults';
 import { WhyBileoSection } from './components/WhyBileoSection';
 import { TicketExperienceScreen } from './components/TicketExperienceScreen';
 import { CarrierDetailScreen } from './components/CarrierDetailScreen';
@@ -88,14 +88,53 @@ import {
   RefundDetails,
   User,
 } from './types';
+import type { LiveSearchState, SearchKind } from './types';
+import type { TurnaKind, TurnaQuery } from './lib/turna/types';
+import { fetchTurna } from './lib/turna/client';
+import { fetchSearch } from './lib/sources/client';
+import type { SourceKind } from './lib/sources/types';
+import type { OtherSourcesState } from './components/results/OtherSourcesPanel';
+import { searchKindToTurnaKind } from './lib/turna/adapter';
+import { isCityKind, resolveTurnaTarget, slugifyTr, TurnaQueryError } from './lib/turna/urls';
+import { formatTrClock, priceTL } from './lib/turna/format';
+import { checkPriceAlerts } from './lib/turna/alerts';
+import { writeRecentSearch } from './lib/turna/places';
 import { SEED_TICKETS } from './data/mockData';
+
+/** Re-run the last query when the tab becomes visible and the result is older than this. */
+const REVALIDATE_AFTER_MS = 600000;
+/** Client-side cooldown between manual refreshes (the server also throttles per URL). */
+const REFRESH_COOLDOWN_MS = 30000;
+const TRAIN_UNSUPPORTED_REASON = 'Turna.com tren bileti sunmuyor; bu sekmede canlı veri yok.';
+
+/** Auth-gate copy for the search button, per tab (Otel and Araç list neither trips nor departure times). */
+/** Turna kinds that have a non-Turna landing-page source as well (KAYNAK_GENISLETME_PLANI.md Faz A). */
+function sourceKindOfTurna(kind: TurnaKind): SourceKind | null {
+  return kind === 'bus' || kind === 'flight' || kind === 'hotel' ? kind : null;
+}
+
+function searchAuthReason(kind: SearchKind): string {
+  if (kind === 'otel') return 'Otel listesini görmek için lütfen giriş yapın veya kayıt olun.';
+  if (kind === 'arac') return 'Araç kiralama listesini görmek için lütfen giriş yapın veya kayıt olun.';
+  return 'Sefer aramak ve sefer saatlerini listelemek için lütfen giriş yapın veya kayıt olun.';
+}
+
+/** Display context of the last submitted search; reused by refresh and revalidation. */
+interface SearchIntent {
+  transportType: TransportType;
+  /** Tab the search was made from; `otel` and `arac` are not transport types. */
+  searchKind: SearchKind;
+  fromCity: string;
+  /** Empty for the single-city tabs (hotel, car). */
+  toCity: string;
+}
 
 export function App() {
   const [searchState, setSearchState] = useState<SearchFilterState>({
     transportType: 'otobus',
     fromCity: 'İstanbul',
     toCity: 'Ankara',
-    departureDate: '24 Mayıs Cuma',
+    departureDate: '',
     passengerCount: 1,
     maxPrice: 3000,
     selectedCompanies: [],
@@ -105,9 +144,17 @@ export function App() {
     sortBy: 'cheapest',
   });
 
-  const [routes, setRoutes] = useState<RouteItem[]>([]);
+  // One live Turna.com search lifecycle; `routes` is derived from the `ok` branch only.
+  const [live, setLive] = useState<LiveSearchState>({ status: 'idle' });
+  /** Results of the non-Turna landing-page sources for the same query (obilet, biletall); undefined for kinds without a source. */
+  const [otherSources, setOtherSources] = useState<OtherSourcesState | undefined>(undefined);
+  const otherSourcesAbortRef = useRef<AbortController | null>(null);
+  const routes: RouteItem[] = live.status === 'ok' ? live.routes : [];
+  const isLiveScraping = live.status === 'loading';
   const [hasSearched, setHasSearched] = useState<boolean>(false);
-  const [isLiveScraping, setIsLiveScraping] = useState<boolean>(false);
+  const searchAbortRef = useRef<AbortController | null>(null);
+  const searchIntentRef = useRef<SearchIntent | null>(null);
+  const lastRefreshAtRef = useRef<number>(0);
 
   // Authentication State
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
@@ -435,65 +482,201 @@ export function App() {
     window.open(url, '_blank');
   };
 
-  const fetchLiveTurnaTickets = useCallback(async (from: string, to: string, type: TransportType) => {
-    if (type !== 'ucak' && type !== 'otobus') return;
-    try {
-      setIsLiveScraping(true);
-      const today = new Date().toISOString().split('T')[0];
-      const url = `/api/live-scrape?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&type=${encodeURIComponent(type)}&date=${today}`;
-      const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setRoutes(data);
+  /**
+   * Run one Turna.com search. Starting a new run aborts the previous one, and every outcome
+   * replaces the previous result so stale rows never survive a new query. `quiet` suppresses
+   * toasts and the recent-search write (used by the visibility revalidation).
+   */
+  /** Fetch the other sources in parallel with Turna; the newest query always wins, stale answers are dropped. */
+  const runOtherSources = useCallback(async (query: TurnaQuery, refresh: boolean) => {
+    otherSourcesAbortRef.current?.abort();
+    const kind = sourceKindOfTurna(query.kind);
+    if (!kind) {
+      otherSourcesAbortRef.current = null;
+      setOtherSources(undefined);
+      return;
+    }
+    const controller = new AbortController();
+    otherSourcesAbortRef.current = controller;
+    setOtherSources({ status: 'loading' });
+    const next = await fetchSearch(kind === 'hotel' ? { kind, city: query.city } : { kind, from: query.from, to: query.to }, { signal: controller.signal, refresh });
+    if (controller.signal.aborted || otherSourcesAbortRef.current !== controller) return;
+    otherSourcesAbortRef.current = null;
+    setOtherSources(next);
+  }, []);
+
+  const runSearch = useCallback(
+    async (query: TurnaQuery, opts: { refresh?: boolean; quiet?: boolean } = {}) => {
+      searchAbortRef.current?.abort();
+      const controller = new AbortController();
+      searchAbortRef.current = controller;
+      const intent = searchIntentRef.current;
+      // Hotel/car queries address one city (carried as fromCity); they have no destination.
+      const cityQuery = isCityKind(query.kind);
+      setLive({ status: 'loading', query, startedAt: Date.now() });
+      void runOtherSources(query, opts.refresh === true);
+
+      const next = await fetchTurna(query, {
+        signal: controller.signal,
+        refresh: opts.refresh === true,
+        fromCity: intent?.fromCity,
+        toCity: cityQuery ? undefined : intent?.toCity,
+      });
+
+      // A newer search superseded this one; its result must not overwrite the newer state.
+      if (controller.signal.aborted || searchAbortRef.current !== controller) return;
+      searchAbortRef.current = null;
+      setLive(next);
+
+      if (opts.quiet) return;
+
+      if ((next.status === 'ok' || next.status === 'facts-only') && intent) {
+        writeRecentSearch({
+          transportType: intent.transportType,
+          searchKind: intent.searchKind,
+          fromCity: intent.fromCity,
+          toCity: cityQuery ? '' : intent.toCity,
+          fromSlug: cityQuery ? next.query.city ?? '' : next.query.from ?? '',
+          toSlug: cityQuery ? '' : next.query.to ?? '',
+          at: next.receivedAt,
+        });
+      }
+
+      if (next.status === 'ok') {
+        // Local price alerts: compare the real page-wide minimum with the targets stored in this browser.
+        const liveMin = next.result.stats?.min;
+        for (const hit of checkPriceAlerts(next.result)) {
+          const seen = typeof liveMin === 'number' ? `en düşük fiyat ${priceTL(liveMin)}, ` : '';
+          showToast('Fiyat alarmı: hedefe ulaşıldı', `${hit.label}: ${seen}hedefiniz ${priceTL(hit.targetPrice)}.`, 'success', 8000);
+        }
+        const via = next.result.fetchedVia === 'cache' ? 'önbellek' : 'canlı';
+        const clock = formatTrClock(next.result.scrapedAt);
+        const stamp = `${via}${clock ? `, ${clock}` : ''}`;
+        if (next.result.kind === 'hotel') {
+          // Hotel landing pages publish no prices, so the count is the only headline number.
           showToast(
-            'Turna.com Canlı Senkronizasyon',
-            `${from} → ${to} rotasında ${data.length} adet anlık güncel ${type === 'ucak' ? 'uçuş' : 'otobüs'} bileti çekildi.`,
+            `Turna.com: ${next.result.items.length} otel listelendi (${stamp})`,
+            'Otel fiyatları tarih seçimine bağlıdır; Turna sayfasında görüntülenir.',
+            'promo'
+          );
+        } else if (next.result.kind === 'car') {
+          // stats.min is the page-wide minimum daily price; omitted when Turna did not publish stats.
+          const minDaily = next.result.stats?.min;
+          showToast(
+            `Turna.com: ${next.result.items.length} araç listelendi (${stamp})`,
+            typeof minDaily === 'number' && Number.isFinite(minDaily) ? `En düşük günlük fiyat ${priceTL(minDaily)}` : undefined,
             'promo'
           );
         } else {
           showToast(
-            'Sonuç Bulunamadı',
-            `${from} → ${to} rotasında şu an müsait ${type === 'ucak' ? 'uçuş' : 'otobüs'} bileti bulunamadı. Lütfen başka bir tarih veya rota deneyin.`,
-            'info'
+            `Turna.com: ${next.routes.length} teklif alındı (${stamp})`,
+            next.droppedItems > 0 ? `${next.droppedItems} teklif doğrulanamadı ve listelenmedi.` : undefined,
+            'promo'
           );
         }
-      } else {
-        showToast('Bağlantı Hatası', 'Turna.com sunucularına bağlanılamadı. Lütfen tekrar deneyin.', 'info');
+      } else if (next.status === 'facts-only') {
+        showToast(
+          'Turna.com: teklif listesi yok',
+          cityQuery
+            ? 'Bu şehir için Turna sayfası liste yayımlamamış; kaynak bağlantısı gösteriliyor.'
+            : next.query.kind === 'ferry'
+              ? 'Feribot sayfası fiyat listesi yayımlamıyor; rota bilgileri gösteriliyor.'
+              : 'Bu rota için yapısal teklif yayımlanmamış; rota bilgileri gösteriliyor.',
+          'info'
+        );
+      } else if (next.status === 'error') {
+        const retry = next.retryAfterSeconds !== undefined ? ` ${next.retryAfterSeconds} sn sonra tekrar deneyin.` : '';
+        showToast('Arama tamamlanamadı', `${next.message}${retry}`, 'error', 6000);
       }
-    } catch (err) {
-      console.error('[bileo] Live scrape error:', err);
-      showToast('Tarama Hatası', 'Canlı bilet taraması sırasında bir hata oluştu. Otomatik olarak tekrar denenecek.', 'info');
-    } finally {
-      setIsLiveScraping(false);
-    }
-  }, [showToast]);
+    },
+    [showToast, runOtherSources]
+  );
 
-  // 60-second automatic live background sync from Turna.com (sadece arama yapıldıysa)
+  // Abort any in-flight search (Turna and the other sources) if the app unmounts.
+  useEffect(
+    () => () => {
+      searchAbortRef.current?.abort();
+      otherSourcesAbortRef.current?.abort();
+    },
+    [],
+  );
+
+  /**
+   * Manual refresh: bypasses the server cache for the current query (30 s client cooldown).
+   * From an error state it is a plain retry (no cache bypass, no cooldown).
+   */
+  const handleRefresh = useCallback(() => {
+    if (live.status === 'idle' || live.status === 'loading' || live.status === 'unsupported') return;
+    if (live.query === null) return;
+    const isRetry = live.status === 'error';
+    if (!isRetry) {
+      const elapsed = Date.now() - lastRefreshAtRef.current;
+      if (elapsed < REFRESH_COOLDOWN_MS) {
+        const wait = Math.ceil((REFRESH_COOLDOWN_MS - elapsed) / 1000);
+        showToast('Yenileme sınırı', `Turna.com verisi 30 saniyede bir yenilenebilir; ${wait} sn sonra tekrar deneyin.`, 'info');
+        return;
+      }
+      lastRefreshAtRef.current = Date.now();
+    }
+    void runSearch(live.query, { refresh: !isRetry });
+  }, [live, runSearch, showToast]);
+
+  // Revalidate a result older than 10 minutes when the tab becomes visible again: only for a
+  // signed-in user and only while no detail/seat/checkout handoff screen is open.
   useEffect(() => {
-    if (!hasSearched) return;
-    const interval = setInterval(() => {
-      fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
-    }, 60000);
-    return () => clearInterval(interval);
-  }, [hasSearched, searchState.fromCity, searchState.toCity, searchState.transportType, fetchLiveTurnaTickets]);
+    const onVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (!currentUser) return;
+      if (selectedRouteForExperience || selectedRouteForSeat || checkoutData) return;
+      if (live.status !== 'ok' && live.status !== 'facts-only') return;
+      const receivedAt = Date.parse(live.receivedAt);
+      if (Number.isNaN(receivedAt) || Date.now() - receivedAt <= REVALIDATE_AFTER_MS) return;
+      void runSearch(live.query, { quiet: true });
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [live, currentUser, selectedRouteForExperience, selectedRouteForSeat, checkoutData, runSearch]);
 
   const handleUpdateSearchState = (updates: Partial<SearchFilterState>) => {
-    setSearchState((prev) => ({ ...prev, ...updates }));
+    // City tabs render lazily loaded panels; start the download as soon as the tab is chosen.
+    if (updates.searchKind === 'otel' || updates.searchKind === 'arac') void preloadCityResults();
+    // A writer that sets a city without stating its slug (guide modals, fare matrix) must not
+    // leave a stale autocomplete slug/code behind; the Hero always sends both keys together.
+    const next: Partial<SearchFilterState> = { ...updates };
+    if ('fromCity' in updates && !('fromSlug' in updates)) {
+      next.fromSlug = undefined;
+      next.fromCode = undefined;
+    }
+    if ('toCity' in updates && !('toSlug' in updates)) {
+      next.toSlug = undefined;
+      next.toCode = undefined;
+    }
+    // A writer that sets a transport type without naming the tab (Header, keyboard shortcuts,
+    // guide modals) means that tab; otherwise a stale Otel/Araç tab would outlive the handoff.
+    if (updates.transportType !== undefined && !('searchKind' in updates)) {
+      next.searchKind = updates.transportType;
+    }
+    setSearchState((prev) => {
+      const merged: SearchFilterState = { ...prev, ...next };
+      const prevKind: SearchKind = prev.searchKind ?? prev.transportType;
+      const nextKind: SearchKind = merged.searchKind ?? merged.transportType;
+      // The day chip belongs to the previous tab's result; a tab change starts on "Tümü".
+      if (nextKind !== prevKind) merged.selectedDay = undefined;
+      return merged;
+    });
   };
 
   const handlePerformSearch = () => {
     setHasSearched(true);
+    const { transportType, fromCity, toCity, fromSlug, toSlug } = searchState;
+    const activeKind: SearchKind = searchState.searchKind ?? transportType;
     if (
-      !requireAuth(
-        'Sefer aramak ve sefer saatlerini listelemek için lütfen giriş yapın veya kayıt olun.',
-        () => {
-          const resultsElement = document.getElementById('search-results-section');
-          if (resultsElement) {
-            resultsElement.scrollIntoView({ behavior: 'smooth' });
-          }
+      !requireAuth(searchAuthReason(activeKind), () => {
+        const resultsElement = document.getElementById('search-results-section');
+        if (resultsElement) {
+          resultsElement.scrollIntoView({ behavior: 'smooth' });
         }
-      )
+      })
     ) {
       return;
     }
@@ -502,7 +685,40 @@ export function App() {
     if (resultsElement) {
       resultsElement.scrollIntoView({ behavior: 'smooth' });
     }
-    fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType);
+
+    const kind = searchKindToTurnaKind(activeKind);
+    if (activeKind === 'tren' || kind === null) {
+      searchAbortRef.current?.abort();
+      searchAbortRef.current = null;
+      setLive({ status: 'unsupported', transportType: 'tren', reason: TRAIN_UNSUPPORTED_REASON });
+      return;
+    }
+
+    // Slugs come from the autocomplete selection; free-typed text falls back to slugifyTr.
+    // Otel/Araç address a single city, which the Hero keeps in fromCity/fromSlug; `city` alone is
+    // sent so an empty city can never fall back to a stale origin slug inside resolveTurnaTarget.
+    const query: TurnaQuery = isCityKind(kind)
+      ? { kind, city: fromSlug || slugifyTr(fromCity) }
+      : { kind, from: fromSlug || slugifyTr(fromCity), to: toSlug || slugifyTr(toCity) };
+    try {
+      resolveTurnaTarget(query);
+    } catch (err) {
+      if (err instanceof TurnaQueryError) {
+        searchAbortRef.current?.abort();
+        searchAbortRef.current = null;
+        showToast('Arama yapılamadı', err.message, 'error');
+        setLive({ status: 'error', query, httpStatus: null, errorCode: err.errorCode, message: err.message });
+        return;
+      }
+      throw err;
+    }
+
+    searchIntentRef.current = { transportType, searchKind: activeKind, fromCity, toCity: isCityKind(kind) ? '' : toCity };
+    // A new query starts on the "Tümü" day chip; the previous selection belongs to the old result.
+    if (searchState.selectedDay !== undefined) {
+      setSearchState((prev) => ({ ...prev, selectedDay: undefined }));
+    }
+    void runSearch(query);
   };
 
   const handleSelectRouteFromResults = (route: RouteItem) => {
@@ -547,7 +763,8 @@ export function App() {
     setSelectedRouteForSeat(null);
     setSelectedRouteForExperience(null);
     setIsWalletOpen(true);
-    showToast('Tebrikler!', `Biletiniz başarıyla oluşturuldu. PNR: ${newTicket.pnr}`, 'success', 5000);
+    // Demo purchase: the code is a preview, never a carrier PNR.
+    showToast('Demo bilet oluşturuldu', `Önizleme kodu: ${newTicket.pnr}. Gerçek bir PNR değildir.`, 'info', 5000);
   };
 
   const handleOpenRefund = (ticket: BookingTicket) => {
@@ -600,16 +817,16 @@ export function App() {
         setIsShortcutsOpen((prev) => !prev);
       } else if (e.key === '1') {
         sound.playTick();
-        setSearchState((prev) => ({ ...prev, transportType: 'otobus' }));
+        setSearchState((prev) => ({ ...prev, transportType: 'otobus', searchKind: 'otobus' }));
       } else if (e.key === '2') {
         sound.playTick();
-        setSearchState((prev) => ({ ...prev, transportType: 'ucak' }));
+        setSearchState((prev) => ({ ...prev, transportType: 'ucak', searchKind: 'ucak' }));
       } else if (e.key === '3') {
         sound.playTick();
-        setSearchState((prev) => ({ ...prev, transportType: 'tren' }));
+        setSearchState((prev) => ({ ...prev, transportType: 'tren', searchKind: 'tren' }));
       } else if (e.key === '4') {
         sound.playTick();
-        setSearchState((prev) => ({ ...prev, transportType: 'feribot' }));
+        setSearchState((prev) => ({ ...prev, transportType: 'feribot', searchKind: 'feribot' }));
       } else if (e.key.toLowerCase() === 'w') {
         e.preventDefault();
         handleOpenWalletWithAuth();
@@ -705,7 +922,6 @@ export function App() {
           selectedSeatObjects={checkoutData.selectedSeatObjects}
           selectedGender={checkoutData.gender}
           onClose={() => setCheckoutData(null)}
-          onPaymentSuccess={handleTicketPurchased}
           onBookingCompleted={handleTicketPurchased}
         />
       </Suspense>
@@ -762,17 +978,26 @@ export function App() {
         {/* 100+ Transport Brands Infinite Scrolling Ribbon */}
         <PartnerLogosRibbon onSelectCarrier={handleSelectCarrierDirect} />
 
-        {/* Turna Canlı Sefer Arama Sonuçları (Sadece arama yapıldığında gösterilir) */}
+        {/* Turna.com live search results (rendered only after the first search) */}
         {hasSearched && (
           <div id="search-results-section">
             <SearchResults
-          routes={routes}
-          searchState={searchState}
-          isLiveScraping={isLiveScraping}
-          onTriggerLiveScrape={() => fetchLiveTurnaTickets(searchState.fromCity, searchState.toCity, searchState.transportType)}
-          onUpdateSearchState={handleUpdateSearchState}
-          onSelectRoute={handleSelectRouteFromResults}
-          onOpenPriceAlert={(minPrice) => setPriceAlertData({ isOpen: true, minPrice })}
+              routes={routes}
+              searchState={searchState}
+              live={live}
+              otherSources={otherSources}
+              onRefresh={handleRefresh}
+              isLiveScraping={isLiveScraping}
+              onTriggerLiveScrape={handleRefresh}
+              onUpdateSearchState={handleUpdateSearchState}
+              onSelectRoute={handleSelectRouteFromResults}
+              onOpenPriceAlert={(minPrice) =>
+                setPriceAlertData({
+                  isOpen: true,
+                  // Prefer the page-wide minimum from Turna's stats over the filtered list minimum.
+                  minPrice: live.status === 'ok' ? live.result.stats?.min ?? minPrice : minPrice,
+                })
+              }
             />
           </div>
         )}
@@ -965,7 +1190,7 @@ export function App() {
         <DestinationWeatherModal
           isOpen={isWeatherModalOpen}
           onClose={() => setIsWeatherModalOpen(false)}
-          initialCity={searchState.toCity || 'İstanbul'}
+          initialCity={searchState.toCity || searchState.fromCity || undefined}
         />
 
         {/* Global Shuttle & Airport Transfer Timetable Modal */}
@@ -1330,9 +1555,10 @@ export function App() {
         <PriceAlertModal
           isOpen={priceAlertData.isOpen}
           onClose={() => setPriceAlertData((prev) => ({ ...prev, isOpen: false }))}
-          fromCity={searchState.fromCity || 'İstanbul'}
-          toCity={searchState.toCity || 'Ankara'}
+          fromCity={searchState.fromCity}
+          toCity={searchState.toCity}
           currentMinPrice={priceAlertData.minPrice}
+          routeKey={live.status === 'ok' ? live.result.routeKey : null}
           onShowToast={showToast}
         />
       </Suspense>

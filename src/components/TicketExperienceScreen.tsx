@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useScreenEntry } from '../lib/useScreenEntry';
 import {
   BileoArrowLeft,
   BileoArrowRight,
@@ -19,6 +20,7 @@ import {
 } from './icons';
 import { RouteItem, TransportType, ReviewItem, ReviewReply, User } from '../types';
 import { CompanyLogo } from './CompanyLogo';
+import { formatTrClock } from '../lib/turna/format';
 
 interface TicketExperienceScreenProps {
   route: RouteItem;
@@ -29,66 +31,57 @@ interface TicketExperienceScreenProps {
   onProceedToSeats: (route: RouteItem, passengerCount: number) => void;
 }
 
-const DEFAULT_REVIEWS: ReviewItem[] = [
-  {
-    id: 'rev-1',
-    author: 'Mehmet Yılmaz',
-    rating: 5,
-    date: '18 Mayıs 2024',
-    comment: 'Araç tertemizdi, koltuk arkası ekranlar ve prizler sorunsuz çalıştı. Mola tesisi de çok kaliteliydi. Kesinlikle tavsiye ederim.',
-    travelType: '2+1 VIP Otobüs',
-    verified: true,
-    scores: { cleanliness: 5, punctuality: 5, comfort: 5, service: 5 },
-    likes: 18,
-    dislikes: 1,
-    userVote: null,
-    replies: [
-      {
-        id: 'rep-1-1',
-        author: 'Pamukkale Müşteri Deneyimi',
-        date: '19 Mayıs 2024',
-        text: 'Değerli yolcumuz, seyahatinizden memnun kalmanıza çok sevindik. Bir sonraki yolculuğunuzda da sizi ağırlamaktan onur duyarız.',
-        isCompany: true,
-      }
-    ]
-  },
-  {
-    id: 'rev-2',
-    author: 'Ayşe Kaya',
-    rating: 5,
-    date: '14 Mayıs 2024',
-    comment: 'Tam vaktinde hareket etti ve tam söylenen saatte vardı. Muavin ve kaptan çok kibardı, sıcak çay ve kahve ikramı harikaydı.',
-    travelType: 'Ekonomi Seferi',
-    verified: true,
-    scores: { cleanliness: 5, punctuality: 5, comfort: 4, service: 5 },
-    likes: 14,
-    dislikes: 0,
-    userVote: null,
-    replies: []
-  },
-  {
-    id: 'rev-3',
-    author: 'Caner Demir',
-    rating: 4,
-    date: '02 Mayıs 2024',
-    comment: 'Diz mesafesi oldukça genişti, yol boyunca Wi-Fi üzerinden rahatça çalıştım. Bileo üzerinden almak da çok hızlı oldu.',
-    travelType: 'İş Seyahati',
-    verified: true,
-    scores: { cleanliness: 4, punctuality: 5, comfort: 5, service: 4 },
-    likes: 9,
-    dislikes: 1,
-    userVote: null,
-    replies: []
+/** Review form default: the travel mode itself, never a fabricated vehicle class. */
+const TRAVEL_TYPE_BY_MODE: Record<TransportType, string> = {
+  otobus: 'Otobüs Yolculuğu',
+  ucak: 'Uçak Yolculuğu',
+  tren: 'Tren Yolculuğu',
+  feribot: 'Feribot Yolculuğu',
+};
+const GENERIC_TRAVEL_TYPES = ['İş Seyahati', 'Aile Tatili', 'Kişisel Gezi'];
+
+const CATEGORY_LABELS = [
+  { key: 'cleanliness', label: 'Araç Temizliği & Hijyen' },
+  { key: 'punctuality', label: 'Zamanında Kalkış & Varış' },
+  { key: 'comfort', label: 'Koltuk Konforu & Diz Mesafesi' },
+  { key: 'service', label: 'Personel & İkram Servisi' },
+] as const;
+type CategoryKey = (typeof CATEGORY_LABELS)[number]['key'];
+
+/** Mean of each category over the reviews that carry scores; null when no review does. */
+const averageCategoryScores = (reviews: ReviewItem[]): Record<CategoryKey, number> | null => {
+  const sums: Record<CategoryKey, number> = { cleanliness: 0, punctuality: 0, comfort: 0, service: 0 };
+  let counted = 0;
+  for (const review of reviews) {
+    if (!review.scores) continue;
+    counted += 1;
+    sums.cleanliness += review.scores.cleanliness;
+    sums.punctuality += review.scores.punctuality;
+    sums.comfort += review.scores.comfort;
+    sums.service += review.scores.service;
   }
-];
+  if (counted === 0) return null;
+  const mean = (total: number) => Math.round((total / counted) * 10) / 10;
+  return {
+    cleanliness: mean(sums.cleanliness),
+    punctuality: mean(sums.punctuality),
+    comfort: mean(sums.comfort),
+    service: mean(sums.service),
+  };
+};
 
 /**
- * Authentic real-world regulatory ticketing passenger limits per PNR transaction
+ * Regulatory per-transaction passenger limits. `availableSeats` is optional because Turna landing
+ * pages do not publish seat counts; the limit then stays regulatory and the note says so.
  */
-const getPassengerLimit = (type: TransportType, availableSeats?: number) => {
+const getPassengerLimit = (
+  type: TransportType,
+  availableSeats: number | undefined,
+  fromTurna = false
+) => {
   let max = 5;
   let ruleDescription = 'Karayolu Mevzuatı Bireysel Limit: Maksimum 5 Bilet';
-  
+
   switch (type) {
     case 'otobus':
       max = 5;
@@ -108,11 +101,15 @@ const getPassengerLimit = (type: TransportType, availableSeats?: number) => {
       break;
   }
 
-  if (availableSeats && availableSeats > 0 && availableSeats < max) {
+  if (typeof availableSeats === 'number' && availableSeats > 0 && availableSeats < max) {
     return {
       max: availableSeats,
       ruleDescription: `Mevcut Boş Koltuk: ${availableSeats} Koltuk`,
     };
+  }
+
+  if (availableSeats === undefined && fromTurna) {
+    return { max, ruleDescription: `${ruleDescription}; koltuk bilgisi Turna sayfasında yok` };
   }
 
   return { max, ruleDescription };
@@ -126,26 +123,30 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
   onClose,
   onProceedToSeats,
 }) => {
-  const limitInfo = getPassengerLimit(route.transportType, route.availableSeats);
+  const entryRef = useScreenEntry<HTMLHeadingElement>();
+  const limitInfo = getPassengerLimit(route.transportType, route.availableSeats, Boolean(route.provenance));
   const [passengerCount, setPassengerCount] = useState<number>(
     Math.max(1, Math.min(limitInfo.max, initialPassengerCount))
   );
   const [activePassengerTab, setActivePassengerTab] = useState<number>(0);
   const [showAllTicketsModal, setShowAllTicketsModal] = useState<boolean>(false);
 
-  // Reviews & Rating System State
-  const [reviewsList, setReviewsList] = useState<ReviewItem[]>(() => {
-    return route.reviews && route.reviews.length > 0 ? route.reviews : DEFAULT_REVIEWS;
-  });
-  const [currentScore, setCurrentScore] = useState<number>(route.rating || 4.8);
-  const [currentReviewCount, setCurrentReviewCount] = useState<number>(route.reviewCount || 1420);
+  // Reviews and rating state start from what the route actually carries; there are no seeded defaults.
+  const [reviewsList, setReviewsList] = useState<ReviewItem[]>(() => route.reviews ?? []);
+  const [currentScore, setCurrentScore] = useState<number | null>(route.rating ?? null);
+  const [currentReviewCount, setCurrentReviewCount] = useState<number>(route.reviewCount ?? 0);
+  const categoryScores = averageCategoryScores(reviewsList);
+  const verifiedReviewCount = reviewsList.filter((review) => review.verified).length;
+  const amenities = route.features ?? [];
+  const travelTypeOptions = [TRAVEL_TYPE_BY_MODE[route.transportType], ...GENERIC_TRAVEL_TYPES];
+  const provenanceClock = route.provenance ? formatTrClock(route.provenance.scrapedAt) : '';
 
   // New Review Modal State
   const [isAddReviewModalOpen, setIsAddReviewModalOpen] = useState<boolean>(false);
   const [newRating, setNewRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [newAuthor, setNewAuthor] = useState<string>('Misafir Yolcu');
-  const [newTravelType, setNewTravelType] = useState<string>('2+1 VIP Otobüs');
+  const [newTravelType, setNewTravelType] = useState<string>(TRAVEL_TYPE_BY_MODE[route.transportType]);
   const [newComment, setNewComment] = useState<string>('');
   const [newCleanliness, setNewCleanliness] = useState<number>(5);
   const [newPunctuality, setNewPunctuality] = useState<number>(5);
@@ -245,7 +246,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
 
     const replierName = currentUser
       ? `${currentUser.name} ${currentUser.surname}`.trim()
-      : 'Doğrulanmış Yolcu';
+      : 'Misafir Yolcu';
 
     const newReply: ReviewReply = {
       id: `rep-${Date.now()}`,
@@ -277,7 +278,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
 
     const authorName = currentUser
       ? `${currentUser.name} ${currentUser.surname}`.trim()
-      : (newAuthor.trim() || 'Doğrulanmış Yolcu');
+      : (newAuthor.trim() || 'Misafir Yolcu');
 
     const newReviewItem: ReviewItem = {
       id: `rev-${Date.now()}`,
@@ -286,7 +287,8 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
       date: 'Bugün',
       comment: newComment.trim(),
       travelType: newTravelType,
-      verified: true,
+      // Only a signed-in account counts as verified; anonymous submissions are plain passenger comments.
+      verified: Boolean(currentUser),
       scores: {
         cleanliness: newCleanliness,
         punctuality: newPunctuality,
@@ -302,11 +304,10 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
     const updated = [newReviewItem, ...reviewsList];
     setReviewsList(updated);
 
-    // Live rating update calculation
+    // Live rating update; a route without a published score starts from this first review.
     const newTotalReviews = currentReviewCount + 1;
-    const newAverage = Number(
-      (((currentScore * currentReviewCount) + newRating) / newTotalReviews).toFixed(1)
-    );
+    const priorTotal = currentScore === null ? 0 : currentScore * currentReviewCount;
+    const newAverage = Number(((priorTotal + newRating) / newTotalReviews).toFixed(1));
     setCurrentScore(newAverage);
     setCurrentReviewCount(newTotalReviews);
 
@@ -367,9 +368,11 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                 size="md"
               />
               <div>
-                <h1 className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2">
+                <h1 ref={entryRef} tabIndex={-1} className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2 outline-none">
                   <span>{route.company}</span>
-                  <span className="text-xs font-medium text-charcoal-muted hidden md:inline">({route.vehicleType})</span>
+                  {route.vehicleType && (
+                    <span className="text-xs font-medium text-charcoal-muted hidden md:inline">({route.vehicleType})</span>
+                  )}
                 </h1>
                 <div className="flex items-center gap-2 text-xs text-charcoal-muted">
                   <span className="font-semibold text-[#1E1B18]">{route.from} → {route.to}</span>
@@ -380,6 +383,22 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                     {route.departureTime}
                   </span>
                 </div>
+                {route.provenance && (
+                  <div className="flex items-center gap-2 text-[11px] text-charcoal-muted">
+                    <span>
+                      Kaynak: Turna.com{provenanceClock ? `, alınma ${provenanceClock}` : ''}
+                    </span>
+                    <a
+                      href={route.provenance.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-bordeaux-700 hover:text-bordeaux-800 dark:text-bordeaux-300 dark:hover:text-bordeaux-200 underline underline-offset-2"
+                    >
+                      Kaynak sayfa
+                      <span className="sr-only"> (yeni sekmede açılır)</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -398,7 +417,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
             <span className="text-charcoal-light">→</span>
             <div className="flex items-center gap-1.5 text-charcoal-muted font-medium">
               <span className="w-4 h-4 rounded-full bg-[#E8E1D5] text-charcoal-muted flex items-center justify-center text-[10px]">3</span>
-              <span>Ödeme & PNR</span>
+              <span>Ödeme & Önizleme</span>
             </div>
           </div>
 
@@ -513,7 +532,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                   <span className="uppercase tracking-wider">
                     {activePassengerTab + 1}. Yolcu Biniş Kartı ({activePassengerTab + 1}/{passengerCount})
                   </span>
-                  <span className="font-mono">TR-{route.id.toUpperCase()}-0{activePassengerTab + 1}</span>
+                  <span className="font-mono">Önizleme kodu TR-{route.id.toUpperCase()}-0{activePassengerTab + 1}</span>
                 </div>
 
                 <div className="grid grid-cols-12 items-center gap-2 relative z-10">
@@ -607,7 +626,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                 <div className="flex flex-wrap items-center justify-between gap-4 text-xs pt-4 border-t border-[#E2DCD2]/40">
                   
                   <div className="flex items-center gap-3 text-charcoal-muted font-semibold">
-                    <span>PNR: TR-{route.id.toUpperCase()}-0{activePassengerTab + 1}</span>
+                    <span>Önizleme kodu: TR-{route.id.toUpperCase()}-0{activePassengerTab + 1}</span>
                     <span>•</span>
                     <span className="text-[#1E1B18] font-bold">
                       Yolcu {activePassengerTab + 1}/{passengerCount}
@@ -637,14 +656,16 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
 
             </div>
 
-            {/* Travel Guarantees Ribbon */}
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-3 max-w-xl mx-auto text-xs text-charcoal-muted font-medium">
-              <span>Koltuk Seçim Garantisi</span>
-              <span>•</span>
-              <span>30 KG Bagaj Hakkı</span>
-              <span>•</span>
-              <span>%100 İade Güvencesi</span>
-            </div>
+            {/* Travel guarantees ribbon: legacy mock-path copy only; Turna landing pages publish none of these terms. */}
+            {!route.provenance && (
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-3 max-w-xl mx-auto text-xs text-charcoal-muted font-medium">
+                <span>Koltuk Seçim Garantisi</span>
+                <span>•</span>
+                <span>30 KG Bagaj Hakkı</span>
+                <span>•</span>
+                <span>%100 İade Güvencesi</span>
+              </div>
+            )}
 
           </div>
 
@@ -710,11 +731,13 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                 </div>
               </div>
 
-              {/* Trust Badge */}
+              {/* Trust note: the refund promise belongs to the mock path; live rows state where the price came from. */}
               <div className="p-3.5 rounded-2xl bg-[#FAF7F2] text-xs text-charcoal-muted flex items-start gap-2.5">
-                <BileoShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                <BileoShieldCheck className={`w-4 h-4 flex-shrink-0 mt-0.5 ${route.provenance ? 'text-charcoal-muted' : 'text-emerald-600'}`} />
                 <span>
-                  Sefer Güvencesi: Sefer saatine kadar %100 kesintisiz anında para iadesi hakkınız saklıdır.
+                  {route.provenance
+                    ? 'Fiyat Turna.com rota sayfasından alındı; iade ve bagaj koşulları taşıyıcı firmaya aittir.'
+                    : 'Sefer Güvencesi: Sefer saatine kadar %100 kesintisiz anında para iadesi hakkınız saklıdır.'}
                 </span>
               </div>
 
@@ -764,6 +787,11 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
               <h2 className="text-xl sm:text-2xl font-extrabold text-[#1E1B18] tracking-tight">
                 Değerlendirmeler & Araç Özellikleri
               </h2>
+              {route.provenance && (
+                <p className="text-[11px] text-charcoal-muted mt-1">
+                  Bileo kullanıcı yorumları; Turna verisi değildir.
+                </p>
+              )}
             </div>
 
             {/* Puan ve Yorum Ekle Butonu */}
@@ -784,90 +812,83 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
               
               <div className="flex items-center gap-5 pb-5">
                 <div className="flex flex-col items-start justify-center">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-4xl font-extrabold text-[#1E1B18] font-display leading-none">
-                      {currentScore}
+                  {currentScore === null ? (
+                    <span className="text-base font-extrabold text-charcoal-muted font-display leading-none">
+                      Puan verisi yok
                     </span>
-                    <span className="text-xs font-bold text-charcoal-muted">/ 5.0</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-amber-500 mt-1.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <BileoStar
-                        key={star}
-                        className={`w-4 h-4 ${star <= Math.round(currentScore) ? 'text-amber-500 fill-amber-500' : 'text-gray-300'}`}
-                      />
-                    ))}
-                  </div>
+                  ) : (
+                    <>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-4xl font-extrabold text-[#1E1B18] font-display leading-none tabular-nums">
+                          {currentScore}
+                        </span>
+                        <span className="text-xs font-bold text-charcoal-muted">/ 5.0</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-amber-500 mt-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <BileoStar
+                            key={star}
+                            className={`w-4 h-4 ${star <= Math.round(currentScore) ? 'text-amber-500 fill-amber-500' : 'text-gray-300'}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div>
                   <h3 className="text-base font-extrabold text-[#1E1B18]">Genel Sefer Puanı</h3>
                   <p className="text-xs text-charcoal-muted mt-0.5">
-                    {currentReviewCount} Doğrulanmış Yolcu Değerlendirmesi
+                    {currentReviewCount > 0
+                      ? `${currentReviewCount} Yolcu Değerlendirmesi${verifiedReviewCount > 0 ? ` (${verifiedReviewCount} doğrulanmış)` : ''}`
+                      : 'Henüz değerlendirme yok'}
                   </p>
                 </div>
               </div>
 
-              {/* Category Scores */}
-              <div className="space-y-4 text-xs">
-                <div>
-                  <div className="flex justify-between text-[#1E1B18] mb-1.5">
-                    <span className="font-semibold">Araç Temizliği & Hijyen</span>
-                    <span className="font-bold text-bordeaux-700">4.9 / 5.0</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[#EFE8DC] overflow-hidden">
-                    <div className="h-full bg-bordeaux-700 rounded-full" style={{ width: '98%' }} />
-                  </div>
+              {/* Category scores: computed from the reviews that carry scores, hidden otherwise. */}
+              {categoryScores && (
+                <div className="space-y-4 text-xs">
+                  {CATEGORY_LABELS.map(({ key, label }) => (
+                    <div key={key}>
+                      <div className="flex justify-between text-[#1E1B18] mb-1.5">
+                        <span className="font-semibold">{label}</span>
+                        <span className="font-bold text-bordeaux-700 dark:text-bordeaux-300 tabular-nums">{categoryScores[key].toFixed(1)} / 5.0</span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-[#EFE8DC] overflow-hidden">
+                        <div
+                          className="h-full bg-bordeaux-700 rounded-full"
+                          style={{ width: `${Math.round((categoryScores[key] / 5) * 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                <div>
-                  <div className="flex justify-between text-[#1E1B18] mb-1.5">
-                    <span className="font-semibold">Zamanında Kalkış & Varış</span>
-                    <span className="font-bold text-bordeaux-700">4.8 / 5.0</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[#EFE8DC] overflow-hidden">
-                    <div className="h-full bg-bordeaux-700 rounded-full" style={{ width: '96%' }} />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[#1E1B18] mb-1.5">
-                    <span className="font-semibold">Koltuk Konforu & Diz Mesafesi</span>
-                    <span className="font-bold text-bordeaux-700">4.7 / 5.0</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[#EFE8DC] overflow-hidden">
-                    <div className="h-full bg-bordeaux-700 rounded-full" style={{ width: '94%' }} />
+              {/* Amenities: driven by route.features; hidden when the source publishes none. */}
+              {amenities.length > 0 && (
+                <div className="pt-6 space-y-3">
+                  <span className="text-xs font-bold text-[#1E1B18] block">Araç Donanımı & Konfor</span>
+                  <div className="flex flex-wrap items-center gap-x-3.5 gap-y-2 text-xs text-charcoal font-medium">
+                    {amenities.map((item, idx) => (
+                      <React.Fragment key={`${idx}-${item}`}>
+                        {idx > 0 && <span className="text-charcoal-muted">•</span>}
+                        <span>{item}</span>
+                      </React.Fragment>
+                    ))}
                   </div>
                 </div>
-
-                <div>
-                  <div className="flex justify-between text-[#1E1B18] mb-1.5">
-                    <span className="font-semibold">Personel & İkram Servisi</span>
-                    <span className="font-bold text-bordeaux-700">4.9 / 5.0</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-[#EFE8DC] overflow-hidden">
-                    <div className="h-full bg-bordeaux-700 rounded-full" style={{ width: '98%' }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Amenities */}
-              <div className="pt-6 space-y-3">
-                <span className="text-xs font-bold text-[#1E1B18] block">Araç Donanımı & Konfor</span>
-                <div className="flex flex-wrap items-center gap-x-3.5 gap-y-2 text-xs text-charcoal font-medium">
-                  <span>220V & USB Priz</span>
-                  <span className="text-charcoal-muted">•</span>
-                  <span>Hızlı Wi-Fi</span>
-                  <span className="text-charcoal-muted">•</span>
-                  <span>Koltuk Ekranı</span>
-                  <span className="text-charcoal-muted">•</span>
-                  <span>Sıcak İkram</span>
-                </div>
-              </div>
+              )}
 
             </div>
 
             {/* Right: Reviews List with Like/Dislike and Replies (7 cols) */}
             <div className="lg:col-span-7 space-y-6">
+              {reviewsList.length === 0 && (
+                <div className="p-5 rounded-2xl bg-white shadow-soft text-xs text-charcoal-muted">
+                  Henüz değerlendirme yok.
+                </div>
+              )}
               {reviewsList.map((rev) => (
                 <div
                   key={rev.id}
@@ -881,11 +902,13 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold text-[#1E1B18]">{rev.author}</span>
-                          {rev.verified && (
-                            <span className="text-[10px] font-bold text-emerald-700 flex items-center gap-0.5">
+                          {rev.verified ? (
+                            <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-0.5">
                               <BileoCheckCircle className="w-3 h-3" />
                               <span>Doğrulanmış Yolcu</span>
                             </span>
+                          ) : (
+                            <span className="text-[10px] font-bold text-charcoal-muted">Yolcu yorumu</span>
                           )}
                         </div>
                         <span className="text-[10px] text-charcoal-muted">{rev.date} • {rev.travelType}</span>
@@ -1204,11 +1227,9 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                     onChange={(e) => setNewTravelType(e.target.value)}
                     className="w-full bg-white p-2.5 rounded-xl text-xs font-semibold text-charcoal focus:outline-none shadow-soft cursor-pointer"
                   >
-                    <option value="2+1 VIP Otobüs">2+1 VIP Otobüs</option>
-                    <option value="Ekonomi Seferi">Ekonomi Seferi</option>
-                    <option value="İş Seyahati">İş Seyahati</option>
-                    <option value="Aile Tatili">Aile Tatili</option>
-                    <option value="Kişisel Gezi">Kişisel Gezi</option>
+                    {travelTypeOptions.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -1295,7 +1316,7 @@ export const TicketExperienceScreen: React.FC<TicketExperienceScreenProps> = ({
                   {/* Body Info */}
                   <div className="p-5 flex flex-wrap items-center justify-between gap-4 text-xs">
                     <div className="space-y-1">
-                      <span className="text-charcoal-muted block">PNR Numarası:</span>
+                      <span className="text-charcoal-muted block">Önizleme kodu:</span>
                       <span className="font-mono font-bold text-[#1E1B18]">
                         TR-{route.id.toUpperCase()}-0{idx + 1}
                       </span>

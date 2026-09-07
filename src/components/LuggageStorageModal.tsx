@@ -5,6 +5,7 @@ import {
   BileoCheck,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface LuggageStorageModalProps {
   isOpen: boolean;
@@ -113,7 +114,7 @@ export const LuggageStorageModal: React.FC<LuggageStorageModalProps> = ({
               🛅
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Emanet Dolapları</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Emanet Dolapları (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Valiz ve eşya emanet ofisleri, günlük tarifeler ve konum bilgileri</p>
             </div>
           </div>
@@ -124,6 +125,8 @@ export const LuggageStorageModal: React.FC<LuggageStorageModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Hub Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

@@ -5,6 +5,7 @@ import {
   BileoCheckCircle,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface SmartTravelBudgetCalculatorModalProps {
   isOpen: boolean;
@@ -130,8 +131,8 @@ export const SmartTravelBudgetCalculatorModal: React.FC<SmartTravelBudgetCalcula
               TRY
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Akıllı Seyahat Bütçe Planlayıcısı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Bilet, yerel ulaşım, mola yeme-içme ve konaklama dahil toplam seyahat bütçesi simülasyonu</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Akıllı Seyahat Bütçe Planlayıcısı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Bilet, yerel ulaşım, mola yeme-içme ve konaklama için temsili birim fiyatlarla bütçe simülasyonu</p>
             </div>
           </div>
           <button
@@ -141,6 +142,8 @@ export const SmartTravelBudgetCalculatorModal: React.FC<SmartTravelBudgetCalcula
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">

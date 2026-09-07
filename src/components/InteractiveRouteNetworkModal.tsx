@@ -7,6 +7,7 @@ import {
   BileoTrain,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { TransportType } from '../types';
 
 interface InteractiveRouteNetworkModalProps {
@@ -155,7 +156,7 @@ export const InteractiveRouteNetworkModal: React.FC<InteractiveRouteNetworkModal
               🗺️
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Türkiye Ana Sefer & Rota Ağı Haritası</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Türkiye Ana Sefer & Rota Ağı Haritası (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Büyük Şehirler Arası Sefer Sıklığı, Ortalama Fiyatlar & İdeal Ulaşım Modları</p>
             </div>
           </div>
@@ -166,6 +167,8 @@ export const InteractiveRouteNetworkModal: React.FC<InteractiveRouteNetworkModal
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Corridor Tabs */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -284,7 +287,7 @@ export const InteractiveRouteNetworkModal: React.FC<InteractiveRouteNetworkModal
           <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-center justify-between text-xs text-charcoal-muted font-medium">
             <div className="flex items-center gap-2">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Bileo Çok Modlu Arama Motoru, Türkiye'deki tüm karayolu ve demiryolu koridorlarını gerçek zamanlı optimize eder.</span>
+              <span>Bu haritadaki sefer sıklığı ve ortalama fiyatlar temsili örneklerdir; canlı bir veri kaynağına bağlı değildir.</span>
             </div>
           </div>
 

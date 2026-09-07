@@ -313,9 +313,12 @@ export const TicketWalletModal: React.FC<TicketWalletModalProps> = ({
                         </span>
                         <span className="h-[1px] flex-1 bg-white/30" />
                       </div>
-                      <span className="text-[10px] text-white/70 font-semibold mt-0.5">
-                        Direkt Sefer
-                      </span>
+                      {/* Only when the source explicitly published a non-stop leg (same guard as SearchResults). */}
+                      {selectedTicket.route.provenance?.isDirect === true && (
+                        <span className="text-[10px] text-white/70 font-semibold mt-0.5">
+                          Direkt Sefer
+                        </span>
+                      )}
                     </div>
 
                     {/* Destination */}
@@ -357,9 +360,11 @@ export const TicketWalletModal: React.FC<TicketWalletModalProps> = ({
                         {selectedTicket.route.company}
                       </span>
                     </div>
-                    <span className="text-xs font-medium text-charcoal-muted">
-                      {selectedTicket.route.vehicleType}
-                    </span>
+                    {selectedTicket.route.vehicleType && (
+                      <span className="text-xs font-medium text-charcoal-muted">
+                        {selectedTicket.route.vehicleType}
+                      </span>
+                    )}
                   </div>
                   
                   {/* 4-Column Key Metrics */}

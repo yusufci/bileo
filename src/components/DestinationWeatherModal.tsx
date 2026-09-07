@@ -4,6 +4,7 @@ import {
   BileoMapPin,
   BileoSparkles,
   BileoCompass,
+  BileoAlertCircle,
 } from './icons';
 import { sound } from '../utils/sound';
 
@@ -22,6 +23,10 @@ interface CityWeather {
   packingTip: string;
   threeDayForecast: { day: string; temp: string; icon: string }[];
 }
+
+/** Said plainly on the screen: this widget is a static sample, not a live forecast. */
+export const WEATHER_SAMPLE_DISCLOSURE =
+  'Bu ekran temsili bir örnektir: sıcaklık, tahmin ve bavul önerisi canlı bir hava durumu kaynağından gelmez ve seyahat gününüzü yansıtmaz. Güncel tahmin için Meteoroloji Genel Müdürlüğü (mgm.gov.tr) sayfasına bakın.';
 
 const WEATHER_DATA: Record<string, CityWeather> = {
   İstanbul: {
@@ -133,8 +138,8 @@ export const DestinationWeatherModal: React.FC<DestinationWeatherModalProps> = (
               <BileoCompass className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Varış Noktası Hava Durumu</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Rotanıza göre 3 günlük tahmin ve bavul önerileri</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Varış Noktası Hava Durumu (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Temsili 3 günlük tahmin ve bavul önerisi; canlı veri değildir</p>
             </div>
           </div>
           <button
@@ -193,6 +198,18 @@ export const DestinationWeatherModal: React.FC<DestinationWeatherModalProps> = (
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Honesty note: static sample data, never a live forecast */}
+          <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-start gap-2.5" role="note" data-weather-disclosure>
+            <BileoAlertCircle className="w-4 h-4 text-bordeaux-700 shrink-0 mt-0.5" />
+            <p className="text-xs text-charcoal-muted leading-relaxed">
+              {WEATHER_SAMPLE_DISCLOSURE}{' '}
+              <a href="https://www.mgm.gov.tr/" target="_blank" rel="noopener noreferrer" className="font-bold text-bordeaux-700 hover:text-bordeaux-800 underline underline-offset-2">
+                mgm.gov.tr
+                <span className="sr-only"> (yeni sekmede açılır)</span>
+              </a>
+            </p>
           </div>
 
           {/* Packing & Luggage Advice */}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDialogFocus } from '../lib/useDialogFocus';
 import {
   BileoSearch,
   BileoTicket,
@@ -34,6 +35,8 @@ export const PnrQueryModal: React.FC<PnrQueryModalProps> = ({
   const [searchedTicket, setSearchedTicket] = useState<BookingTicket | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const dialogRef = useDialogFocus<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -87,8 +90,13 @@ export const PnrQueryModal: React.FC<PnrQueryModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      <div className="bg-[#FAF7F2] rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-[#E8E1D5] flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pnr-query-title"
+    >
+      <div ref={dialogRef} tabIndex={-1} className="bg-[#FAF7F2] rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-[#E8E1D5] flex flex-col max-h-[90vh] outline-none">
         
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between">
@@ -97,7 +105,7 @@ export const PnrQueryModal: React.FC<PnrQueryModalProps> = ({
               <BileoTicket className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black text-[#1E1B18] font-display tracking-tight">
+              <h2 id="pnr-query-title" className="text-base sm:text-lg font-black text-[#1E1B18] font-display tracking-tight">
                 PNR ile Bilet Sorgulama & İade Portalı
               </h2>
               <p className="text-xs text-charcoal-muted font-medium">
@@ -107,6 +115,7 @@ export const PnrQueryModal: React.FC<PnrQueryModalProps> = ({
           </div>
           <button
             onClick={onClose}
+            aria-label="Kapat"
             className="w-8 h-8 rounded-full bg-[#FAF7F2] hover:bg-[#E8E1D5] text-charcoal flex items-center justify-center transition-colors cursor-pointer"
             title="Kapat"
           >

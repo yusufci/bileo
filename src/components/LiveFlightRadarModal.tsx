@@ -5,6 +5,7 @@ import {
   BileoPlane,
   BileoBus,
 } from './icons';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { sound } from '../utils/sound';
 import { TransportType } from '../types';
 
@@ -137,13 +138,13 @@ export const LiveFlightRadarModal: React.FC<LiveFlightRadarModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-black text-[#1E1B18] font-display">Canlı Hava Sahası & Sefer Radarı</h3>
+                <h3 className="text-lg font-black text-[#1E1B18] font-display">Hava Sahası & Sefer Radarı (örnek)</h3>
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-extrabold border border-emerald-300 animate-pulse">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                  CANLI ({liveCount} Uçuş)
+                  ÖRNEK ({liveCount} Uçuş)
                 </span>
               </div>
-              <p className="text-xs text-charcoal-muted font-medium">Türkiye Üzerindeki Anlık Ticari Uçuşlar, İrtifa, Hız ve Koridor Yoğunlukları</p>
+              <p className="text-xs text-charcoal-muted font-medium">Türkiye Üzerinden Örnek Ticari Uçuşlar, İrtifa, Hız ve Koridor Yoğunlukları; canlı ADS-B verisi değildir</p>
             </div>
           </div>
           <button
@@ -153,6 +154,8 @@ export const LiveFlightRadarModal: React.FC<LiveFlightRadarModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* View Tabs */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2">
@@ -254,7 +257,7 @@ export const LiveFlightRadarModal: React.FC<LiveFlightRadarModalProps> = ({
                   </div>
                   <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#E8E1D5] text-center">
                     <span className="text-[10px] text-charcoal-muted font-bold block uppercase">Sinyal</span>
-                    <span className="text-sm font-black text-emerald-800">ADS-B Canlı</span>
+                    <span className="text-sm font-black text-emerald-800">ADS-B (örnek)</span>
                   </div>
                 </div>
               </div>
@@ -350,7 +353,7 @@ export const LiveFlightRadarModal: React.FC<LiveFlightRadarModalProps> = ({
           <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-center justify-between text-xs text-charcoal-muted font-medium">
             <div className="flex items-center gap-2">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>OpenSky Network ve Karayolları Genel Müdürlüğü (KGM) canlı telemetrisi entegredir.</span>
+              <span>OpenSky Network veya KGM telemetrisine bağlı değildir; gösterilen uçuşlar ve değerler örnektir.</span>
             </div>
           </div>
 

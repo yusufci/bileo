@@ -4,6 +4,7 @@ import {
   BileoMapPin,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface TaxiEstimatorModalProps {
   isOpen: boolean;
@@ -130,8 +131,8 @@ export const TaxiEstimatorModal: React.FC<TaxiEstimatorModalProps> = ({
               <BileoMapPin className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Taksi Ücret Hesaplayıcı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Resmi tarife, tahmini yolculuk tutarları ve durak lokasyonları</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Taksi Ücret Hesaplayıcı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Temsili tarife örnekleri, tahmini yolculuk tutarları ve durak lokasyonları; resmi tarife değildir</p>
             </div>
           </div>
           <button
@@ -141,6 +142,8 @@ export const TaxiEstimatorModal: React.FC<TaxiEstimatorModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Hub Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

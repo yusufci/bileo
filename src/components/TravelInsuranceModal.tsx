@@ -5,6 +5,7 @@ import {
   BileoCheck,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface TravelInsuranceModalProps {
   isOpen: boolean;
@@ -93,8 +94,8 @@ export const TravelInsuranceModal: React.FC<TravelInsuranceModalProps> = ({
               <BileoShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Seyahat & Bilet Koruma Paketleri</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Zorunlu ferdi kaza teminatları ve ek güvence avantajları</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Seyahat & Bilet Koruma Paketleri (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Temsili koruma paketi örnekleri; bu ekranda gerçek bir sigorta ürünü satılmaz</p>
             </div>
           </div>
           <button
@@ -104,6 +105,8 @@ export const TravelInsuranceModal: React.FC<TravelInsuranceModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-6">

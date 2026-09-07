@@ -8,6 +8,7 @@ import {
   BileoCompass,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 import { TransportType } from '../types';
 
@@ -121,7 +122,7 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
               <BileoCompass className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Popüler Rotalar & Tatil Gezi Rehberi</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Popüler Rotalar & Tatil Gezi Rehberi (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Türkiye’nin En Sevilen Kaçış Rotaları, Gezilecek Yerler ve Ulaşım İpuçları</p>
             </div>
           </div>
@@ -132,6 +133,8 @@ export const TravelGuidesModal: React.FC<TravelGuidesModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Destination Tabs */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

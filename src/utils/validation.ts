@@ -298,6 +298,14 @@ export function validateCoupon(code: string): {
   }
 }
 
+export interface PricingOptions {
+  /**
+   * True for routes adapted from a Turna.com landing page: the source publishes exactly one fare,
+   * so every seat costs that fare and no tier surcharge is invented.
+   */
+  flatFare?: boolean;
+}
+
 /**
  * Calculates complete live dynamic pricing with seat tier surcharges, luggage fees, insurance, and coupons.
  */
@@ -305,26 +313,29 @@ export function calculatePricing(
   basePrice: number,
   seats: SeatItem[],
   addOns: { luggageKg: number; insurance: boolean },
-  couponCode?: string
+  couponCode?: string,
+  options: PricingOptions = {}
 ): PricingBreakdown {
   const seatCount = seats.length > 0 ? seats.length : 1;
   const baseFare = basePrice * seatCount;
 
-  // Seat surcharges: sum of individual seat premiums above base price
+  // Seat surcharges: sum of individual seat premiums above base price (zero for flat-fare sources)
   let seatSurcharges = 0;
-  seats.forEach((seat) => {
-    if (seat.price > basePrice) {
-      seatSurcharges += (seat.price - basePrice);
-    } else if (seat.tier === 'single') {
-      seatSurcharges += 30;
-    } else if (seat.tier === 'business') {
-      seatSurcharges += 350;
-    } else if (seat.tier === 'extra_legroom' || seat.tier === 'exit_row') {
-      seatSurcharges += 90;
-    } else if (seat.tier === 'vip_lounge') {
-      seatSurcharges += 60;
-    }
-  });
+  if (!options.flatFare) {
+    seats.forEach((seat) => {
+      if (seat.price > basePrice) {
+        seatSurcharges += (seat.price - basePrice);
+      } else if (seat.tier === 'single') {
+        seatSurcharges += 30;
+      } else if (seat.tier === 'business') {
+        seatSurcharges += 350;
+      } else if (seat.tier === 'extra_legroom' || seat.tier === 'exit_row') {
+        seatSurcharges += 90;
+      } else if (seat.tier === 'vip_lounge') {
+        seatSurcharges += 60;
+      }
+    });
+  }
 
   // Luggage fare: 15kg/20kg standard included (0 TL), 25kg (+95 TL), 35kg (+175 TL)
   let luggageFarePerPerson = 0;

@@ -1,16 +1,19 @@
 import React from 'react';
 
+/** Whole-word match for short aliases (THY, BA, KLM, VİB, İDO) so "Seyidoğlu" never becomes İDO. */
+const hasToken = (haystack: string, token: string): boolean => haystack.split(/[^a-zçğıöşüi̇]+/u).includes(token);
+
 export const getNormalizedBrandName = (name: string): string => {
   const n = (name || '').toLowerCase().trim();
-  if (n.includes('türk hava yolları') || n.includes('turkish airlines') || n.includes('thy')) return 'Türk Hava Yolları';
+  if (n.includes('türk hava yolları') || n.includes('turkish airlines') || hasToken(n, 'thy')) return 'Türk Hava Yolları';
   if (n.includes('pegasus')) return 'Pegasus';
   if (n.includes('ajet') || n.includes('anadolujet')) return 'AJet';
   if (n.includes('sunexpress')) return 'SunExpress';
   if (n.includes('lufthansa')) return 'Lufthansa';
   if (n.includes('emirates')) return 'Emirates';
   if (n.includes('qatar')) return 'Qatar Airways';
-  if (n.includes('klm')) return 'KLM';
-  if (n.includes('british') || n.includes('ba')) return 'British Airways';
+  if (hasToken(n, 'klm')) return 'KLM';
+  if (n.includes('british') || hasToken(n, 'ba')) return 'British Airways';
   if (n.includes('air france') || n.includes('airfrance')) return 'Air France';
   if (n.includes('corendon')) return 'Corendon Airlines';
   if (n.includes('swiss')) return 'Swiss International';
@@ -35,12 +38,12 @@ export const getNormalizedBrandName = (name: string): string => {
   if (n.includes('dadaş') || n.includes('dadas')) return 'Dadaş Turizm';
   if (n.includes('ben turizm')) return 'Ben Turizm';
   if (n.includes('cizre')) return 'Cizre İtimat';
-  if (n.includes('vib') || n.includes('vi̇b')) return 'Sakarya VİB';
+  if (hasToken(n, 'vib') || hasToken(n, 'vi̇b')) return 'Sakarya VİB';
   if (n.includes('kontur')) return 'Kontur Turizm';
   if (n.includes('özkaymak') || n.includes('ozkaymak')) return 'Özkaymak';
   if (n.includes('truva')) return 'Çanakkale Truva';
   if (n.includes('tcdd')) return 'TCDD Taşımacılık';
-  if (n.includes('ido') || n.includes('i̇do')) return 'İDO';
+  if (hasToken(n, 'ido') || hasToken(n, 'i̇do')) return 'İDO';
   if (n.includes('budo')) return 'BUDO';
   if (n.includes('gestaş') || n.includes('gestas')) return 'Gestaş';
   if (n.includes('şehir hatları') || n.includes('sehir hatlari')) return 'Şehir Hatları';

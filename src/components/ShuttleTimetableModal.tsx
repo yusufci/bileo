@@ -4,6 +4,7 @@ import {
   BileoBus,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface ShuttleTimetableModalProps {
   isOpen: boolean;
@@ -118,7 +119,7 @@ export const ShuttleTimetableModal: React.FC<ShuttleTimetableModalProps> = ({
               <BileoBus className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı & Otogar Servis Saatleri</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Havalimanı & Otogar Servis Saatleri (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Havaist, Havabüs, ücretsiz otogar servisleri ve transfer ringleri</p>
             </div>
           </div>
@@ -129,6 +130,8 @@ export const ShuttleTimetableModal: React.FC<ShuttleTimetableModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Filter Pills */}
         <div className="px-6 py-3 bg-white/50 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">

@@ -26,6 +26,8 @@ import { runAuthServiceTests } from './auth_service.test';
 import { runChallengerM2_1EmpiricalTests } from './challenger_m2_1_empirical.test';
 import { runChallengerM2_2EmpiricalTests } from './challenger_m2_2_empirical.test';
 import { runGoogleAuthAndReviewTests } from './google_auth_and_review.test';
+import { runTurnaScraperTests } from './turna_scraper.test';
+import { runSourcesTests } from './sources.test';
 
 async function main() {
   console.log('🚀 INITIALIZING BILEO COMPREHENSIVE E2E TEST SUITE...\n');
@@ -99,6 +101,13 @@ async function main() {
 
   // Register Auth & Gatekeeping System Tests (8 tests)
   runAuthGatekeepingTests();
+
+  // Register Turna.com scraper integration: urls, parser, analytics, fetch hardening, pipeline/HTTP,
+  // history store, guard/adapter/client, places autocomplete, static guards, SearchResults SSR (offline)
+  runTurnaScraperTests();
+
+  // Register multi-source landing-page parsers (obilet / biletall microdata, otelz), offline fixtures
+  runSourcesTests();
 
   // Run all registered tests
   await runner.runAll();

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useScreenEntry } from '../lib/useScreenEntry';
 import {
   BileoArrowLeft,
   BileoCreditCard,
@@ -53,6 +54,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onPaymentSuccess,
   onBookingCompleted,
 }) => {
+  const entryRef = useScreenEntry<HTMLHeadingElement>();
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
 
   useEffect(() => {
@@ -190,15 +192,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
     }
   };
 
-  // Dynamic Pricing Calculation
+  // Dynamic Pricing Calculation. A Turna offer publishes one fare, so seat tiers add nothing on top of it.
+  const flatFare = Boolean(route.provenance);
   const pricing = useMemo(() => {
     return calculatePricing(
       route.price,
       selectedSeatObjects,
       addOns,
-      appliedCouponCode
+      appliedCouponCode,
+      { flatFare }
     );
-  }, [route.price, selectedSeatObjects, addOns, appliedCouponCode]);
+  }, [route.price, selectedSeatObjects, addOns, appliedCouponCode, flatFare]);
 
   // Detected Credit Card Brand via Luhn
   const cardBrand = useMemo(() => {
@@ -434,7 +438,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 size="md"
               />
               <div>
-                <h2 className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2">
+                <h2 ref={entryRef} tabIndex={-1} className="text-sm sm:text-base font-extrabold text-[#1E1B18] tracking-tight flex items-center gap-2 outline-none">
                   <span>{route.company}</span>
                   <span className="text-xs font-medium text-charcoal-muted hidden md:inline">({route.from} → {route.to})</span>
                 </h2>
@@ -1135,6 +1139,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 >
                   veya Tek Tıkla Ödemeyi Tamamla
                 </button>
+
+                <p className="text-center text-[11px] text-charcoal-muted leading-relaxed">
+                  Demo rezervasyon: gerçek ödeme alınmaz, gösterilen kod gerçek bir PNR değildir.
+                </p>
 
               </div>
 

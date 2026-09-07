@@ -7,6 +7,7 @@ import {
   BileoBus,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface ExpressParcelTransitModalProps {
   isOpen: boolean;
@@ -123,29 +124,14 @@ export const ExpressParcelTransitModal: React.FC<ExpressParcelTransitModalProps>
       sound.playSuccess();
       setActiveParcel(SAMPLE_TRACKING_DATA[cleanQuery]);
       if (onShowToast) {
-        onShowToast('Kargo Bulundu', `${cleanQuery} nolu gönderinin canlı konumu görüntülendi.`, 'success');
+        onShowToast('Örnek Kayıt Bulundu', `${cleanQuery} nolu örnek gönderi kaydı görüntülendi; gerçek bir kargo sistemine bağlı değildir.`, 'success');
       }
     } else {
       sound.playTick();
-      // Generate dynamic tracking result for demo
-      const simulated: ParcelTrackingResult = {
-        trackingNo: cleanQuery,
-        sender: 'Ahmet Y. (İstanbul)',
-        receiver: 'Zeki K. (İzmir)',
-        originTerminal: 'İstanbul Alibeyköy Cep Otogarı',
-        destTerminal: 'İzmir İZOTAŞ Kargo Bürosu',
-        carrier: 'Bileo Ekspres Şehirlerarası Sevk',
-        vehiclePlate: '34 BL 104',
-        status: 'in_transit',
-        statusText: 'O-5 Otoyolu Susurluk Mevkiinde (Yolda)',
-        departureTime: '13:00',
-        estArrivalTime: '18:15',
-        itemType: 'Standart Paket (Koli)',
-        weightKg: 4.2,
-      };
-      setActiveParcel(simulated);
+      // No invented shipment for unknown codes: this screen is not connected to a carrier system.
+      setActiveParcel(null);
       if (onShowToast) {
-        onShowToast('Gönderi Sorgulandı', `${cleanQuery} nolu kargo otobüs bagajında aktif sevkiyatta.`, 'info');
+        onShowToast('Kayıt Bulunamadı', `${cleanQuery} örnek kayıtlar arasında yok. Bu ekran gerçek bir kargo sistemine bağlı değildir; örnek kod: KRG-784102.`, 'info');
       }
     }
   };
@@ -161,8 +147,8 @@ export const ExpressParcelTransitModal: React.FC<ExpressParcelTransitModalProps>
               📦
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Uçak Hızlı Kargo Portalı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Şehirlerarası aynı gün otobüs bagajı ve uçak kargo takip & tarife rehberi</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Uçak Hızlı Kargo Portalı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Şehirlerarası otobüs bagajı ve uçak kargo süreçleri için temsili takip ve tarife örnekleri</p>
             </div>
           </div>
           <button
@@ -172,6 +158,8 @@ export const ExpressParcelTransitModal: React.FC<ExpressParcelTransitModalProps>
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">
@@ -187,7 +175,7 @@ export const ExpressParcelTransitModal: React.FC<ExpressParcelTransitModalProps>
                   : 'bg-white text-charcoal border-[#E8E1D5] hover:bg-[#FAF7F2]'
               }`}
             >
-              🔍 Canlı Kargo Takibi
+              🔍 Kargo Takibi (örnek)
             </button>
             <button
               type="button"

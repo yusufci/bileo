@@ -246,7 +246,7 @@ export const InteractiveTicketShowcase: React.FC<InteractiveTicketShowcaseProps>
           <div className="grid grid-cols-3 gap-2 items-center text-center">
             
             <div className="text-left">
-              <span className="block text-[11px] font-medium text-charcoal-light">
+              <span className="block text-[11px] font-medium text-charcoal-muted">
                 {ticketData.date}
               </span>
               <span className="block text-xl font-extrabold text-charcoal tracking-tight mt-0.5">
@@ -255,7 +255,7 @@ export const InteractiveTicketShowcase: React.FC<InteractiveTicketShowcaseProps>
             </div>
 
             <div>
-              <span className="block text-[11px] font-medium text-charcoal-light">
+              <span className="block text-[11px] font-medium text-charcoal-muted">
                 Koltuk No
               </span>
               <span className="block text-xl font-extrabold text-charcoal tracking-tight mt-0.5">
@@ -264,7 +264,7 @@ export const InteractiveTicketShowcase: React.FC<InteractiveTicketShowcaseProps>
             </div>
 
             <div className="text-right flex flex-col items-end">
-              <span className="block text-[11px] font-medium text-charcoal-light">
+              <span className="block text-[11px] font-medium text-charcoal-muted">
                 Firma
               </span>
               <span className="block text-sm font-bold text-charcoal mt-0.5">

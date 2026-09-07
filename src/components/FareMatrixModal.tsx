@@ -9,6 +9,7 @@ import {
   BileoShieldCheck,
 } from './icons';
 import { TransportType } from '../types';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface RouteComparisonItem {
   id: string;
@@ -171,8 +172,8 @@ export const FareMatrixModal: React.FC<FareMatrixModalProps> = ({
         {/* Header */}
         <div className="px-6 py-5 bg-white border-b border-[#E8E1D5] flex items-center justify-between flex-shrink-0">
           <div>
-            <h3 className="text-lg font-black text-[#1E1B18] font-display">Çok Modlu Ulaşım & Fiyat Karşılaştırması</h3>
-            <p className="text-xs text-charcoal-muted font-medium">Süre, bilet fiyatı, bagaj ve karbon salınımı karşılaştırma tablosu</p>
+            <h3 className="text-lg font-black text-[#1E1B18] font-display">Çok Modlu Ulaşım & Fiyat Karşılaştırması (örnek)</h3>
+            <p className="text-xs text-charcoal-muted font-medium">Temsili süre, bilet fiyatı, bagaj ve karbon salınımı karşılaştırma tablosu</p>
           </div>
           <button
             onClick={onClose}
@@ -181,6 +182,8 @@ export const FareMatrixModal: React.FC<FareMatrixModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Route Selector Tabs */}
         <div className="px-6 py-3.5 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto flex-shrink-0">

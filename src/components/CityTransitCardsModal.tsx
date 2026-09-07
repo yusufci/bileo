@@ -5,6 +5,7 @@ import {
   BileoCheck,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface CityTransitCardsModalProps {
   isOpen: boolean;
@@ -154,7 +155,7 @@ export const CityTransitCardsModal: React.FC<CityTransitCardsModalProps> = ({
               💳
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Şehir İçi Toplu Taşıma & Ulaşım Kartları Rehberi</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Şehir İçi Toplu Taşıma & Ulaşım Kartları Rehberi (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">Otogar, YHT Garı ve Havalimanından Şehir Merkezine Metro, Tramvay ve Kart Bilgileri</p>
             </div>
           </div>
@@ -165,6 +166,8 @@ export const CityTransitCardsModal: React.FC<CityTransitCardsModalProps> = ({
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* City Selector Tabs */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -294,7 +297,7 @@ export const CityTransitCardsModal: React.FC<CityTransitCardsModalProps> = ({
           <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-center justify-between text-xs text-charcoal-muted font-medium">
             <div className="flex items-center gap-2">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Büyükşehir Belediyeleri ve UKOME resmi güncel tarife verileri baz alınmıştır.</span>
+              <span>Kart ve bilet ücretleri temsili örneklerdir; güncel tarifeler için büyükşehir belediyelerinin ve UKOME'nin duyurularına bakın.</span>
             </div>
           </div>
 

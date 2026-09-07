@@ -5,6 +5,7 @@ import {
   BileoRefreshCw,
   BileoCheckCircle,
 } from './icons';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { sound } from '../utils/sound';
 
 interface HighwayPassesLiveRadarModalProps {
@@ -175,8 +176,8 @@ export const HighwayPassesLiveRadarModal: React.FC<HighwayPassesLiveRadarModalPr
               KGM
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Kritik Dağ Geçitleri & Karayolu Tünel Radarı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Bolu Dağı, Osmangazi, Toroslar, Zigana geçişleri canlı yol, hava ve tünel durumu</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Kritik Dağ Geçitleri & Karayolu Tünel Radarı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Bolu Dağı, Osmangazi, Toroslar, Zigana geçişleri için örnek yol, hava ve tünel durumu; canlı veri değildir</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -196,6 +197,8 @@ export const HighwayPassesLiveRadarModal: React.FC<HighwayPassesLiveRadarModalPr
             </button>
           </div>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">

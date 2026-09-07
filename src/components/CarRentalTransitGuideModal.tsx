@@ -5,6 +5,7 @@ import {
   BileoCheckCircle,
 } from './icons';
 import { sound } from '../utils/sound';
+import { SampleDataNotice } from './common/SampleDataNotice';
 
 interface CarRentalTransitGuideModalProps {
   isOpen: boolean;
@@ -132,7 +133,7 @@ export const CarRentalTransitGuideModal: React.FC<CarRentalTransitGuideModalProp
               🚗
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Araç Kiralama Rehberi</h3>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Otogar & Havalimanı Araç Kiralama Rehberi (örnek)</h3>
               <p className="text-xs text-charcoal-muted font-medium">İniş sonrası son mil ulaşımı, depozito kuralları, kasko güvenceleri ve teslim noktaları</p>
             </div>
           </div>
@@ -143,6 +144,8 @@ export const CarRentalTransitGuideModal: React.FC<CarRentalTransitGuideModalProp
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Content Body */}
         <div className="p-6 overflow-y-auto space-y-6">

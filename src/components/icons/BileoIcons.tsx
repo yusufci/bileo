@@ -1247,6 +1247,34 @@ export const BileoMessageSquare = React.forwardRef<SVGSVGElement, BileoIconProps
 );
 BileoMessageSquare.displayName = 'BileoMessageSquare';
 
+/**
+ * Bileo External Link (box with an outward arrow; marks links that open a source page in a new tab)
+ */
+export const BileoExternalLink = React.forwardRef<SVGSVGElement, BileoIconProps>(
+  ({ className = 'w-4 h-4', size, strokeWidth = 1.75, color, title, ...props }, ref) => (
+    <svg
+      ref={ref}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color || 'currentColor'}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      width={size}
+      height={size}
+      aria-hidden={title ? undefined : 'true'}
+      {...props}
+    >
+      {title && <title>{title}</title>}
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <path d="M15 3h6v6" />
+      <path d="M10 14L21 3" />
+    </svg>
+  )
+);
+BileoExternalLink.displayName = 'BileoExternalLink';
+
 // ============================================================================
 // COMPATIBILITY & SEMANTIC ALIASES
 // ============================================================================

@@ -11,6 +11,11 @@ import { RouteItem, TransportType } from '../types';
 import { renderBrandSVG } from './PartnerLogosRibbon';
 import { CompanyLogo } from './CompanyLogo';
 import { POPULAR_ROUTES } from '../data/mockData';
+import { parseBileoDurationMinutes } from '../lib/turna/format';
+
+/** Numeric duration for sorting; rows without a parsable label sort last. */
+const durationMinutesOf = (r: RouteItem): number =>
+  r.durationMinutes ?? parseBileoDurationMinutes(r.duration) ?? Number.MAX_SAFE_INTEGER;
 
 interface CarrierDetailScreenProps {
   carrierName: string;
@@ -328,8 +333,8 @@ export const CarrierDetailScreen: React.FC<CarrierDetailScreenProps> = ({
       .sort((a, b) => {
         if (sortBy === 'earliest') return a.departureTime.localeCompare(b.departureTime);
         if (sortBy === 'cheapest') return a.price - b.price;
-        if (sortBy === 'rating') return b.rating - a.rating;
-        if (sortBy === 'fastest') return a.duration.localeCompare(b.duration);
+        if (sortBy === 'rating') return (b.rating ?? -1) - (a.rating ?? -1);
+        if (sortBy === 'fastest') return durationMinutesOf(a) - durationMinutesOf(b);
         return 0;
       });
   }, [carrierRoutes, fromCityFilter, sortBy]);
@@ -451,13 +456,21 @@ export const CarrierDetailScreen: React.FC<CarrierDetailScreenProps> = ({
                   
                   <div className="flex items-center gap-3">
                     <CompanyLogo company={route.company} transportType={route.transportType} size="sm" />
-                    <span className="text-xs font-semibold text-[#1E1B18]">{route.vehicleType}</span>
-                    <span className="text-charcoal-muted text-xs">•</span>
+                    {route.vehicleType && (
+                      <>
+                        <span className="text-xs font-semibold text-[#1E1B18]">{route.vehicleType}</span>
+                        <span className="text-charcoal-muted text-xs">•</span>
+                      </>
+                    )}
                     <span className="text-xs text-charcoal-muted font-normal">{route.date}</span>
-                    <span className="text-charcoal-muted text-xs">•</span>
-                    <span className="text-xs font-medium text-emerald-700">
-                      {route.availableSeats} Koltuk Kaldı
-                    </span>
+                    {typeof route.availableSeats === 'number' && (
+                      <>
+                        <span className="text-charcoal-muted text-xs">•</span>
+                        <span className="text-xs font-medium text-emerald-700">
+                          {route.availableSeats} Koltuk Kaldı
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 items-center gap-4 pt-1">
@@ -511,9 +524,11 @@ export const CarrierDetailScreen: React.FC<CarrierDetailScreenProps> = ({
                 <div className="lg:pl-6 lg:border-l lg:border-[#E2DCD2]/60 flex sm:flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between gap-4">
                   
                   <div className="text-left lg:text-right">
-                    <span className="text-[11px] text-charcoal-muted line-through block">
-                      {route.originalPrice} TL
-                    </span>
+                    {typeof route.originalPrice === 'number' && (
+                      <span className="text-[11px] text-charcoal-muted line-through block">
+                        {route.originalPrice} TL
+                      </span>
+                    )}
                     <div className="text-2xl sm:text-3xl font-bold text-[#1E1B18] font-display">
                       {route.price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} <span className="text-base font-semibold">TL</span>
                     </div>

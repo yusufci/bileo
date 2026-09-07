@@ -1,7 +1,14 @@
 // Bileo Ultra-Premium Multi-Modal Transportation Platform
 // Domain Type Definitions & Interface Contracts
 
+import type { TurnaQuery, TurnaSuccess } from '../lib/turna/types';
+
 export type TransportType = 'otobus' | 'ucak' | 'tren' | 'feribot';
+/**
+ * Every search tab: the four transport modes plus the single-city Otel and Araç tabs.
+ * Maps to Turna kinds via src/lib/turna/adapter.ts `searchKindToTurnaKind` (otel -> hotel, arac -> car).
+ */
+export type SearchKind = TransportType | 'otel' | 'arac';
 export type TransportMode = 'bus' | 'flight' | 'train' | 'ferry' | 'otobus' | 'ucak' | 'tren' | 'feribot';
 
 export type SeatGender = 'male' | 'female' | 'none' | null;
@@ -70,18 +77,23 @@ export interface RouteItem {
   toTerminal: string;
   departureTime: string;
   arrivalTime: string;
+  /** Display label, `Hs MMdk` (e.g. "2s 10dk"); numeric source in durationMinutes when known. */
   duration: string;
+  /** Total minutes when the source publishes it; undefined for legacy mock rows. */
+  durationMinutes?: number;
+  /** Turkish display string for both mock and Turna rows (e.g. "24 Eylül Perşembe"); the ISO date lives in provenance.dateIso. */
   date: string;
   price: number;
   originalPrice?: number;
   company: string;
   companyLogo?: string;
   transportType: TransportType;
-  vehicleType: string;
-  availableSeats: number;
-  rating: number;
-  reviewCount: number;
-  features: string[];
+  /** The following fields are optional because Turna landing pages do not publish them; never default them. */
+  vehicleType?: string;
+  availableSeats?: number;
+  rating?: number;
+  reviewCount?: number;
+  features?: string[];
   badge?: string;
   serviceClass?: 'standard' | 'comfort' | 'business' | 'vip';
   vesselType?: string;
@@ -95,6 +107,39 @@ export interface RouteItem {
     duration: string;
     description: string;
   };
+  /** Present only on rows adapted from a Turna.com landing page. */
+  provenance?: RouteProvenance;
+}
+
+/** Where a live RouteItem came from. Attached by src/lib/turna/adapter.ts, never by mock data. */
+export interface RouteProvenance {
+  source: 'turna';
+  kind: 'flight' | 'bus';
+  /** 12-hex stable offer id (parity with turna/parse.py). */
+  offerId: string;
+  /** e.g. `flight:istanbul-ankara` */
+  routeKey: string;
+  sourceUrl: string;
+  /** ISO timestamp of when the HTML was actually fetched (cache hits keep the original). */
+  scrapedAt: string;
+  fetchedVia: 'direct' | 'cache';
+  /** YYYY-MM-DD local departure date. */
+  dateIso: string;
+  /** ISO-8601 with +03:00 offset. */
+  departureAt: string;
+  arrivalAt: string;
+  durationMinutes: number | null;
+  /** null = the landing page is silent about stops (flights); buses never publish it. */
+  isDirect: boolean | null;
+  currency: 'TRY';
+  /** Landing pages list the cheapest upcoming fares across several dates, not a timetable for one day. */
+  sampling: 'cheapest-upcoming';
+  airlineCode?: string | null;
+  companyUrl?: string | null;
+  /** Turna CDN logo (airline by IATA, bus company by slug); may 403/404, so render with an onError text fallback. */
+  logoUrl?: string | null;
+  /** Bus company ASCII slug (last segment of companyUrl); null for flights. */
+  companySlug?: string | null;
 }
 
 export interface PassengerInfo {
@@ -178,10 +223,21 @@ export interface DiscoveryCardItem {
 
 export interface SearchFilterState {
   transportType: TransportType;
+  /** Active search tab; undefined means the tab equals transportType (derive with `searchKind ?? transportType`). */
+  searchKind?: SearchKind;
   fromCity: string;
   toCity: string;
+  /** turna.com URL segments (slugifyTr) set by HeroSection on selection/swap; App falls back to slugifyTr(fromCity). */
+  fromSlug?: string;
+  toSlug?: string;
+  /** Optional IATA code carried for display only. */
+  fromCode?: string;
+  toCode?: string;
+  /** Display only; Turna landing pages are date-agnostic. App initialises it to ''. */
   departureDate: string;
   returnDate?: string;
+  /** ISO YYYY-MM-DD chosen in the DayStrip; filters routes by provenance.dateIso. */
+  selectedDay?: string;
   passengerCount: number;
   maxPrice: number;
   selectedCompanies: string[];
@@ -220,3 +276,32 @@ export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
 }
+
+/**
+ * Lifecycle of one live Turna.com search. `routes` in App is derived from the `ok` branch only;
+ * every other branch renders its own honest state (see SearchResults).
+ */
+export type LiveSearchState =
+  | { status: 'idle' }
+  | { status: 'loading'; query: TurnaQuery; startedAt: number }
+  | {
+      status: 'ok';
+      query: TurnaQuery;
+      result: TurnaSuccess;
+      /** Adapted flight/bus rows; `[]` for hotel/car, whose offers are read from `result.items`. */
+      routes: RouteItem[];
+      /** Items rejected by guard/adapter validation (surfaced as "N teklif doğrulanamadı"). */
+      droppedItems: number;
+      receivedAt: string;
+    }
+  /** items.length === 0: ferry pages, or a flight/bus page without structured offers. */
+  | { status: 'facts-only'; query: TurnaQuery; result: TurnaSuccess; receivedAt: string }
+  | { status: 'unsupported'; transportType: 'tren'; reason: string }
+  | {
+      status: 'error';
+      query: TurnaQuery | null;
+      httpStatus: number | null;
+      errorCode: string;
+      message: string;
+      retryAfterSeconds?: number;
+    };

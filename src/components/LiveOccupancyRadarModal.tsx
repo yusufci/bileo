@@ -7,6 +7,7 @@ import {
   BileoPlane,
   BileoFerry,
 } from './icons';
+import { SampleDataNotice } from './common/SampleDataNotice';
 import { sound } from '../utils/sound';
 import { TransportType } from '../types';
 
@@ -144,7 +145,7 @@ export const LiveOccupancyRadarModal: React.FC<LiveOccupancyRadarModalProps> = (
     if (onShowToast) {
       onShowToast(
         'Doluluk Takip Alarmı Kuruldu',
-        `${item.route} seferinde kalan koltuk sayısı azaldığında anlık bildirim alacaksınız.`,
+        `${item.route}: bu örnek ekran bildirim göndermez; Turna landing sayfaları koltuk sayısı yayımlamaz. Gerçek fiyat alarmı için arama sonuçlarındaki Fiyat Alarmı düğmesini kullanın.`,
         'success'
       );
     }
@@ -161,8 +162,8 @@ export const LiveOccupancyRadarModal: React.FC<LiveOccupancyRadarModalProps> = (
               🔥
             </div>
             <div>
-              <h3 className="text-lg font-black text-[#1E1B18] font-display">Canlı Doluluk & Son Koltuklar Radarı</h3>
-              <p className="text-xs text-charcoal-muted font-medium">Kritik Seferler, Dolmak Üzere Olan Hatlar ve Gerçek Zamanlı Koltuk Sayıları</p>
+              <h3 className="text-lg font-black text-[#1E1B18] font-display">Doluluk & Son Koltuklar Radarı (örnek)</h3>
+              <p className="text-xs text-charcoal-muted font-medium">Kritik Seferler, Dolmak Üzere Olan Hatlar ve Örnek Koltuk Sayıları; canlı envanter değildir</p>
             </div>
           </div>
           <button
@@ -172,6 +173,8 @@ export const LiveOccupancyRadarModal: React.FC<LiveOccupancyRadarModalProps> = (
             <BileoClose className="w-4 h-4" />
           </button>
         </div>
+
+        <SampleDataNotice />
 
         {/* Filter Pills */}
         <div className="px-6 py-3 bg-white/60 border-b border-[#E8E1D5] flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -284,7 +287,7 @@ export const LiveOccupancyRadarModal: React.FC<LiveOccupancyRadarModalProps> = (
           <div className="p-3.5 rounded-2xl bg-white border border-[#E8E1D5] flex items-center justify-between text-xs text-charcoal-muted font-medium">
             <div className="flex items-center gap-2">
               <BileoShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Doluluk verileri taşıyıcı GDS envanter sistemlerinden anlık çekilir.</span>
+              <span>Bu doluluk verileri örnektir; taşıyıcı envanterine canlı bağlantı yoktur.</span>
             </div>
           </div>
 
