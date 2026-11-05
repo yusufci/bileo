@@ -1,5 +1,7 @@
 # Bileo
 
+![Bileo Ana Sayfa](public/screenshots/homepage.png)
+
 Bileo, Türkiye içi seyahat için uçak, otobüs, otel ve araç kiralama tekliflerini tek ekranda gösteren bir Vite + React sitesidir.
 Veri, Turna.com landing sayfalarından (JSON-LD ve RSC katmanı) ve 2026-09-07'den beri başka Türk landing sayfalarından
 (obilet.com, biletall.com, otelz.com, enuygun.com, flixbus.com.tr) okunur. Hiçbir ekranda uydurma veri yoktur: kaynak yayımlamıyorsa
