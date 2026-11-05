@@ -28,6 +28,7 @@ import { runChallengerM2_2EmpiricalTests } from './challenger_m2_2_empirical.tes
 import { runGoogleAuthAndReviewTests } from './google_auth_and_review.test';
 import { runTurnaScraperTests } from './turna_scraper.test';
 import { runSourcesTests } from './sources.test';
+import { runJwtSecretConfigTests } from './jwt_secret_config.test';
 
 async function main() {
   console.log('🚀 INITIALIZING BILEO COMPREHENSIVE E2E TEST SUITE...\n');
@@ -37,6 +38,7 @@ async function main() {
 
   // Register Milestone 2: Cryptographic Auth, Token Security & Rate Limiting Tests (35 tests)
   runAuthServiceTests();
+  runJwtSecretConfigTests();
 
   // Register Challenger M2.1: Empirical Bcrypt, Timing Defense & Password Complexity Suite (15 tests)
   runChallengerM2_1EmpiricalTests();

@@ -1,7 +1,7 @@
-﻿import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getJwtSecret } from '../auth/tokenService';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'bileo_production_hardened_secret_key_2026_x89';
 const JWT_EXPIRES_IN = '24h';
 const BCRYPT_SALT_ROUNDS = 12;
 
@@ -64,7 +64,7 @@ export class AuthService {
    * Generates a signed JWT session token
    */
   public static signToken(payload: TokenPayload): string {
-    return jwt.sign(payload, JWT_SECRET, {
+    return jwt.sign(payload, getJwtSecret(), {
       expiresIn: JWT_EXPIRES_IN,
       algorithm: 'HS256',
     });
@@ -75,7 +75,7 @@ export class AuthService {
    */
   public static verifyToken(token: string): TokenPayload {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET, {
+      const decoded = jwt.verify(token, getJwtSecret(), {
         algorithms: ['HS256'],
       }) as TokenPayload;
       return decoded;

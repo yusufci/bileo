@@ -84,7 +84,7 @@ Test çerçevesi kendi yazımımızdır (`src/tests/test_framework.ts`): `toEqua
 | `TURNA_RESPECT_ROBOTS` | 1 | robots.txt okuması (24 saat önbellek; 5 sn, yavaş hostlarda 12 sn) |
 | `TURNA_HISTORY` | memory | Fiyat geçmişi: `memory` (rota başına son 60 gözlem, süreç içi), `off`, `pg` (`DATABASE_URL` ya da `PGHOST`/`PGPORT`/`PGUSER`/`PGPASSWORD`/`PGDATABASE`, TLS için `DB_SSL=true`) |
 | `VITE_GOOGLE_CLIENT_ID` | boş | Google ile giriş (tarayıcıya açılır) |
-| `JWT_SECRET` | | Sunucu tarafı kimlik doğrulama imzası |
+| `JWT_SECRET` | | Sunucu tarafı JWT imza anahtarı. `NODE_ENV=production` iken zorunlu; yoksa sunucu token imzalamayı ve doğrulamayı reddeder. Geliştirmede kaynakta duran güvensiz dev anahtarı kullanılır. |
 
 Not: `.env.example` içindeki `POSTGRES_*` adlarını kod okumaz; Postgres bağlantısı `DATABASE_URL` ya da `PG*` ile kurulur.
 `docker-compose.yml` yerel bir Postgres 16 başlatır ve `src/server/db/schema.sql` şemasını yükler.
@@ -99,8 +99,7 @@ Not: `.env.example` içindeki `POSTGRES_*` adlarını kod okumaz; Postgres bağl
   tarife yayımlamadığı için sefer satırı gösterilmez.
 - Elle yazılmış örnek veriyle çalışan rehber modalları başlıkta "(örnek)" ve `SampleDataNotice` uyarısı taşır.
 - Kaynak matrisi ve kararların gerekçesi: `KAYNAK_GENISLETME_PLANI.md` (bölüm 1 keşif, bölüm 5 uygulanan matris).
-  Turna sözleşmesi ve arayüz kuralları: `TURNA_INTEGRATION.md`, `GELISTIRME_PLANI.md`. Gün gün çalışma kaydı: depo kökünde
-  `GELISIM_GUNLUGU.md`.
+  Turna sözleşmesi ve arayüz kuralları: `TURNA_INTEGRATION.md`, `GELISTIRME_PLANI.md`.
 
 ## Dizin özeti
 

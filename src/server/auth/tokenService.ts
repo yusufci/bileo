@@ -5,7 +5,9 @@
 import jwt, { JwtPayload as StandardJwtPayload, SignOptions, VerifyOptions } from 'jsonwebtoken';
 import crypto from 'crypto';
 
-export const JWT_SECRET_DEFAULT = 'bileo_production_hardened_secret_key_2026_x89_super_secure_32_chars';
+// Development/test-only fallback. It is visible in the public source, so getJwtSecret refuses to
+// use it when NODE_ENV=production; otherwise anyone could mint valid tokens for a deployment.
+export const JWT_SECRET_DEFAULT = 'bileo-dev-only-insecure-jwt-secret-do-not-deploy';
 export const JWT_ISSUER_DEFAULT = 'bileo-api';
 export const JWT_AUDIENCE_DEFAULT = 'bileo-app';
 export const JWT_EXPIRES_IN_DEFAULT = '1h';
@@ -46,7 +48,12 @@ export interface UserTokenInput {
  * Resolves the configured JWT signing secret
  */
 export function getJwtSecret(): string {
-  return process.env.JWT_SECRET || JWT_SECRET_DEFAULT;
+  const secret = process.env.JWT_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET must be set in production.');
+  }
+  return JWT_SECRET_DEFAULT;
 }
 
 /**
